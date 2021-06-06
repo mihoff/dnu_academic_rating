@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-30 09:43+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: templates/base.html:24
+msgid "Academic raiting"
+msgstr ""
+
+#: templates/base.html:39
+msgid "Enter data"
+msgstr ""
+
+#: templates/base.html:48
+msgid "How to use"
+msgstr ""
+
+#: templates/base.html:57
+msgid "Log in using Office365"
+msgstr ""
+
+#: templates/base.html:63
+#, fuzzy
+#| msgid "Log in"
+msgid "Log out"
+msgstr "Увійти"
+
+#: templates/index.html:6
+msgid "Logout"
+msgstr ""
+
+#: templates/registration/login.html:28
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/registration/login.html:37
+msgid "Log in with"
+msgstr "Увійти за допомогою"
+
+#: templates/registration/login.html:70
+msgid "Forgotten your password or username?"
+msgstr "Забули пароль або логін?"
+
+#: templates/registration/login.html:76
+msgid "Log in"
+msgstr "Увійти"
+
+#: user_profile/admin.py:11
+msgid "User"
+msgstr ""
+
+#: user_profile/models.py:13
+msgid "Faculty"
+msgstr "Факультет"
+
+#: user_profile/models.py:14
+msgid "Faculties"
+msgstr "Факультети"
+
+#: user_profile/models.py:25
+#, python-brace-format
+msgid "{self.title} of the faculty {self.faculty.title}"
+msgstr "{self.title} факультету {self.faculty.title}"
+
+#: user_profile/models.py:28
+msgid "Department of the University"
+msgstr "Кафедра"
+
+#: user_profile/models.py:29
+msgid "Departments of the University"
+msgstr "Кафедри"
+
+#: user_profile/models.py:39
+msgid "Position"
+msgstr "Посада"
+
+#: user_profile/models.py:40
+msgid "Positions"
+msgstr "Посади"
+
+#~ msgid "Please correct the error below."
+#~ msgstr "Будь ласка, виправте помилку."
+
+#~ msgid "Please correct the errors below."
+#~ msgstr "Будь ласка, виправте помилки."
+
+#~ msgid "User Profile"
+#~ msgstr "Профіль Користувача"
+
+#~ msgid "or"
+#~ msgstr "або"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"

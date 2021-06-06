@@ -1,0 +1,7 @@
+[MASTER]
+ignore=third_party
+jobs=4
+
+[FORMAT]
+
+max-line-length=120

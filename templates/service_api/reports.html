@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load i18n static extras %}
+
+{% block title %}Звіт{% endblock %}
+
+{% block h1 %}Звіт{% endblock %}
+{% block content %}
+    <h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>
+    {% if generic_report %}
+        <table class="table table-bordered table-sm table-hover">
+            <thead>
+            <tr class="table-active">
+                <th scope="col">Назва</th>
+                <th scope="col">Значення</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Факультет</td>
+                <td>{{ generic_report.user.profile.department.faculty }}</td>
+            </tr>
+            <tr>
+                <td>Кафедра</td>
+                <td>
+                    {{ generic_report.user.profile.department }}
+                </td>
+            </tr>
+            <tr>
+                <td>Науково-педагогічний працівник</td>
+                <td>
+                    {{ generic_report.user.last_name }} {{ generic_report.user.first_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>Займана посада</td>
+                <td>{{ generic_report.user.profile.position.title }}</td>
+            </tr>
+            <tr>
+                <td>Частка ставки, яку обіймає працівник за основною посадою</td>
+                <td>{{ generic_report.main_assignment }}</td>
+            </tr>
+            <tr>
+                <td>Частка ставки, яку обіймає працівник за штатним сумісництвом</td>
+                <td>{{ generic_report.additional_assignment }}</td>
+            </tr>
+            <tr>
+                <td>Навчально-методична робота</td>
+                <td>{{ generic_report.educationalandmethodicalwork.adjusted_result|default:"0,0" }}</td>
+            </tr>
+            <tr>
+                <td>Науково-інноваційна робота</td>
+                <td>{{ generic_report.scientificandinnovativework.adjusted_result|default:"0,0" }}</td>
+            </tr>
+            <tr>
+                <td>Організаційно-виховна робота</td>
+                <td>{{ generic_report.organizationalandeducationalwork.adjusted_result|default:"0,0" }}</td>
+            </tr>
+            <tr>
+                <td>Бал за наслідками анонімного анкетування студентів</td>
+                <td>{{ generic_report.students_rating }}</td>
+            </tr>
+            <tr>
+                <td>Рейтинговий бал працівника</td>
+                <td>{{ generic_report.result }}</td>
+            </tr>
+            <tr class="table-active">
+                <td colspan="2" class="text-center">
+                    <a href="{% url 'report_pdf' generic_report.report_period.report_period|period_url_replace %}"
+                       role="button"
+                       target="_blank"
+{#                       onClick="window.print();return false"#}
+                       class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        Роздрукувати</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            Дані відсутні в системі або обраний період неактивний, будь ласка, перейдіть за посиланням:
+            <a href="{% url 'generic_report_data_view' %}" class="alert-link">Введення загальних даних</a>
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Змінити звітний період
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for period in report_periods %}
+                            <a class="dropdown-item {% if period.report_period == report_period %}active{% endif %}"
+                               href="
+                                       {% if period.report_period != report_period %}{% url 'reports' period.report_period.report_period|period_url_replace %}{% else %}#{% endif %}">
+                                {{ period.report_period }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

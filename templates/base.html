@@ -1,0 +1,133 @@
+{% load i18n static %}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="The service to calculate rating of teachers. DNU">
+    <meta name="author" content="Michael Tkachenko">
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Рейтинг Викладача :: {% block title %}{% endblock %}</title>
+</head>
+<body>
+{% if not is_pdf %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="/">
+        <img src="{% static 'favicon.ico' %}" height="30" alt="">
+        Рейтинг Викладача
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if is_index %}active{% endif %}">
+                <a class="nav-link" href="{% url 'index' %}">Положення</a>
+            </li>
+
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown
+                {% if is_generic_report_data_view or is_educational_and_methodical_work or is_scientific_and_innovative_work or is_organizational_and_educational_work %} active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Введення даних
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item {% if is_generic_report_data_view %}active{% endif %}"
+                           href="{% url 'generic_report_data_view' %}">Загальні дані</a>
+                        <a class="dropdown-item {% if is_educational_and_methodical_work %}active{% endif %}"
+                           href="{% url 'educational_and_methodical_work' %}">Навчально-методична робота</a>
+                        <a class="dropdown-item {% if is_scientific_and_innovative_work %}active{% endif %}"
+                           href="{% url 'scientific_and_innovative_work' %}">Науково-інноваційна робота</a>
+                        <a class="dropdown-item {% if is_organizational_and_educational_work %}active{% endif %}"
+                           href="{% url 'organizational_and_educational_work' %}">Організаційно-виховна робота</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if is_report %}active{% endif %}" href="{% url 'reports' %}">Звіт</a>
+                </li>
+            {% endif %}
+        </ul>
+
+        {% if microsoft_login_enabled and not user.is_authenticated %}
+            <button id="microsoft-login" class="btn btn-primary">
+                Увійти в систему за допомогою <span class="font-weight-bold">Office365</span>
+            </button>
+            <div style="display: none;">
+                <button id="password-login"></button>
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout_' %}" class="btn btn-secondary">
+                ({{ user.last_name }} {{ user.first_name|slice:"1" }}) <span
+                    class="font-weight-bold">{% trans "Log out" %}</span>
+            </a>
+        {% endif %}
+
+    </div>
+</nav>
+{% endif %}
+<main role="main" class="container">
+    <div class="jumbotron">
+        {% if messages %}
+            <div style="position: fixed; left: 0; width: 100%;">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show col-6"
+                         style="margin: 0 auto;" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% endif %}
+
+        <h1 class="text-center">{% block h1 %}{% endblock %}</h1>
+        {% block additional_header %}{% endblock %}
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+{% if microsoft_login_enabled and not user.is_authenticated %}
+    <script type="text/javascript" src="{% static 'microsoft/js/login.js' %}"></script>
+    <script type="text/javascript">
+        document.addEventListener(
+            "DOMContentLoaded",
+            function (e) {
+                window.microsoft.login = new window.microsoft.objects.LoginController({
+                    'authorization_url': '{{ microsoft_authorization_url }}'
+                });
+            });
+    </script>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.alert').alert();
+    });
+</script>
+
+{% block extra_footer %}
+{% endblock %}
+
+</html>

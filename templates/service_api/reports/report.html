@@ -1,0 +1,54 @@
+{% extends "base_report.html" %}
+
+{% block additional_header %}{% endblock %}
+{% block report_form %}
+    {% if generic_report_data %}
+        <hr/>
+
+        {% with generic_report_data as form %}
+            <p class="h2 text-center">{{ form.Meta.model }}</p>
+            {% include "service_api/raw_report_forms/raw_generic_report_data_view.html" %}
+        {% endwith %}
+
+        {% if educational_and_methodical_work %}
+            {% with educational_and_methodical_work as form %}
+                <p class="h2 text-center">{{ form.Meta.model }}</p>
+                {% include "service_api/raw_report_forms/raw_educational_and_methodical_work.html" %}
+            {% endwith %}
+        {% endif %}
+
+        {% if scientific_and_innovative_work %}
+            {% with scientific_and_innovative_work as form %}
+                <p class="h2 text-center">{{ form.Meta.model }}</p>
+                {% include "service_api/raw_report_forms/raw_scientific_and_innovative_work.html" %}
+            {% endwith %}
+        {% endif %}
+
+        {% if organizational_and_educational_work %}
+            {% with organizational_and_educational_work as form %}
+                <p class="h2 text-center">{{ form.Meta.model }}</p>
+                {% include "service_api/raw_report_forms/raw_organizational_and_educational_work.html" %}
+            {% endwith %}
+        {% endif %}
+
+    {% endif %}
+    <b>Примітка</b>: За кожним видом роботи, що оцінюється, надаються матеріали, що підтверджують її виконання.
+    <br/>
+    <br/>
+    від «____» ________________ 20___ р., протокол № _______________
+    <br/>
+    <br/>
+    Завідувач кафедри ___________ _______________________
+    <br/>
+    <br/>
+    Декан факультету ___________ _______________________
+{% endblock %}
+
+{% block extra_footer %}
+    <script>
+        $(document).ready(function () {
+            $('input, select').attr('readonly', true);
+            window.print();
+        });
+    </script>
+{% endblock %}

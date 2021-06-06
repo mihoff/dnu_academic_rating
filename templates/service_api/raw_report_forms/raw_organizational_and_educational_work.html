@@ -1,0 +1,444 @@
+<form action="{% url 'organizational_and_educational_work' %}" method="post">
+    {% csrf_token %}
+    <table class="table table-bordered table-sm">
+        <thead class="text-center table-active h5">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col" style="width: 50%">Вид роботи</th>
+            <th scope="col">Значення показника</th>
+            <th scope="col">Примітка</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th class="table-active">3.1</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота в науково-методичних комісіях (підкомісіях) з вищої освіти Міністерства освіти і науки України
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.one_one.id_for_label }}">{{ form.one_one.label }}</label></td>
+            <td>{{ form.one_one }}{{ form.one_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th class="table-active">3.2</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота в Акредитаційній комісії або її експертних рад, галузевих експертних радах НАЗЯВО,
+                або Міжгалузевої експертної ради з вищої освіти Акредитаційної комісії,
+                експертних комісіях МОН/зазначеного агентства
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.two_one.id_for_label }}"></label></td>
+            <td>{{ form.two_one }}{{ form.two_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th class="table-active">3.3</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота в експертних комісіях АКУ та ліцензування МОН
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.three_one.id_for_label }}"></label></td>
+            <td>{{ form.three_one }}{{ form.three_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th class="table-active">3.4</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота в науково-технічній раді НДЧ ДНУ, науково-методичній раді, РЗЯВО, БЗЯВО
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3">Рівень універсітету</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_one.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_one.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_one }}{{ form.four_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_two.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_two.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_two }}{{ form.four_two.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_three.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_three.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_three }}{{ form.four_three.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3">Рівень факультету</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_four.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_four.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_four }}{{ form.four_four.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_five.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_five.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_five }}{{ form.four_five.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label for="{{ form.four_six.id_for_label }}">
+                    <span style="margin-left: 40px;">&#10095; {{ form.four_six.label }}</span>
+                </label>
+            </td>
+            <td>{{ form.four_six }}{{ form.four_six.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.5</th>
+            <th scope="row" colspan="3" class="table-active">
+                Організація та проведення загальнодержавних наукових конференцій, симпозіумів і семінарів
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.five_one.id_for_label }}">{{ form.five_one.label }}</label></td>
+            <td>{{ form.five_one }}{{ form.five_one.errors }}</td>
+            <td rowspan="3">Кількість</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.five_two.id_for_label }}">{{ form.five_two.label }}</label></td>
+            <td>{{ form.five_two }}{{ form.five_two.errors }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.five_three.id_for_label }}">{{ form.five_three.label }}</label></td>
+            <td>{{ form.five_three }}{{ form.five_three.errors }}</td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.6</th>
+            <th scope="row" colspan="3" class="table-active">
+                Виконання обов’язків заступника декана факультету на громадських засадах
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.six_one.id_for_label }}">{{ form.six_one.label }}</label></td>
+            <td>{{ form.six_one }}{{ form.six_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.six_two.id_for_label }}">{{ form.six_two.label }}</label></td>
+            <td>{{ form.six_two }}{{ form.six_two.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.7</th>
+            <th scope="row" colspan="3" class="table-active">Робота секретарем ЕК</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seven_one.id_for_label }}">{{ form.seven_one.label }}</label></td>
+            <td>{{ form.seven_one }}{{ form.seven_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.8</th>
+            <th scope="row" colspan="3" class="table-active">
+                Здійснення процедур нормоконтролю випускних кваліфікаційних робіт
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.eight_one.id_for_label }}">{{ form.eight_one.label }}</label></td>
+            <td>{{ form.eight_one }}{{ form.eight_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.9</th>
+            <th scope="row" colspan="3" class="table-active">
+                Перевірка випускних кваліфікаційних робіт на плагіат
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.nine_one.id_for_label }}">{{ form.nine_one.label }}</label></td>
+            <td>{{ form.nine_one }}{{ form.nine_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.10</th>
+            <th scope="row" colspan="3" class="table-active">
+                Виконання обов’язків відповідального за організацію замовлення додатків DIPLOMA SUPLIMENT,
+                включаючи переклад на іноземну мову
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.ten_one.id_for_label }}">{{ form.ten_one.label }}</label></td>
+            <td>{{ form.ten_one }}{{ form.ten_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.11</th>
+            <th scope="row" colspan="3" class="table-active">Участь у виховній роботі в студентському колективі</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.eleven_one.id_for_label }}">{{ form.eleven_one.label }}</label></td>
+            <td>{{ form.eleven_one }}{{ form.eleven_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.eleven_two.id_for_label }}">{{ form.eleven_two.label }}</label></td>
+            <td>{{ form.eleven_two }}{{ form.eleven_two.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.12</th>
+            <th scope="row" colspan="3" class="table-active">Робота у складі вченої ради ДНУ</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.twelve_one.id_for_label }}"></label></td>
+            <td>{{ form.twelve_one }}{{ form.twelve_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.13</th>
+            <th scope="row" colspan="3" class="table-active">Робота у складі вченої ради факультету</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.thirteen_one.id_for_label }}">{{ form.thirteen_one.label }}</label></td>
+            <td>{{ form.thirteen_one }}{{ form.thirteen_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.thirteen_two.id_for_label }}">{{ form.thirteen_two.label }}</label></td>
+            <td>{{ form.thirteen_two }}{{ form.thirteen_two.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.thirteen_three.id_for_label }}">{{ form.thirteen_three.label }}</label></td>
+            <td>{{ form.thirteen_three }}{{ form.thirteen_three.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.14</th>
+            <th scope="row" colspan="3" class="table-active">Організаційна робота</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.fourteen_one.id_for_label }}">{{ form.fourteen_one.label }}</label></td>
+            <td>{{ form.fourteen_one }}{{ form.fourteen_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.fourteen_two.id_for_label }}">{{ form.fourteen_two.label }}</label></td>
+            <td>{{ form.fourteen_two }}{{ form.fourteen_two.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.15</th>
+            <th scope="row" colspan="3" class="table-active">
+                Взаємовідвідування занять НПП (крім завідувача кафедри) зі складанням відгуку в журналі взаємовідвідувань
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.fifteen_one.id_for_label }}">{{ form.fifteen_one.label }}</label></td>
+            <td>{{ form.fifteen_one }}{{ form.fifteen_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.16</th>
+            <th scope="row" colspan="3" class="table-active">
+                Участь у профорієнтаційній роботі кафедри, факультету, університету
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.sixteen_one.id_for_label }}">{{ form.sixteen_one.label }}</label></td>
+            <td>{{ form.sixteen_one }}{{ form.sixteen_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.17</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота в приймальній комісії (відповідно до наказів)
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_one.id_for_label }}">{{ form.seventeen_one.label }}</label></td>
+            <td>{{ form.seventeen_one }}{{ form.seventeen_one.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_two.id_for_label }}">{{ form.seventeen_two.label }}</label></td>
+            <td>{{ form.seventeen_two }}{{ form.seventeen_two.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_three.id_for_label }}">{{ form.seventeen_three.label }}</label></td>
+            <td>{{ form.seventeen_three }}{{ form.seventeen_three.errors }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_four.id_for_label }}">{{ form.seventeen_four.label }}</label></td>
+            <td>{{ form.seventeen_four }}{{ form.seventeen_four.errors }}</td>
+            <td rowspan="5">Кількість фактично відпрацьованих днів</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_five.id_for_label }}">{{ form.seventeen_five.label }}</label></td>
+            <td>{{ form.seventeen_five }}{{ form.seventeen_five.errors }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_six.id_for_label }}">{{ form.seventeen_six.label }}</label></td>
+            <td>{{ form.seventeen_six }}{{ form.seventeen_six.errors }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_seven.id_for_label }}">{{ form.seventeen_seven.label }}</label></td>
+            <td>{{ form.seventeen_seven }}{{ form.seventeen_seven.errors }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.seventeen_eight.id_for_label }}">{{ form.seventeen_eight.label }}</label></td>
+            <td>{{ form.seventeen_eight }}{{ form.seventeen_eight.errors }}</td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.18</th>
+            <th scope="row" colspan="3" class="table-active">
+                Введення персональних даних викладачів в ЄДЕБО та їхня періодична актуалізація,
+                а також перевірка персональних даних студентів випускних курсів, що виконують співробітники
+                на факультетах протягом навчального року (окрім роботи в межах діяльності приймальної комісії)
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.eighteen_one.id_for_label }}"></label></td>
+            <td>{{ form.eighteen_one }}{{ form.eighteen_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.19</th>
+            <th scope="row" colspan="3" class="table-active">
+                Участь у підготовці та проведенні студентських та учнівських олімпіад, турнірів, конкурсів,
+                олімпіад ДНУ для вступників
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.nineteen_one.id_for_label }}"></label></td>
+            <td>{{ form.nineteen_one }}{{ form.nineteen_one.errors }}</td>
+            <td>Кількість заходів</td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.20</th>
+            <th scope="row" colspan="3" class="table-active">
+                Участь в організації та проведенні позанавчальних культурно-спортивних заходів
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.twenty_zero_one.id_for_label }}"></label></td>
+            <td>{{ form.twenty_zero_one }}{{ form.twenty_zero_one.errors }}</td>
+            <td>Кількість заходів</td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.21</th>
+            <th scope="row" colspan="3" class="table-active">
+                Робота на виборних посадах у профспілковому комітеті ДНУ
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.twenty_one_one.id_for_label }}"></label></td>
+            <td>{{ form.twenty_one_one }}{{ form.twenty_one_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th class="table-active">3.22</th>
+            <th scope="row" colspan="3" class="table-active">
+                Керівництво волонтерським проектом студентів
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><label for="{{ form.twenty_two_one.id_for_label }}"></label></td>
+            <td>{{ form.twenty_two_one }}{{ form.twenty_two_one.errors }}</td>
+            <td></td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    {% if not is_pdf %}
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button type="submit" class="btn btn-primary">Зберегти</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</form>
