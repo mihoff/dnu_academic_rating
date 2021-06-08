@@ -27,11 +27,11 @@
                 <td>{{ profile.position }}</td>
                 <td>{{ profile.department }}</td>
                 <td>{{ profile.department.faculty }}</td>
-                <td>
-                    {% with profile.user.genericreportdata_set|filter_qs_by_report_period:report_period as rp %}
-                        {{ rp.result }}
-                    {% endwith %}
-                </td>
+                {% with profile.user.genericreportdata_set|filter_qs_by_report_period:report_period as rp %}
+                    <td>
+                        {{ rp.result|default:"Звіт відсутній" }}
+                    </td>
+                {% endwith %}
             </tr>
         {% endfor %}
         </tbody>

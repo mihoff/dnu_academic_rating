@@ -103,13 +103,15 @@ class PivotReportView(TemplateView, BaseView):
         data = super().get_context_data(**kwargs)
         if self.request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
             profiles = Profile.objects.filter(department=self.request.user.profile.department)
-        else:
+        elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
             profiles = Profile.objects.filter(department__faculty=self.request.user.profile.department.faculty)
+        else:
+            raise Http404
 
         data.update(
             {
                 "is_pivot_report": True,
-                "profiles": profiles.order_by("user__last_name"),
+                "profiles": profiles.exclude(user=self.request.user).order_by("user__last_name"),
             }
         )
         return data

@@ -31,8 +31,7 @@ urlpatterns = [
     path("reports/<str:report_period>/", ReportsView.as_view(), name="reports"),
     path("reports/pdf/<str:report_period>", ReportPdf.as_view(), name="report_pdf"),
     path("pivot-report/", PivotReportView.as_view(), name="pivot_report"),
-    path("pivot-report/<str:report_period>", PivotReportView.as_view(), name="pivot_report"),
-
+    path("pivot-report/<str:report_period>/", PivotReportView.as_view(), name="pivot_report"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
