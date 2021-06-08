@@ -22,7 +22,7 @@ class Faculty(models.Model):
 
 
 class Department(models.Model):
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, verbose_name="факультет")
+    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, verbose_name="факультет", blank=True, null=True)
     title = models.CharField(max_length=256, verbose_name="назва")
 
     def __str__(self):
@@ -36,11 +36,12 @@ class Department(models.Model):
         verbose_name = "Кафедра"
         verbose_name_plural = "Кафедри"
         constraints = [UniqueConstraint(fields=["title", "faculty"], name="unique_department_faculty_title")]
+        ordering = ["title"]
 
 
 class Position(models.Model):
     BY_DEPARTMENT = "department"
-    BY_FACULTY = "department"
+    BY_FACULTY = "faculty"
     CUMULATIVE_CALCULATION_CHOICES = (
         (BY_DEPARTMENT, "По Кафедрі"),
         (BY_FACULTY, "По Факультету")
@@ -65,8 +66,8 @@ class Position(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def last_name_and_initial(self):
@@ -82,6 +83,7 @@ class Profile(models.Model):
         verbose_name = "Профіль користувача"
         verbose_name_plural = "Профілі користувачів"
         constraints = [UniqueConstraint(fields=["user", "department", "position"], name="unique_profile")]
+        ordering = ["department__title", "department__faculty__title"]
 
 
 @receiver(post_save, sender=User)

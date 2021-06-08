@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
@@ -15,16 +16,7 @@ from service_api.forms.generic_report_data_form import GenericReportDataForm, Ed
     OrganizationalAndEducationalWorkForm, ScientificAndInnovativeWorkForm
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
     ScientificAndInnovativeWork, ReportPeriod
-
-
-class IndexView(TemplateView):
-    template_name = "index.html"
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data["is_index"] = True
-        data.update(microsoft(self.request))
-        return data
+from user_profile.models import Profile, Position
 
 
 class BaseView(ContextMixin, LoginRequiredMixin):
@@ -45,10 +37,14 @@ class BaseView(ContextMixin, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+        extended_user = False
+        if self.request.user.is_authenticated and self.request.user.profile.position.cumulative_calculation is not None:
+            extended_user = True
         data.update(
             {
                 "report_period": self.report_period,
                 "generic_report": self.generic_report,
+                "extended_user": extended_user,
             }
         )
         return data
@@ -74,6 +70,45 @@ class BaseReportFormView(FormView, BaseView):
         data.update(
             {
                 "report_name": self.model.NAME,
+            }
+        )
+        return data
+
+
+class IndexView(TemplateView, BaseView):
+    template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data.update(
+            {
+                "is_index": True,
+                **microsoft(self.request)
+            }
+        )
+        return data
+
+
+class PivotReportView(TemplateView, BaseView):
+    template_name = "service_api/pivot_report.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated or self.request.user.profile.position.cumulative_calculation is None:
+            raise Http404
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+            profiles = Profile.objects.filter(department=self.request.user.profile.department)
+        else:
+            profiles = Profile.objects.filter(department__faculty=self.request.user.profile.department.faculty)
+
+        data.update(
+            {
+                "is_pivot_report": True,
+                "profiles": profiles.order_by("user__last_name"),
             }
         )
         return data

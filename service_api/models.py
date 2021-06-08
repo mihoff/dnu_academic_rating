@@ -75,6 +75,7 @@ class GenericReportData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     report_period = models.ForeignKey(ReportPeriod, on_delete=models.SET_NULL, blank=True, null=True)
     result = models.FloatField(default=0, validators=[validators.MinValueValidator(0)])
+    is_closed = models.BooleanField(verbose_name="Чи закрито звітний період", default=False)
 
     assignment_duration = models.FloatField(
         verbose_name="Кількість відпрацьованих місяців за звітний період", default=10,
@@ -102,6 +103,8 @@ class GenericReportData(models.Model):
         return "generic_report_data"
 
     class Meta:
+        verbose_name = "Загальний звіт"
+        verbose_name_plural = "Загальні звіти"
         constraints = [UniqueConstraint(fields=["user", "report_period"], name="unique_user_report_period")]
 
 

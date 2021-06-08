@@ -10,5 +10,6 @@ setup(
         "django-microsoft-auth==2.4.0",
         "pyjwt==1.7.1",
         "pylint==2.8.3",
+        "gunicorn==20.1.0"
     ],
 )

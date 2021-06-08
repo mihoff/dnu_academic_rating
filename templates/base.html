@@ -9,68 +9,86 @@
     <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Рейтинг Викладача :: {% block title %}{% endblock %}</title>
+    {% if not is_pdf %}<title>Рейтинг Викладача :: {% block title %}{% endblock %}</title>{% endif %}
+
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            background-color: #f5f5f5;
+        }
+    </style>
 </head>
 <body>
 {% if not is_pdf %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="/">
-        <img src="{% static 'favicon.ico' %}" height="30" alt="">
-        Рейтинг Викладача
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <a class="navbar-brand" href="/">
+            <img src="{% static 'favicon.ico' %}" height="30" alt="">
+            Рейтинг Викладача
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if is_index %}active{% endif %}">
-                <a class="nav-link" href="{% url 'index' %}">Положення</a>
-            </li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if is_index %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'index' %}">Положення</a>
+                </li>
 
-            {% if user.is_authenticated %}
-                <li class="nav-item dropdown
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown
                 {% if is_generic_report_data_view or is_educational_and_methodical_work or is_scientific_and_innovative_work or is_organizational_and_educational_work %} active{% endif %}">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Введення даних
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item {% if is_generic_report_data_view %}active{% endif %}"
-                           href="{% url 'generic_report_data_view' %}">Загальні дані</a>
-                        <a class="dropdown-item {% if is_educational_and_methodical_work %}active{% endif %}"
-                           href="{% url 'educational_and_methodical_work' %}">Навчально-методична робота</a>
-                        <a class="dropdown-item {% if is_scientific_and_innovative_work %}active{% endif %}"
-                           href="{% url 'scientific_and_innovative_work' %}">Науково-інноваційна робота</a>
-                        <a class="dropdown-item {% if is_organizational_and_educational_work %}active{% endif %}"
-                           href="{% url 'organizational_and_educational_work' %}">Організаційно-виховна робота</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if is_report %}active{% endif %}" href="{% url 'reports' %}">Звіт</a>
-                </li>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Введення даних
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item {% if is_generic_report_data_view %}active{% endif %}"
+                               href="{% url 'generic_report_data_view' %}">Загальні дані</a>
+                            <a class="dropdown-item {% if is_educational_and_methodical_work %}active{% endif %}"
+                               href="{% url 'educational_and_methodical_work' %}">Навчально-методична робота</a>
+                            <a class="dropdown-item {% if is_scientific_and_innovative_work %}active{% endif %}"
+                               href="{% url 'scientific_and_innovative_work' %}">Науково-інноваційна робота</a>
+                            <a class="dropdown-item {% if is_organizational_and_educational_work %}active{% endif %}"
+                               href="{% url 'organizational_and_educational_work' %}">Організаційно-виховна робота</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if is_report %}active{% endif %}" href="{% url 'reports' %}">Звіт</a>
+                    </li>
+                    {% if extended_user %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if is_pivot_report %}active{% endif %}" href="{% url 'pivot_report' %}">
+                                Зведений звіт
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+
+            {% if microsoft_login_enabled and not user.is_authenticated %}
+                <button id="microsoft-login" class="btn btn-primary">
+                    Увійти в систему за допомогою <span class="font-weight-bold">Office365</span>
+                </button>
+                <div style="display: none;">
+                    <button id="password-login"></button>
+                </div>
             {% endif %}
-        </ul>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout_' %}" class="btn btn-secondary">
+                    ({{ user.last_name }} {{ user.first_name|slice:"1" }}) <span
+                        class="font-weight-bold">{% trans "Log out" %}</span>
+                </a>
+            {% endif %}
 
-        {% if microsoft_login_enabled and not user.is_authenticated %}
-            <button id="microsoft-login" class="btn btn-primary">
-                Увійти в систему за допомогою <span class="font-weight-bold">Office365</span>
-            </button>
-            <div style="display: none;">
-                <button id="password-login"></button>
-            </div>
-        {% endif %}
-        {% if user.is_authenticated %}
-            <a href="{% url 'logout_' %}" class="btn btn-secondary">
-                ({{ user.last_name }} {{ user.first_name|slice:"1" }}) <span
-                    class="font-weight-bold">{% trans "Log out" %}</span>
-            </a>
-        {% endif %}
-
-    </div>
-</nav>
+        </div>
+    </nav>
 {% endif %}
 <main role="main" class="container">
     <div class="jumbotron">
@@ -95,6 +113,20 @@
         {% endblock %}
     </div>
 </main>
+{% if not is_pdf %}
+    <footer class="footer">
+        <div class="container text-right">
+            <div class="btn-group-sm" role="group" aria-label="Basic example">
+                <a href="http://dnu.dp.ua/" target="_blank" type="button" class="btn btn-secondary">Сайт ДНУ</a>
+                <a href="mailto:tkachenko.m20@fpm.dnu.edu.ua" type="button" class="btn btn-secondary">
+                    Написати розробнику
+                </a>
+                <a href="{% url 'admin:index' %}" type="button" class="btn btn-secondary">Адміністрування</a>
+            </div>
+
+        </div>
+    </footer>
+{% endif %}
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

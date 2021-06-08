@@ -11,3 +11,8 @@ def period_url_replace(value: str) -> str:
     :return:
     """
     return value.replace("/", "-")
+
+
+@register.filter()
+def filter_qs_by_report_period(qs, value):
+    return qs.filter(report_period=value).first()

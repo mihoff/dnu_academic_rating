@@ -1,7 +1,7 @@
 import csv
 
 from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from user_profile.models import Position, Department, Faculty
 
@@ -22,17 +22,21 @@ class Command(BaseCommand):
         with open(options['file_path']) as f:
             file_reader = csv.DictReader(f, delimiter=';')
             for row in file_reader:
-                user = User.objects.filter(email=row[self.email]).first()
+                email = row[self.email].lower().strip()
+                user = User.objects.filter(email=email).first()
                 if user:
                     self.stdout.write(f"{user} already exists, make an update through the admin flow")
-                    continue
                 last_name, first_name = row[self.full_name].split(' ', maxsplit=1)
-                user = User.objects.create_user(
-                    username=row[self.email].strip(),
-                    email=row[self.email].strip(),
-                    first_name=first_name,
-                    last_name=last_name,
-                )
+                if user:
+                    user.first_name = first_name
+                    user.last_name = last_name
+                else:
+                    user = User.objects.create_user(
+                        username=email,
+                        email=email,
+                        first_name=first_name,
+                        last_name=last_name,
+                    )
 
                 faculty, _ = Faculty.objects.get_or_create(title=row[self.faculty].strip().lower())
 

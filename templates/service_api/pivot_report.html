@@ -1,0 +1,39 @@
+{% extends "service_api/reports.html" %}
+{% load extras %}
+
+{% block title %}Зведений звіт{% endblock %}
+
+{% block h1 %}Зведений звіт {{ user.profile.position.get_cumulative_calculation_display|lower }}{% endblock %}
+
+{% block content %}
+    <h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>
+    <h3 class="tex-center"></h3>
+    <table class="table table-bordered table-sm">
+        <thead class="text-center">
+        <tr class="table-active">
+            <th scope="col">#</th>
+            <th scope="col">Працівник</th>
+            <th scope="col">Посада</th>
+            <th scope="col">Кафедра</th>
+            <th scope="col">Факультет</th>
+            <th scope="col">Загальний бал</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for profile in profiles %}
+            <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ profile.last_name_and_initial }}</td>
+                <td>{{ profile.position }}</td>
+                <td>{{ profile.department }}</td>
+                <td>{{ profile.department.faculty }}</td>
+                <td>
+                    {% with profile.user.genericreportdata_set|filter_qs_by_report_period:report_period as rp %}
+                        {{ rp.result }}
+                    {% endwith %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
