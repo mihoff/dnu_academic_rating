@@ -24,14 +24,15 @@ class BaseView(ContextMixin, LoginRequiredMixin):
     generic_report: GenericReportData
 
     def dispatch(self, request, *args, **kwargs):
-        report_period_str = (kwargs.get("report_period") or "").replace("-", '/')
-        if report_period_str:
-            self.report_period = ReportPeriod.objects.filter(report_period=report_period_str).first()
-        else:
-            self.report_period = ReportPeriod.get_active()
+        if request.user.is_authenticated:
+            report_period_str = (kwargs.get("report_period") or "").replace("-", '/')
+            if report_period_str:
+                self.report_period = ReportPeriod.objects.filter(report_period=report_period_str).first()
+            else:
+                self.report_period = ReportPeriod.get_active()
 
-        self.generic_report = GenericReportData.objects.filter(
-            user=request.user, report_period=self.report_period).first()
+            self.generic_report = GenericReportData.objects.filter(
+                user=request.user, report_period=self.report_period).first()
 
         return super().dispatch(request, *args, **kwargs)
 
