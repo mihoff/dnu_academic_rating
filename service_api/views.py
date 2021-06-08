@@ -20,8 +20,8 @@ from user_profile.models import Profile, Position
 
 
 class BaseView(ContextMixin, LoginRequiredMixin):
-    report_period: ReportPeriod
-    generic_report: GenericReportData
+    report_period: ReportPeriod = None
+    generic_report: GenericReportData = None
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -52,7 +52,7 @@ class BaseView(ContextMixin, LoginRequiredMixin):
 
 
 class BaseReportFormView(FormView, BaseView):
-    model: type(models.Model)
+    model: type(models.Model) = None
 
     def get_object(self, report_period: ReportPeriod):
         return NotImplementedError
