@@ -1,7 +1,11 @@
+import logging
+
 from django.contrib import admin
 
 from django.utils.translation import gettext as _
 from user_profile.models import Profile, Position, Department, Faculty
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(Profile)
@@ -25,6 +29,18 @@ class ProfileAdmin(admin.ModelAdmin):
     def faculty_(self, obj):
         return obj.department.faculty if obj.department else "-"
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        try:
+            if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                qs = qs.filter(department=request.user.profile.department)
+            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(department__faculty=request.user.profile.department.faculty)
+        except Exception as e:
+            logging.error(f"ProfileAdmin :: {e}")
+
+        return qs
+
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
@@ -37,11 +53,23 @@ class PositionAdmin(admin.ModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "people_cnt")
+    list_display = ("__str__", "faculty", "people_cnt")
 
     @admin.display(description="Кількість працівників", empty_value="0")
     def people_cnt(self, obj):
         return obj.profile_set.count()
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        try:
+            if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                qs = qs.filter(pk=request.user.profile.department.pk)
+            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(faculty=request.user.profile.department.faculty)
+        except Exception as e:
+            logging.error(f"ProfileAdmin :: {e}")
+
+        return qs
 
 
 @admin.register(Faculty)
@@ -55,3 +83,15 @@ class FacultyAdmin(admin.ModelAdmin):
     @admin.display(description="Кількість кафедр", empty_value="0")
     def dep_cnt(self, obj):
         return obj.department_set.count()
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        try:
+            if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                qs = qs.filter(department=request.user.profile.department)
+            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(pk=request.user.profile.department.faculty.pk)
+        except Exception as e:
+            logging.error(f"ProfileAdmin :: {e}")
+
+        return qs

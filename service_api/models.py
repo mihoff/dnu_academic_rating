@@ -65,6 +65,7 @@ class ReportPeriod(models.Model):
     class Meta:
         verbose_name = "Звітній період"
         verbose_name_plural = "Звітні періоди"
+        constraints = [UniqueConstraint(fields=["report_period"], name="unique_report_period_report_period")]
 
 
 class GenericReportData(models.Model):

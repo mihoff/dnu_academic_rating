@@ -8,8 +8,7 @@ from django.urls import path, include
 
 from proxy_microsoft_oauth.views import logout_view
 from service_api.views import IndexView, EducationalAndMethodicalWorkView, ScientificAndInnovativeWorkView, \
-    GenericReportDataView, ReportsView, \
-    OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView
+    GenericReportDataView, ReportsView, OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
