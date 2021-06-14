@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from proxy_microsoft_oauth.views import logout_view
+from proxy_microsoft_oauth.views import logout_view, AuthenticateCallbackViewOverwrite
 from service_api.views import IndexView, EducationalAndMethodicalWorkView, ScientificAndInnovativeWorkView, \
     GenericReportDataView, ReportsView, OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/logout/", logout_view),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("microsoft/auth-callback/", AuthenticateCallbackViewOverwrite.as_view(), name="auth-callback"),
     path("microsoft/", include("microsoft_auth.urls", namespace="microsoft")),
     path("fillin/generic-report-data-view/", GenericReportDataView.as_view(),
          name="generic_report_data_view"),

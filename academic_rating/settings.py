@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'proxy_microsoft_oauth',
     'service_api',
     'user_profile',
+    'django_tables2',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MICROSOFT_AUTH_LOGIN_TYPE = 'ma'
+MICROSOFT_AUTH_AUTHENTICATE_HOOK = 'proxy_microsoft_oauth.hooks.auth_hook'
 
 WSGI_APPLICATION = 'academic_rating.wsgi.application'
 

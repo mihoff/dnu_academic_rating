@@ -17,9 +17,9 @@ class BaseCalculation:
         if value == "0":
             return r
 
-        for i in value.split():
+        for i in value.split(";"):
             for j in i.split("("):
-                r += k * float(j.replace(')', ''))
+                r += k * float(j.replace(')', '').replace(",", "."))
         return r
 
     @staticmethod

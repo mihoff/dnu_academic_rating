@@ -5,6 +5,7 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
+from django_tables2 import LazyPaginator, SingleTableView
 from microsoft_auth.context_processors import microsoft
 
 from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
@@ -16,6 +17,7 @@ from service_api.forms.generic_report_data_form import GenericReportDataForm, Ed
     OrganizationalAndEducationalWorkForm, ScientificAndInnovativeWorkForm
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
     ScientificAndInnovativeWork, ReportPeriod
+from service_api.tables import PivotReportTable
 from user_profile.models import Profile, Position
 
 
@@ -90,31 +92,19 @@ class IndexView(TemplateView, BaseView):
         return data
 
 
-class PivotReportView(TemplateView, BaseView):
-    template_name = "service_api/pivot_report.html"
+class PivotReportView(BaseView, SingleTableView):
+    template_name = "service_api/pivot_report_test.html"
+    paginator_class = LazyPaginator
+    table_class = PivotReportTable
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated or self.request.user.profile.position.cumulative_calculation is None:
-            raise Http404
-
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
+    def get_queryset(self):
         if self.request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
             profiles = Profile.objects.filter(department=self.request.user.profile.department)
         elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
             profiles = Profile.objects.filter(department__faculty=self.request.user.profile.department.faculty)
         else:
             raise Http404
-
-        data.update(
-            {
-                "is_pivot_report": True,
-                "profiles": profiles.exclude(user=self.request.user).order_by("user__last_name"),
-            }
-        )
-        return data
+        return profiles
 
 
 class GenericReportDataView(BaseReportFormView):
