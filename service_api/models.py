@@ -7,11 +7,17 @@ from django.db.models import UniqueConstraint
 
 from service_api.calculations import BaseCalculation
 
-NUMBER_SPACE_VALIDATOR = validators.RegexValidator(
-    r"^[\d+\s*]+$", message="Невірний формат даних. Введіть числа через пробіл.")
+NUMBER_SEMICOLON_VALIDATOR = validators.RegexValidator(
+    r"\d+?(;|$)", message="Невірний формат даних. Введіть числа через крапку з комою.")
 
 NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR = validators.RegexValidator(
     r"^[\d+(\d+)\s*]+$", message="Невірний формат даних. Введіть числа через пробіл.")
+
+FLOAT_NUMBER_SEMICOLON_VALIDATOR = validators.RegexValidator(
+    r"\d+([,.]\d+)?", message="Невірний формат даних. Введіть числа через крапку з комою.")
+
+FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR = validators.RegexValidator(
+    r"^[\d+(,.)\d+(;|$)\s+]+$", message="Невірний формат даних. Введіть числа через пробіл.")
 
 
 class BaseReportModel(models.Model):
@@ -80,10 +86,10 @@ class GenericReportData(models.Model):
 
     assignment_duration = models.FloatField(
         verbose_name="Кількість відпрацьованих місяців за звітний період", default=10,
-        validators=[validators.MinValueValidator(1), validators.MaxValueValidator(10)])
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(10)])
     main_assignment = models.FloatField(
         verbose_name="Відсоток ставки, яку обіймає за основною посадою", default=100,
-        validators=[validators.MinValueValidator(1), validators.MaxValueValidator(100)])
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(100)])
     additional_assignment = models.FloatField(
         verbose_name="Відсоток ставки, яку обіймає за штатним сумісництвом", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(50)])
@@ -125,31 +131,31 @@ class EducationalAndMethodicalWork(BaseReportModel):
     )
 
     # 1 Виконання навчального навантаження
-    one_one = models.IntegerField(
+    one_one = models.FloatField(
         verbose_name="обсяг виконаного аудиторного навантаження (год.)", default=0,
-        validators=[validators.MinValueValidator(0)])
-    one_two = models.IntegerField(
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
+    one_two = models.FloatField(
         verbose_name="обсяг виконаного аудиторного навантаження (год.) іноземною мовою", default=0,
-        validators=[validators.MinValueValidator(0)])
-    one_three = models.IntegerField(
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
+    one_three = models.FloatField(
         verbose_name="загальне навчальне навантаження працівника (год.) за рік", default=0,
-        validators=[validators.MinValueValidator(0)])
-    one_four = models.IntegerField(
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
+    one_four = models.FloatField(
         verbose_name="середньорічне навчальне навантаження в ДНУ (год.)", default=0,
-        validators=[validators.MinValueValidator(0)])
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
 
     # 2 Рецензування навчально-методичних матеріалів
     two_one = models.CharField(
         max_length=256, verbose_name="методичних вказівок (рекомендацій)", default="0",
-        validators=[NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     two_two = models.CharField(
         max_length=256, verbose_name="навчально-методичних посібників, посібників", default="0",
-        validators=[NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     two_three = models.CharField(
         max_length=256,
         verbose_name="навчально-методичних матеріалів (підручників, посібників тощо), "
                      "що подаються МОН України на закрите рецензування",
-        default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 3 Експертиза
     three_one = models.IntegerField(
@@ -164,106 +170,113 @@ class EducationalAndMethodicalWork(BaseReportModel):
     # виховної роботи, міжнародної діяльності тощо
     four_one = models.CharField(
         max_length=256, verbose_name="кількість виконавців одного документу", default="0",
-        validators=[NUMBER_SPACE_VALIDATOR])
+        validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 5 Редагування (переклад) підручників, навчальних посібників, методичних матеріалів тощо
     five_one = models.CharField(
         max_length=256, verbose_name="редагування (кількість аркушів)",
-        default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     five_two = models.CharField(
-        max_length=256, verbose_name="переклад (кількість аркушів)", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="переклад (кількість аркушів)", default="0",
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 6 Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
     # проектами ТEMPUS, ERASMUS+
     six_one = models.IntegerField(
-        verbose_name="керівнику (на всіх виконавців)", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        verbose_name="керівнику (на всіх виконавців)", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 7 Публікації
     seven_one = models.CharField(
-        max_length=256, verbose_name="курс лекцій", default="0", validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="курс лекцій", default="0",
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_two = models.CharField(
         max_length=256, verbose_name="видання методичних матеріалів навчально-методичні рекомендації", default="0",
-        validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_three = models.CharField(
         max_length=256, verbose_name="підручник в Україні", default="0",
-        validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_four = models.CharField(
         max_length=256, verbose_name="навчальний посібник в Україні", default="0",
-        validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_five = models.CharField(
         max_length=256, verbose_name="підручник за кордоном", default="0",
-        validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_six = models.CharField(
         max_length=256, verbose_name="навчальний посібник за кордоном", default="0",
-        validators=[NUMBER_BRACKETS_NUMBER_SPACE_VALIDATOR])
+        validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 8 Виконання обов’язків гаранта ОП І освітнього рівня/ІІ ОР/ІІІ ОР
-    eight_one = models.IntegerField(verbose_name="І освітній рівень", default=0, validators=[NUMBER_SPACE_VALIDATOR])
-    eight_two = models.IntegerField(verbose_name="ІІ освітній рівень", default=0, validators=[NUMBER_SPACE_VALIDATOR])
+    eight_one = models.IntegerField(
+        verbose_name="І освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
+    eight_two = models.IntegerField(
+        verbose_name="ІІ освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
     eight_three = models.IntegerField(
-        verbose_name="ІІІ освітній рівень", default=0, validators=[NUMBER_SPACE_VALIDATOR])
+        verbose_name="ІІІ освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 9 Розробка НМКД
     nine_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
     nine_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 10 Розробка нових
     ten_one = models.CharField(
-        max_length=256, verbose_name="навчальних планів", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="навчальних планів", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
     ten_two = models.CharField(
-        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
     ten_three = models.CharField(
-        max_length=256, verbose_name="навчальних планів", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="навчальних планів", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
     ten_four = models.CharField(
-        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 11 Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
     eleven_one = models.CharField(
-        max_length=256, verbose_name="розробка і підготовка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка і підготовка", default="0",
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     eleven_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 12 Розробка та затвердження нової освітньої (освітньо-професійної або освітньо-наукової) програми
     twelve_one = models.CharField(
-        max_length=256, verbose_name="розробка та затвердження", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка та затвердження", default="0",
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 13 Підготовка справи та успішне проходження експертизи
     thirteen_one = models.CharField(
-        max_length=256, verbose_name="ліцензійної", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="ліцензійної", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     thirteen_two = models.CharField(
-        max_length=256, verbose_name="акредитаційної", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="акредитаційної", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 14 Підготовка комп’ютерного програмного забезпечення навчальних дисциплін
     fourteen_one = models.CharField(
-        max_length=256, verbose_name="підготовка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="підготовка", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     fourteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 15 Розробка складових ЕОР
     fifteen_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     fifteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 16 Розробка програм і завдань до вступних випробувань
     sixteen_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     sixteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     sixteen_three = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     sixteen_four = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     sixteen_five = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     sixteen_six = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="оновлення", default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 17 Розробка і впровадження нових форм, методів і технологій навчання
     seventeen_one = models.CharField(
-        max_length=256, verbose_name="розробка і впровадження", default="0", validators=[NUMBER_SPACE_VALIDATOR])
+        max_length=256, verbose_name="розробка і впровадження", default="0",
+        validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 18 Підготовка концертних програм і персональних художніх виставок, спортивних заходів
     eighteen_one = models.IntegerField(default=0)
