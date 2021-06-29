@@ -41,7 +41,9 @@ class BaseView(ContextMixin, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         extended_user = False
-        if self.request.user.is_authenticated and self.request.user.profile.position.cumulative_calculation is not None:
+        if self.request.user.is_authenticated \
+                and self.request.user.profile.position is not None \
+                and self.request.user.profile.position.cumulative_calculation is not None:
             extended_user = True
         data.update(
             {

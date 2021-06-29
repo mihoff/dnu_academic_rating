@@ -19,7 +19,7 @@ class BaseCalculation:
 
         for i in value.split(";"):
             for j in i.split("("):
-                r += k * float(j.replace(')', '').replace(",", "."))
+                r += k * (float(j.replace(')', '').replace(",", ".")) / 100)
         return r
 
     @staticmethod

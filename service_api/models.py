@@ -174,23 +174,23 @@ class EducationalAndMethodicalWork(BaseReportModel):
 
     # 5 Редагування (переклад) підручників, навчальних посібників, методичних матеріалів тощо
     five_one = models.CharField(
-        max_length=256, verbose_name="редагування (кількість аркушів)",
+        max_length=256, verbose_name="редагування (кількість друкованих аркушів)",
         default="0", validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     five_two = models.CharField(
-        max_length=256, verbose_name="переклад (кількість аркушів)", default="0",
+        max_length=256, verbose_name="переклад (кількість друкованих аркушів)", default="0",
         validators=[FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 6 Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
     # проектами ТEMPUS, ERASMUS+
     six_one = models.IntegerField(
-        verbose_name="керівнику (на всіх виконавців)", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
+        verbose_name="кількість виконавців проєкту", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
 
     # 7 Публікації
     seven_one = models.CharField(
         max_length=256, verbose_name="курс лекцій", default="0",
         validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_two = models.CharField(
-        max_length=256, verbose_name="видання методичних матеріалів навчально-методичні рекомендації", default="0",
+        max_length=256, verbose_name="навчально-методичні рекомендації", default="0",
         validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
     seven_three = models.CharField(
         max_length=256, verbose_name="підручник в Україні", default="0",
