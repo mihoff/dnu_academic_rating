@@ -8,7 +8,7 @@ class BaseCalculation:
 
     @staticmethod
     def _multiply(k: int, value: str) -> float:
-        return sum(k * float(i) for i in value.split())
+        return sum(k * float(i.replace(",", ".")) for i in value.split(";"))
 
     @staticmethod
     def _multiply_complex(k: int, value: str) -> float:
