@@ -24,4 +24,4 @@ class BaseCalculation:
 
     @staticmethod
     def _divide(k: int, value: str) -> float:
-        return sum((k / float(i)) if i != "0" else 0 for i in value.split())
+        return sum((k / float(i.replace(",", "."))) if float(i.replace(",", ".")) != 0 else 0 for i in value.split(";"))
