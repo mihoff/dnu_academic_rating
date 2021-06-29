@@ -1,13 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
 from django_tables2 import LazyPaginator, SingleTableView
 from microsoft_auth.context_processors import microsoft
 
+from service_api.calculations import BaseCalculation
 from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
 from service_api.calculations.generic_report_calc import GenericReportCalculation
 from service_api.calculations.organizational_and_educational_work_calc import \
@@ -57,9 +58,10 @@ class BaseView(ContextMixin, LoginRequiredMixin):
 
 class BaseReportFormView(FormView, BaseView):
     model: type(models.Model) = None
+    calc_model: type(BaseCalculation) = None
 
     def get_object(self, report_period: ReportPeriod):
-        return NotImplementedError
+        return self.model.get_report(self.request.user, report_period)
 
     def get_form(self, form_class=None):
         obj = self.get_object(ReportPeriod.get_active())
@@ -75,9 +77,30 @@ class BaseReportFormView(FormView, BaseView):
         data.update(
             {
                 "report_name": self.model.NAME,
+                f"is_{self.model.slug()}": True,
             }
         )
         return data
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        active_report_period = ReportPeriod.get_active()
+        if not self.get_object(active_report_period):
+            f.generic_report_data = GenericReportData.objects.get(
+                user=self.request.user, report_period=active_report_period)
+        calc_obj = self.calc_model(f)
+        f.result = calc_obj.get_result()
+        f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
+        f.save()
+
+        self.update_generic_report()
+
+        messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Виправте помилки та спробуйте ще раз")
+        return super().form_invalid(form)
 
 
 class IndexView(TemplateView, BaseView):
@@ -108,6 +131,11 @@ class PivotReportView(BaseView, SingleTableView):
             raise Http404
         return profiles
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["is_pivot_report"] = True
+        return data
+
 
 class GenericReportDataView(BaseReportFormView):
     """
@@ -117,18 +145,10 @@ class GenericReportDataView(BaseReportFormView):
     form_class = GenericReportDataForm
     template_name = "service_api/generic_report_data_form.html"
     success_url = reverse_lazy("generic_report_data_view")
+    calc_model = GenericReportCalculation
 
     def get_object(self, report_period):
         return self.generic_report
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data.update(
-            {
-                "is_generic_report_data_view": True,
-            }
-        )
-        return data
 
     def form_valid(self, form):
         f = form.save(commit=False)
@@ -136,12 +156,12 @@ class GenericReportDataView(BaseReportFormView):
         if not self.get_object(active_report_period):
             f.user = self.request.user
             f.report_period = active_report_period
-        calc_obj = GenericReportCalculation(f)
+        calc_obj = self.calc_model(f)
         f.result = calc_obj.get_result()
         f.save()
 
         messages.success(self.request, "Загальні дані збережено")
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class EducationalAndMethodicalWorkView(BaseReportFormView):
@@ -152,117 +172,29 @@ class EducationalAndMethodicalWorkView(BaseReportFormView):
     form_class = EducationalAndMethodicalWorkForm
     template_name = "service_api/educational_and_methodical_work.html"
     success_url = reverse_lazy("educational_and_methodical_work")
-
-    def get_object(self, report_period):
-        return EducationalAndMethodicalWork.get_report(self.request.user, report_period)
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data.update(
-            {
-                "is_educational_and_methodical_work": True,
-            }
-        )
-        return data
-
-    def form_valid(self, form):
-        f = form.save(commit=False)
-        active_report_period = ReportPeriod.get_active()
-        if not self.get_object(active_report_period):
-            f.generic_report_data = GenericReportData.objects.get(
-                user=self.request.user, report_period=active_report_period)
-        calc_obj = EducationalAndMethodicalWorkCalculation(f)
-        f.result = calc_obj.get_result()
-        f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
-        f.save()
-
-        self.update_generic_report()
-
-        messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, "Виправте помилки та спробуйте ще раз")
-        return super().form_invalid(form)
+    calc_model = EducationalAndMethodicalWorkCalculation
 
 
 class ScientificAndInnovativeWorkView(BaseReportFormView):
     """
         2. Науково-інноваційна робота
     """
+    model = ScientificAndInnovativeWork
     form_class = ScientificAndInnovativeWorkForm
     template_name = "service_api/scientific_and_innovative_work.html"
     success_url = reverse_lazy("scientific_and_innovative_work")
-    model = ScientificAndInnovativeWork
-
-    def get_object(self, report_period):
-        return ScientificAndInnovativeWork.get_report(self.request.user, report_period)
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data.update(
-            {
-                "is_scientific_and_innovative_work": True,
-            }
-        )
-        return data
-
-    def form_valid(self, form):
-        f = form.save(commit=False)
-        active_report_period = ReportPeriod.get_active()
-        if not self.get_object(active_report_period):
-            f.generic_report_data = GenericReportData.objects.get(
-                user=self.request.user, report_period=active_report_period)
-        calc_obj = ScientificAndInnovativeWorkCalculation(f)
-        f.result = calc_obj.get_result()
-        f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
-        f.save()
-
-        self.update_generic_report()
-
-        messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
-        return super().form_valid(form)
+    calc_model = ScientificAndInnovativeWorkCalculation
 
 
 class OrganizationalAndEducationalWorkView(BaseReportFormView):
     """
         3. Організаційно-виховна робота
     """
+    model = OrganizationalAndEducationalWork
     form_class = OrganizationalAndEducationalWorkForm
     template_name = "service_api/organizational_and_educational_work.html"
-    model = OrganizationalAndEducationalWork
     success_url = reverse_lazy("organizational_and_educational_work")
-
-    def get_object(self, report_period):
-        return self.model.objects.filter(
-            generic_report_data__user=self.request.user,
-            generic_report_data__report_period=report_period).first()
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data.update(
-            {
-                "is_organizational_and_educational_work": True,
-            }
-        )
-        return data
-
-    def form_valid(self, form):
-        f = form.save(commit=False)
-        active_report_period = ReportPeriod.get_active()
-        if not self.get_object(active_report_period):
-            f.generic_report_data = GenericReportData.objects.get(
-                user=self.request.user, report_period=active_report_period)
-
-        calc_obj = OrganizationalAndEducationalWorkCalculation(f)
-        f.result = calc_obj.get_result()
-        f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
-        f.save()
-
-        self.update_generic_report()
-
-        messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
-        return super().form_valid(form)
+    calc_model = OrganizationalAndEducationalWorkCalculation
 
 
 class ReportsView(TemplateView, BaseView):
