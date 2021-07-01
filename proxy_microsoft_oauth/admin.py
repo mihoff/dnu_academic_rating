@@ -2,8 +2,6 @@ from django.contrib import admin
 from microsoft_auth.admin import MicrosoftAccountAdmin
 from microsoft_auth.models import MicrosoftAccount
 
-from proxy_microsoft_oauth.models import AllowedMicrosoftAccount
-
 
 class MicrosoftAccountAdminOverride(MicrosoftAccountAdmin):
     list_display = ["user__first_name", "user__last_name", "user__email"]
@@ -27,8 +25,3 @@ class MicrosoftAccountAdminOverride(MicrosoftAccountAdmin):
 
 admin.site.unregister(MicrosoftAccount)
 admin.site.register(MicrosoftAccount, MicrosoftAccountAdminOverride)
-
-
-@admin.register(AllowedMicrosoftAccount)
-class AllowedMicrosoftAccountAdmin(admin.ModelAdmin):
-    ...
