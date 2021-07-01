@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 from proxy_microsoft_oauth.exceptions import DNUAuthHookException
 from user_profile.models import Profile
 

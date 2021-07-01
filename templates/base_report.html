@@ -12,7 +12,7 @@
     {% else %}
         <div class="alert alert-danger" role="alert">
             Дані відсутні в системі або обраний період неактивний, будь ласка, перейдіть за посиланням:
-            <a href="{% url 'generic_report_data_view' %}" class="alert-link">Введення загальних даних</a>
+            <a href="{% url 'generic_report_data_view' %}" class="btn btn-danger">Введення загальних даних</a>
         </div>
     {% endif %}
 {% endblock %}
