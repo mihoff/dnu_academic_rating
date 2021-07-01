@@ -6,7 +6,7 @@
 {% block h1 %}{{ report_name }}{% endblock %}
 {% block additional_header %}<h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>{% endblock %}
 {% block content %}
-    {% if generic_report or is_generic_report_data_view %}
+    {% if generic_report or is_generic_report_data %}
         {% block report_form %}
         {% endblock %}
     {% else %}
