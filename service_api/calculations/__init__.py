@@ -8,7 +8,7 @@ class BaseCalculation:
 
     @staticmethod
     def _multiply(k: int, value: str) -> float:
-        return sum(k * float(i.replace(",", ".")) for i in value.split(";"))
+        return sum(k * float(i.replace(",", ".") or 0) for i in value.split(";"))
 
     @staticmethod
     def _multiply_complex(k: int, value: str) -> float:
@@ -19,9 +19,11 @@ class BaseCalculation:
 
         for i in value.split(";"):
             for j in i.split("("):
-                r += k * (float(j.replace(')', '').replace(",", ".")) / 100)
+                r += k * (float(j.replace(')', '').replace(",", ".") or 0) / 100)
         return r
 
     @staticmethod
     def _divide(k: int, value: str) -> float:
-        return sum((k / float(i.replace(",", "."))) if float(i.replace(",", ".")) != 0 else 0 for i in value.split(";"))
+        return sum(
+            (k / float(i.replace(",", "."))) if float(i.replace(",", ".") or 0) != 0 else 0 for i in value.split(";")
+        )

@@ -14,7 +14,7 @@ from service_api.calculations.generic_report_calc import GenericReportCalculatio
 from service_api.calculations.organizational_and_educational_work_calc import \
     OrganizationalAndEducationalWorkCalculation
 from service_api.calculations.scientific_and_innovative_work_calc import ScientificAndInnovativeWorkCalculation
-from service_api.forms.generic_report_data_form import GenericReportDataForm, EducationalAndMethodicalWorkForm, \
+from service_api.forms.report_forms import GenericReportDataForm, EducationalAndMethodicalWorkForm, \
     OrganizationalAndEducationalWorkForm, ScientificAndInnovativeWorkForm
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
     ScientificAndInnovativeWork, ReportPeriod

@@ -27,9 +27,21 @@ class DivErrorList(ErrorList):
 class BaseForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if not self.initial:
+            for f in self.fields.values():
+                f.initial = None
+                f.required = False
         self.error_class = DivErrorList
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control form-control-sm"
+
+    def clean(self):
+        super().clean()
+        if not self.initial:
+            for f_name, f_value in self.cleaned_data.items():
+                attr = getattr(self._meta.model, f_name)
+                self.cleaned_data[f_name] = f_value or attr.field.default
+        return self.cleaned_data
 
 
 class GenericReportDataForm(BaseForm):
