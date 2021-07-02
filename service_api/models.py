@@ -24,6 +24,8 @@ class BaseReportModel(models.Model):
     generic_report_data = models.OneToOneField("GenericReportData", on_delete=models.SET_NULL, blank=True, null=True)
     result = models.FloatField(verbose_name="Підсумковий бал", default=0, validators=[validators.MinValueValidator(0)])
     adjusted_result = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Додано")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Останнє редагування")
 
     @property
     def report_period(self) -> str:
@@ -97,6 +99,8 @@ class GenericReportData(models.Model):
         verbose_name="Бал за наслідками анонімного анкетування студентів", default=0,
         validators=[validators.MinValueValidator(0)]
     )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Додано")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Останнє редагування")
 
     def __str__(self):
         return self.NAME
