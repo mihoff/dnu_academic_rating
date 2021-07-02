@@ -2,10 +2,50 @@ import logging
 
 from django.contrib import admin
 
-from service_api.models import ReportPeriod, GenericReportData
+from service_api.models import (
+    ReportPeriod,
+    GenericReportData,
+    EducationalAndMethodicalWork,
+    ScientificAndInnovativeWork,
+    OrganizationalAndEducationalWork)
 from user_profile.models import Department, Faculty, Position
 
 logger = logging.getLogger(__name__)
+
+
+class BaseReportAdmin(admin.ModelAdmin):
+    list_display = ("user_", "department_", "faculty_", "report_period", "result", "is_closed_")
+
+    def get_ordering(self, request):
+        one, two = "user__profile__department__faculty", "user__profile__department"
+        if hasattr(self.model, "generic_report_data"):
+            one = f"generic_report_data__{one}"
+            two = f"generic_report_data__{two}"
+        return one, two
+
+    @admin.display(description="Користувач", ordering="user", empty_value="")
+    def user_(self, obj):
+        _obj = getattr(obj, "generic_report_data", obj)
+        if _obj is not None:
+            return _obj.user.profile.last_name_and_initial
+
+    @admin.display(description=Department._meta.verbose_name, ordering="user__profile__department")
+    def department_(self, obj):
+        _obj = getattr(obj, "generic_report_data", obj)
+        if _obj is not None:
+            return _obj.user.profile.department
+
+    @admin.display(description=Faculty._meta.verbose_name, ordering="user__profile__department__faculty")
+    def faculty_(self, obj):
+        _obj = getattr(obj, "generic_report_data", obj)
+        if _obj is not None:
+            return _obj.user.profile.department.faculty
+
+    @admin.display(description=GenericReportData.is_closed.field.verbose_name, boolean=True)
+    def is_closed_(self, obj):
+        _obj = getattr(obj, "generic_report_data", obj)
+        if _obj is not None:
+            return _obj.is_closed
 
 
 @admin.register(ReportPeriod)
@@ -24,21 +64,7 @@ class ReportPeriodAdmin(admin.ModelAdmin):
 
 
 @admin.register(GenericReportData)
-class GenericReportDataAdmin(admin.ModelAdmin):
-    list_display = ("user_", "department_", "faculty_", "report_period", "result", "is_closed")
-    ordering = ("user__profile__department__faculty", "user__profile__department")
-
-    @admin.display(description="Користувач", ordering="user")
-    def user_(self, obj):
-        return obj.user.profile.last_name_and_initial
-
-    @admin.display(description=Department._meta.verbose_name, ordering="user__profile__department")
-    def department_(self, obj):
-        return obj.user.profile.department
-
-    @admin.display(description=Faculty._meta.verbose_name, ordering="user__profile__department__faculty")
-    def faculty_(self, obj):
-        return obj.user.profile.department.faculty
+class GenericReportDataAdmin(BaseReportAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -51,3 +77,18 @@ class GenericReportDataAdmin(admin.ModelAdmin):
             logging.error(f"GenericReportDataAdmin :: {e}")
 
         return qs
+
+
+@admin.register(EducationalAndMethodicalWork)
+class EducationalAndMethodicalWorkAdmin(BaseReportAdmin):
+    ...
+
+
+@admin.register(ScientificAndInnovativeWork)
+class ScientificAndInnovativeWorkAdmin(BaseReportAdmin):
+    ...
+
+
+@admin.register(OrganizationalAndEducationalWork)
+class OrganizationalAndEducationalWorkAdmin(BaseReportAdmin):
+    ...
