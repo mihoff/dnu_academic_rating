@@ -37,7 +37,7 @@ class BaseReportModel(models.Model):
 
             # Коррекция баллов относительно колличества отработанних месяцев
             result = main_assignment_correction / (generic_report.assignment_duration / 10)
-        except ZeroDivisionError:
+        except (ZeroDivisionError, AttributeError):
             result = .0
         return BaseCalculation.apply_rounding(result)
 
