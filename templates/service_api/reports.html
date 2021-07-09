@@ -81,7 +81,7 @@
     {% else %}
         <div class="alert alert-danger" role="alert">
             Дані відсутні в системі або обраний період неактивний, будь ласка, перейдіть за посиланням:
-            <a href="{% url 'generic_report_data_view' %}" class="btn btn-danger">Введення загальних даних</a>
+            <a href="{% url 'generic_report_data' %}" class="btn btn-danger">Введення загальних даних</a>
         </div>
     {% endif %}
 
@@ -97,8 +97,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {% for period in report_periods %}
                             <a class="dropdown-item {% if period.report_period == report_period %}active{% endif %}"
-                               href="
-                                       {% if period.report_period != report_period %}{% url 'reports' period.report_period.report_period|period_url_replace %}{% else %}#{% endif %}">
+                               href="{% if period.report_period != report_period %}{% url 'reports' period.report_period.report_period|period_url_replace %}{% else %}#{% endif %}">
                                 {{ period.report_period }}
                             </a>
                         {% endfor %}

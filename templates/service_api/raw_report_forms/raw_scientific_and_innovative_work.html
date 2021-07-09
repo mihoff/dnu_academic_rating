@@ -1,37 +1,23 @@
-<form action="{% url 'scientific_and_innovative_work' %}" method="post">
-    {% csrf_token %}
-
-    <table class="table table-sm table-bordered">
-        <thead class="text-center table-active h5">
+<table class="table table-sm table-bordered">
+    <thead class="text-center table-active h5">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col" style="width: 50%">Вид роботи</th>
+        <th scope="col">Значення показника</th>
+        <th scope="col">Примітка</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for field in form %}
         <tr>
-            <th scope="col">#</th>
-            <th scope="col" style="width: 50%">Вид роботи</th>
-            <th scope="col">Значення показника</th>
-            <th scope="col">Примітка</th>
+            <td></td>
+            <td><label for="{{ field.id_for_label }}">{{ field.label }}</label></td>
+            <td>
+                {{ field }}
+                {{ field.errors }}
+            </td>
+            <td></td>
         </tr>
-        </thead>
-        <tbody>
-        {% for field in form %}
-            <tr>
-                <td></td>
-                <td><label for="{{ field.id_for_label }}">{{ field.label }}</label></td>
-                <td>
-                    {{ field }}
-                    {{ field.errors }}
-                </td>
-                <td></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% if not is_pdf %}
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <button type="submit" class="btn btn-primary">Зберегти</button>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-</form>
+    {% endfor %}
+    </tbody>
+</table>

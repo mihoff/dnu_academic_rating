@@ -7,12 +7,23 @@
 {% block additional_header %}<h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>{% endblock %}
 {% block content %}
     {% if generic_report or is_generic_report_data %}
-        {% block report_form %}
-        {% endblock %}
+        <form action="{{ view.success_url }}" method="post">
+            {% csrf_token %}
+            {% block report_form %}
+                {% include report_template_path %}
+            {% endblock %}
+            {% if is_editable %}
+                <div class="row">
+                    <div class="mx-auto">
+                        <button type="submit" class="btn btn-primary">Зберегти</button>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
     {% else %}
         <div class="alert alert-danger" role="alert">
             Дані відсутні в системі або обраний період неактивний, будь ласка, перейдіть за посиланням:
-            <a href="{% url 'generic_report_data_view' %}" class="btn btn-danger">Введення загальних даних</a>
+            <a href="{% url 'generic_report_data' %}" class="btn btn-danger">Введення загальних даних</a>
         </div>
     {% endif %}
 {% endblock %}

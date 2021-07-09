@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    {% if not is_pdf %}<title>Рейтинг Викладача :: {% block title %}{% endblock %}</title>{% endif %}
+    {% if is_editable and not is_pdf %}<title>РВ | {% block title %}{% endblock %}</title>{% endif %}
 
     <style>
         .footer {
@@ -42,7 +42,7 @@
 
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown
-                {% if is_generic_report_data_view or is_educational_and_methodical_work or is_scientific_and_innovative_work or is_organizational_and_educational_work %} active{% endif %}">
+                {% if is_generic_report_data or is_educational_and_methodical_work or is_scientific_and_innovative_work or is_organizational_and_educational_work %} active{% endif %}">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -50,7 +50,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item {% if is_generic_report_data %}active{% endif %}"
-                               href="{% url 'generic_report_data_view' %}">Загальні дані</a>
+                               href="{% url 'generic_report_data' %}">Загальні дані</a>
                             <a class="dropdown-item {% if is_educational_and_methodical_work %}active{% endif %}"
                                href="{% url 'educational_and_methodical_work' %}">Навчально-методична робота</a>
                             <a class="dropdown-item {% if is_scientific_and_innovative_work %}active{% endif %}"
@@ -115,15 +115,14 @@
 </main>
 {% if not is_pdf %}
     <footer class="footer">
-        <div class="container text-right">
-            <div class="btn-group-sm" role="group" aria-label="Basic example">
+        <div class="row">
+            <div class="btn-group-sm mx-auto" role="group" aria-label="Basic example">
                 <a href="http://dnu.dp.ua/" target="_blank" type="button" class="btn btn-secondary">Сайт ДНУ</a>
                 <a href="mailto:tkachenko.m20@fpm.dnu.edu.ua" type="button" class="btn btn-secondary">
                     Написати розробнику
                 </a>
                 <a href="{% url 'admin:index' %}" type="button" class="btn btn-secondary">Адміністрування</a>
             </div>
-
         </div>
     </footer>
 {% endif %}

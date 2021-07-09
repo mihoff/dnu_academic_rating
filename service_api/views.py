@@ -27,13 +27,13 @@ class BaseView(ContextMixin, LoginRequiredMixin):
     generic_report: GenericReportData = None
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            report_period_str = (kwargs.get("report_period") or "").replace("-", '/')
-            if report_period_str:
-                self.report_period = ReportPeriod.objects.filter(report_period=report_period_str).first()
-            else:
-                self.report_period = ReportPeriod.get_active()
+        report_period_str = (kwargs.get("report_period") or "").replace("-", '/')
+        if report_period_str:
+            self.report_period = ReportPeriod.objects.filter(report_period=report_period_str).first()
+        else:
+            self.report_period = ReportPeriod.get_active()
 
+        if request.user.is_authenticated:
             self.generic_report = GenericReportData.objects.filter(
                 user=request.user, report_period=self.report_period).first()
 
@@ -46,11 +46,20 @@ class BaseView(ContextMixin, LoginRequiredMixin):
                 and self.request.user.profile.position is not None \
                 and self.request.user.profile.position.cumulative_calculation is not None:
             extended_user = True
+
+        if self.generic_report:
+            is_editable = not self.generic_report.is_closed
+        elif self.report_period:
+            is_editable = self.report_period.is_active
+        else:
+            is_editable = True
+
         data.update(
             {
                 "report_period": self.report_period,
                 "generic_report": self.generic_report,
                 "extended_user": extended_user,
+                "is_editable": is_editable
             }
         )
         return data
@@ -59,6 +68,8 @@ class BaseView(ContextMixin, LoginRequiredMixin):
 class BaseReportFormView(FormView, BaseView):
     model: type(models.Model) = None
     calc_model: type(BaseCalculation) = None
+    template_name = "base_report.html"
+    report_template_path: str = None
 
     def get_object(self, report_period: ReportPeriod):
         return self.model.get_report(self.request.user, report_period)
@@ -78,6 +89,7 @@ class BaseReportFormView(FormView, BaseView):
             {
                 "report_name": self.model.NAME,
                 f"is_{self.model.slug()}": True,
+                "report_template_path": self.report_template_path
             }
         )
         return data
@@ -143,8 +155,8 @@ class GenericReportDataView(BaseReportFormView):
     """
     model = GenericReportData
     form_class = GenericReportDataForm
-    template_name = "service_api/generic_report_data_form.html"
-    success_url = reverse_lazy("generic_report_data_view")
+    report_template_path = "service_api/raw_report_forms/raw_generic_report_data_view.html"
+    success_url = reverse_lazy("generic_report_data")
     calc_model = GenericReportCalculation
 
     def get_object(self, report_period):
@@ -170,7 +182,7 @@ class EducationalAndMethodicalWorkView(BaseReportFormView):
     """
     model = EducationalAndMethodicalWork
     form_class = EducationalAndMethodicalWorkForm
-    template_name = "service_api/educational_and_methodical_work.html"
+    report_template_path = "service_api/raw_report_forms/raw_educational_and_methodical_work.html"
     success_url = reverse_lazy("educational_and_methodical_work")
     calc_model = EducationalAndMethodicalWorkCalculation
 
@@ -181,7 +193,7 @@ class ScientificAndInnovativeWorkView(BaseReportFormView):
     """
     model = ScientificAndInnovativeWork
     form_class = ScientificAndInnovativeWorkForm
-    template_name = "service_api/scientific_and_innovative_work.html"
+    report_template_path = "service_api/raw_report_forms/raw_scientific_and_innovative_work.html"
     success_url = reverse_lazy("scientific_and_innovative_work")
     calc_model = ScientificAndInnovativeWorkCalculation
 
@@ -192,7 +204,7 @@ class OrganizationalAndEducationalWorkView(BaseReportFormView):
     """
     model = OrganizationalAndEducationalWork
     form_class = OrganizationalAndEducationalWorkForm
-    template_name = "service_api/organizational_and_educational_work.html"
+    report_template_path = "service_api/raw_report_forms/raw_organizational_and_educational_work.html"
     success_url = reverse_lazy("organizational_and_educational_work")
     calc_model = OrganizationalAndEducationalWorkCalculation
 
@@ -227,6 +239,7 @@ class ReportPdf(TemplateView, BaseView):
         data.update(
             {
                 **report_instances,
+                "is_editable": False,
                 "is_pdf": True,
                 GenericReportData.slug():
                     GenericReportDataForm(instance=self.generic_report) if self.generic_report else None,
