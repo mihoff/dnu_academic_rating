@@ -51,7 +51,7 @@ class BaseReportAdmin(admin.ModelAdmin):
 
 @admin.register(ReportPeriod)
 class ReportPeriodAdmin(admin.ModelAdmin):
-    list_display = ("report_period", "is_active")
+    list_display = ("report_period", "is_active", "annual_workload")
     ordering = ("report_period",)
 
     def has_delete_permission(self, request, obj=None):

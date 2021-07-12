@@ -21,8 +21,9 @@ class AuthenticateCallbackViewOverwrite(AuthenticateCallbackView):
     def post(self, request):
         try:
             return super().post(request)
-        except DNUAuthHookException:
+        except DNUAuthHookException as e:
             return render(
                 request,
                 "proxy_microsoft_oauth/auth_hook_exception.html",
+                context={"user__": e.user__}
             )

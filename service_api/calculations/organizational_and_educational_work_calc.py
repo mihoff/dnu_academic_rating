@@ -17,12 +17,10 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return self.apply_rounding(result)
 
     def __calc_one(self) -> float:
-        r = dict((
-            (OrganizationalAndEducationalWork.NONE, 0),
-            (OrganizationalAndEducationalWork.HEAD, 100),
-            (OrganizationalAndEducationalWork.SECRETARY, 100),
-            (OrganizationalAndEducationalWork.MEMBER, 50),
-        )).get(self.report.one_one) or 0
+        r = {OrganizationalAndEducationalWork.NONE: 0,
+             OrganizationalAndEducationalWork.HEAD: 100,
+             OrganizationalAndEducationalWork.SECRETARY: 100,
+             OrganizationalAndEducationalWork.MEMBER: 50}.get(self.report.one_one) or 0
         return r
 
     def __calc_two(self) -> float:
@@ -34,12 +32,23 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_four(self) -> float:
-        r = (50 if self.report.four_one else 0) + \
-            (50 if self.report.four_two else 0) + \
-            (25 if self.report.four_three else 0) + \
-            (30 if self.report.four_four else 0) + \
-            (30 if self.report.four_five else 0) + \
-            (15 if self.report.four_six else 0)
+        UNIVERSITY_POSITIONS = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 50,
+            OrganizationalAndEducationalWork.SECRETARY: 50,
+            OrganizationalAndEducationalWork.MEMBER: 25}
+        FACULTY_POSITIONS = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 30,
+            OrganizationalAndEducationalWork.SECRETARY: 30,
+            OrganizationalAndEducationalWork.MEMBER: 15}
+
+        r = UNIVERSITY_POSITIONS.get(self.report.four_one) + \
+            UNIVERSITY_POSITIONS.get(self.report.four_two) + \
+            FACULTY_POSITIONS.get(self.report.four_three) + \
+            UNIVERSITY_POSITIONS.get(self.report.four_four) + \
+            FACULTY_POSITIONS.get(self.report.four_five) + \
+            FACULTY_POSITIONS.get(self.report.four_six)
         return r
 
     def __calc_five(self) -> float:

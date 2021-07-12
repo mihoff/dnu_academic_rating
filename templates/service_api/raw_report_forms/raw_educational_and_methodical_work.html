@@ -2,8 +2,8 @@
     <thead class="text-center table-active h5">
     <tr>
         <th scope="col">#</th>
-        <th scope="col" style="width: 50%">Вид роботи</th>
-        <th scope="col">Значення показника</th>
+        <th scope="col" style="width: 45%">Вид роботи</th>
+        <th scope="col" style="width: 16%">Значення показника</th>
         <th scope="col">Примітка</th>
     </tr>
     </thead>
@@ -16,7 +16,7 @@
         <td></td>
         <td><label for="{{ form.one_one.id_for_label }}">{{ form.one_one.label }}</label></td>
         <td>{{ form.one_one }}{{ form.one_one.errors }}</td>
-        <td rowspan="4">Години</td>
+        <td rowspan="3">{{ form.one_one.help_text }}</td>
     </tr>
     <tr>
         <td></td>
@@ -27,11 +27,6 @@
         <td></td>
         <td><label for="{{ form.one_three.id_for_label }}">{{ form.one_three.label }}</label></td>
         <td>{{ form.one_three }}{{ form.one_three.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.one_four.id_for_label }}">{{ form.one_four.label }}</label></td>
-        <td>{{ form.one_four }}{{ form.one_four.errors }}</td>
     </tr>
 
     <tr>
@@ -89,8 +84,8 @@
         <td></td>
         <td><label for="{{ form.four_one.id_for_label }}">{{ form.four_one.label }}</label></td>
         <td>{{ form.four_one }}{{ form.four_one.errors }}</td>
-        <td>Кількість виконавців одного документу. У разі декількох робіт слід вказати кожне значення через крапку з
-            комою
+        <td>Кількість виконавців одного документу. У разі виконання декількох робіт слід вказати кожне значення через
+            крапку з комою
         </td>
     </tr>
 
@@ -104,8 +99,8 @@
         <td></td>
         <td><label for="{{ form.five_one.id_for_label }}">{{ form.five_one.label }}</label></td>
         <td>{{ form.five_one }}{{ form.five_one.errors }}</td>
-        <td rowspan="2">Кількість друкованих аркушів. У разі декількох робіт слід вказати кожне значення через крапку з
-            комою
+        <td rowspan="2">Кількість друкованих аркушів. У разі виконання декількох робіт слід вказати кожне значення через
+            крапку з комою
         </td>
     </tr>
     <tr>
@@ -118,14 +113,20 @@
         <th class="table-active">1.6</th>
         <th scope="row" colspan="3" class="table-active">
             Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
-            проектами ТEMPUS, ERASMUS+
+            проєктами ТEMPUS, ERASMUS+
         </th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.six_one.id_for_label }}">{{ form.six_one.label }}</label></td>
         <td>{{ form.six_one }}{{ form.six_one.errors }}</td>
-        <td>Кількість виконавців</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.six_two.id_for_label }}">{{ form.six_two.label }}</label></td>
+        <td>{{ form.six_two }}{{ form.six_two.errors }}</td>
+        <td>{{ form.six_two.help_text }}</td>
     </tr>
 
     <tr>
@@ -147,7 +148,7 @@
         </td>
         <td>{{ form.seven_one }}{{ form.seven_one.errors }}</td>
         <td rowspan="2">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
-            який визначено кафедрою. У разі декількох робіт слід вказати кожне значення через крапку з комою.
+            який визначено кафедрою. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -172,7 +173,7 @@
         </td>
         <td>{{ form.seven_three }}{{ form.seven_three.errors }}</td>
         <td rowspan="4">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
-            який визначено кафедрою. У разі декількох робіт слід вказати кожне значення через крапку з комою.
+            який визначено кафедрою. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -211,17 +212,7 @@
         <td></td>
         <td><label for="{{ form.eight_one.id_for_label }}">{{ form.eight_one.label }}</label></td>
         <td>{{ form.eight_one }}{{ form.eight_one.errors }}</td>
-        <td rowspan="3">Кількість робіт</td>
-    </tr>
-    <tr>
         <td></td>
-        <td><label for="{{ form.eight_two.id_for_label }}">{{ form.eight_two.label }}</label></td>
-        <td>{{ form.eight_two }}{{ form.eight_two.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.eight_three.id_for_label }}">{{ form.eight_three.label }}</label></td>
-        <td>{{ form.eight_three }}{{ form.eight_three.errors }}</td>
     </tr>
 
     <tr>
@@ -233,7 +224,7 @@
         <td><label for="{{ form.nine_one.id_for_label }}">{{ form.nine_one.label }}</label></td>
         <td>{{ form.nine_one }}{{ form.nine_one.errors }}</td>
         <td rowspan="2">Відсоток загального результату, який визначено кафедрою.
-            У разі декількох робіт слід вказати кожне значення через крапку з комою.
+            У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -260,7 +251,7 @@
             </label>
         </td>
         <td>{{ form.ten_one }}{{ form.ten_one.errors }}</td>
-        <td rowspan="2">Кількість виконавців. У разі декількох робіт слід вказати кожне значення через крапку з комою.
+        <td rowspan="2">Кількість виконавців. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -286,7 +277,7 @@
             </label>
         </td>
         <td>{{ form.ten_three }}{{ form.ten_three.errors }}</td>
-        <td rowspan="2">Кількість виконавців. У разі декількох робіт слід вказати кожне значення через крапку з комою.
+        <td rowspan="2">Кількість виконавців. У разі виконання виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -302,7 +293,7 @@
     <tr>
         <th class="table-active">1.11</th>
         <th scope="row" colspan="3" class="table-active">
-            Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
+            Розробка і підготовка нових лабораторних робіт
         </th>
     </tr>
     <tr>
@@ -310,7 +301,7 @@
         <td><label for="{{ form.eleven_one.id_for_label }}">{{ form.eleven_one.label }}</label></td>
         <td>{{ form.eleven_one }}{{ form.eleven_one.errors }}</td>
         <td rowspan="2">Відсоток загального результату, який визначено кафедрою.
-            У разі декількох робіт слід вказати кожне значення через крапку з комою.
+            У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
@@ -329,7 +320,7 @@
         <td></td>
         <td><label for="{{ form.twelve_one.id_for_label }}">{{ form.twelve_one.label }}</label></td>
         <td>{{ form.twelve_one }}{{ form.twelve_one.errors }}</td>
-        <td>Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати через кожне
+        <td>Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати через кожне
             значення через крапку з комою.
         </td>
     </tr>
@@ -342,7 +333,7 @@
         <td></td>
         <td><label for="{{ form.thirteen_one.id_for_label }}">{{ form.thirteen_one.label }}</label></td>
         <td>{{ form.thirteen_one }}{{ form.thirteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -362,7 +353,7 @@
         <td></td>
         <td><label for="{{ form.fourteen_one.id_for_label }}">{{ form.fourteen_one.label }}</label></td>
         <td>{{ form.fourteen_one }}{{ form.fourteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -380,7 +371,7 @@
         <td></td>
         <td><label for="{{ form.fifteen_one.id_for_label }}">{{ form.fifteen_one.label }}</label></td>
         <td>{{ form.fifteen_one }}{{ form.fifteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою.. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою.. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -406,7 +397,7 @@
             </label>
         </td>
         <td>{{ form.sixteen_one }}{{ form.sixteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -431,7 +422,7 @@
             </label>
         </td>
         <td>{{ form.sixteen_three }}{{ form.sixteen_three.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -456,7 +447,7 @@
             </label>
         </td>
         <td>{{ form.sixteen_five }}{{ form.sixteen_five.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати
+        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
             кожне значення через крапку з комою.
         </td>
     </tr>
@@ -480,8 +471,8 @@
         <td></td>
         <td><label for="{{ form.seventeen_one.id_for_label }}">{{ form.seventeen_one.label }}</label></td>
         <td>{{ form.seventeen_one }}{{ form.seventeen_one.errors }}</td>
-        <td>Доля загального результату, яка визначена кафедрою. У разі декількох робіт слід вказати
-            через пробіл кожне значення.
+        <td>Відсоток загального результату, яка визначена кафедрою. У разі виконання декількох робіт слід вказати
+            кожне значення через крапку з комою
         </td>
     </tr>
 

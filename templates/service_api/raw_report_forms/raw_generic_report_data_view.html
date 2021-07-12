@@ -4,29 +4,34 @@
         <th scope="col">#</th>
         <th scope="col" style="width: 50%">Назва</th>
         <th scope="col">Значення</th>
+        <th scope="col">Примітка</th>
     </tr>
     </thead>
     <tbody>
-    {% if not is_editable %}
+    {% if is_pdf %}
         <tr>
             <td></td>
             <td>Факультет</td>
             <td>{{ user.profile.department.faculty }}</td>
+            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>Кафедра</td>
             <td>{{ user.profile.department }}</td>
+            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>Науково-педагогічний працівник</td>
             <td>{{ user.last_name }} {{ user.first_name }}</td>
+            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>Займана посада</td>
             <td>{{ user.profile.position }}</td>
+            <td></td>
         </tr>
     {% endif %}
     {% for field in form %}
@@ -37,13 +42,15 @@
                 {{ field }}
                 {{ field.errors }}
             </td>
+            <td>{{ field.help_text }}</td>
         </tr>
     {% endfor %}
-    {% if not is_editable %}
+    {% if is_pdf %}
         <tr>
             <td></td>
             <td><b>Рейтинговий бал працівника</b></td>
             <td><b>{{ generic_report.result }}</b></td>
+            <td></td>
         </tr>
     {% endif %}
     </tbody>

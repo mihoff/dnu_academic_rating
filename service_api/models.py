@@ -35,10 +35,10 @@ class BaseReportModel(models.Model):
     def raw_calculation(raw_result, generic_report):
         try:
             # Корекция базовых баллов относительно ставки
-            main_assignment_correction = raw_result / (generic_report.main_assignment / 100)
+            assignment_correction = raw_result / generic_report.assignment
 
             # Коррекция баллов относительно колличества отработанних месяцев
-            result = main_assignment_correction / (generic_report.assignment_duration / 10)
+            result = assignment_correction / (generic_report.assignment_duration / 10)
         except (ZeroDivisionError, AttributeError):
             result = .0
         return BaseCalculation.apply_rounding(result)
@@ -55,6 +55,10 @@ class ReportPeriod(models.Model):
 
     is_active = models.BooleanField(verbose_name="Активний", default=False)
     report_period = models.CharField(verbose_name="Період", max_length=9, choices=REPORT_PERIOD_CHOICES)
+
+    annual_workload = models.FloatField(
+        verbose_name="середньорічне навчальне навантаження в ДНУ (год.)", default=0,
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
 
     def __str__(self):
         return self.report_period
@@ -88,17 +92,19 @@ class GenericReportData(models.Model):
 
     assignment_duration = models.FloatField(
         verbose_name="Кількість відпрацьованих місяців за звітний період", default=10,
-        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(10)])
-    main_assignment = models.FloatField(
-        verbose_name="Відсоток ставки, яку обіймає за основною посадою", default=100,
-        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(100)])
-    additional_assignment = models.FloatField(
-        verbose_name="Відсоток ставки, яку обіймає за штатним сумісництвом", default=0,
-        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(50)])
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(10)],
+        help_text="Значення від 0 до 10")
+
+    assignment = models.FloatField(
+        verbose_name="Доля ставки, яку обіймає за основною посадою або за штатним сумісництвом",
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(1)],
+        default=1, help_text="Значення від 0 до 1"
+    )
     students_rating = models.FloatField(
         verbose_name="Бал за наслідками анонімного анкетування студентів", default=0,
-        validators=[validators.MinValueValidator(0)]
-    )
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(200)],
+        help_text="Значення від 0 до 200 балів. "
+                  "Сума балів, які отримані НПП за результатами двох анкетувань (1 та 2 семестр)")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Додано")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Останнє редагування")
 
@@ -134,18 +140,27 @@ class EducationalAndMethodicalWork(BaseReportModel):
         (DOCENT, "Доцент"),
     )
 
+    LEVEL_ONE = "І освітній рівень"
+    LEVEL_TWO = "ІІ освітній рівень"
+    LEVEL_THREE = "ІІІ освітній рівень"
+    LEVELS_CHOICES = (
+        (NONE, "-"),
+        (LEVEL_ONE, LEVEL_ONE),
+        (LEVEL_TWO, LEVEL_TWO),
+        (LEVEL_THREE, LEVEL_THREE)
+    )
+
     # 1 Виконання навчального навантаження
     one_one = models.FloatField(
         verbose_name="обсяг виконаного аудиторного навантаження (год.)", default=0,
-        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)],
+        help_text="До аудиторного навантаження включаються години за проведення лекційних, практичних, семінарських, "
+                  "лабораторних занять.")
     one_two = models.FloatField(
         verbose_name="обсяг виконаного аудиторного навантаження (год.) іноземною мовою", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
     one_three = models.FloatField(
         verbose_name="загальне навчальне навантаження працівника (год.) за рік", default=0,
-        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
-    one_four = models.FloatField(
-        verbose_name="середньорічне навчальне навантаження в ДНУ (год.)", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
 
     # 2 Рецензування навчально-методичних матеріалів
@@ -166,7 +181,7 @@ class EducationalAndMethodicalWork(BaseReportModel):
         verbose_name="нормативних документів, наданих МОН України для публічного обговорення",
         default=0, validators=[validators.MinValueValidator(0)])
     three_two = models.IntegerField(
-        verbose_name="конкурсних дипломних проектів і робіт", default=0, validators=[validators.MinValueValidator(0)])
+        verbose_name="конкурсних дипломних проєктів і робіт", default=0, validators=[validators.MinValueValidator(0)])
     three_three = models.IntegerField(
         verbose_name="конкурсних робіт МАН", default=0, validators=[validators.MinValueValidator(0)])
 
@@ -186,8 +201,9 @@ class EducationalAndMethodicalWork(BaseReportModel):
 
     # 6 Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
     # проектами ТEMPUS, ERASMUS+
-    six_one = models.IntegerField(
-        verbose_name="кількість виконавців проєкту", default="0", validators=[NUMBER_SEMICOLON_VALIDATOR])
+    # выконавець True - False
+    six_one = models.BooleanField(verbose_name="В ролі керівника", default=False)
+    six_two = models.IntegerField(verbose_name="В ролі виконавця", default=0, help_text="Кількість участників проєкту")
 
     # 7 Публікації
     seven_one = models.CharField(
@@ -210,12 +226,8 @@ class EducationalAndMethodicalWork(BaseReportModel):
         validators=[FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR])
 
     # 8 Виконання обов’язків гаранта ОП І освітнього рівня/ІІ ОР/ІІІ ОР
-    eight_one = models.IntegerField(
-        verbose_name="І освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
-    eight_two = models.IntegerField(
-        verbose_name="ІІ освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
-    eight_three = models.IntegerField(
-        verbose_name="ІІІ освітній рівень", default=0, validators=[NUMBER_SEMICOLON_VALIDATOR])
+    eight_one = models.CharField(
+        max_length=32, verbose_name="", choices=LEVELS_CHOICES, default=NONE, null=True, blank=True)
 
     # 9 Розробка НМКД
     nine_one = models.CharField(
@@ -346,7 +358,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     HEAD = "head"
     SECRETARY = "secretary"
     MEMBER = "member"
-    ONE_ONE_CHOICES = (
+    POSITION_CHOICES = (
         (NONE, "-"),
         (HEAD, "голова, заступник голови"),
         (SECRETARY, "секретар"),
@@ -355,7 +367,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
 
     # 1. Робота в науково-методичних комісіях (підкомісіях) з вищої освіти Міністерства освіти і науки України
     one_one = models.CharField(
-        max_length=10, verbose_name="посада", default=NONE, choices=ONE_ONE_CHOICES, blank=True, null=True)
+        max_length=10, verbose_name="посада", default=NONE, choices=POSITION_CHOICES, blank=True, null=True)
 
     # 2. Робота в Акредитаційній комісії або її експертних рад, галузевих експертних радах НАЗЯВО, або Міжгалузевої
     # експертної ради з вищої освіти Акредитаційної комісії, експертних комісіях МОН/зазначеного агентства
@@ -365,21 +377,33 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     three_one = models.BooleanField(default=False)
 
     # 4. Робота в науково-технічній раді НДЧ ДНУ, науково-методичній раді, РЗЯВО, БЗЯВО університету (факультету)
-    four_one = models.BooleanField(verbose_name="голова, заступник голови", default=False)
-    four_two = models.BooleanField(verbose_name="секретар", default=False)
-    four_three = models.BooleanField(verbose_name="член", default=False)
-    four_four = models.BooleanField(verbose_name="голова, заступник голови", default=False)
-    four_five = models.BooleanField(verbose_name="секретар", default=False)
-    four_six = models.BooleanField(verbose_name="член", default=False)
+    four_one = models.CharField(
+        verbose_name="Робота в науково-технічній раді НДЧ ДНУ", max_length=10, choices=POSITION_CHOICES, default=NONE,
+        blank=True, null=True)
+    four_two = models.CharField(
+        verbose_name="Робота в науково-методичній раді", max_length=10, choices=POSITION_CHOICES, default=NONE,
+        blank=True, null=True)
+    four_three = models.CharField(
+        verbose_name="Робота в науково-методичній раді", max_length=10, choices=POSITION_CHOICES, default=NONE,
+        blank=True, null=True)
+    four_four = models.CharField(
+        verbose_name="Робота в раді та бюро із забезпечення якості вищої освіти (РЗЯВО, БЗЯВО)",
+        max_length=10, choices=POSITION_CHOICES, default=NONE, blank=True, null=True)
+    four_five = models.CharField(
+        verbose_name="Робота в раді та бюро із забезпечення якості вищої освіти (РЗЯВО, БЗЯВО)",
+        max_length=10, choices=POSITION_CHOICES, default=NONE, blank=True, null=True)
+    four_six = models.CharField(
+        verbose_name="Робота у бюро з академічної доброчесності факультету", max_length=10,
+        choices=POSITION_CHOICES, default=NONE, blank=True, null=True)
 
     # 5. Організація та проведення загальнодержавних наукових конференцій, симпозіумів і семінарів
     five_one = models.IntegerField(verbose_name="голова оргкомітету", default=0)
     five_two = models.IntegerField(verbose_name="вчений секретар оргкомітету", default=0)
-    five_three = models.IntegerField(verbose_name="інші члени оргкомітету", default=0)
+    five_three = models.IntegerField(verbose_name="член оргкомітету", default=0)
 
     # 6. Виконання обов’язків заступника декана факультету на громадських засадах
     # з навчальної роботи (з інших видів діяльності)
-    six_one = models.BooleanField(verbose_name="навчальна аробота", default=False)
+    six_one = models.BooleanField(verbose_name="навчальна робота", default=False)
     six_two = models.BooleanField(verbose_name="інші види діяльності", default=False)
 
     # 7. Робота секретарем ЕК
@@ -393,7 +417,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
 
     # 10. Виконання обов’язків відповідального за організацію замовлення додатків DIPLOMA SUPLIMENT,
     # включаючи переклад на іноземну мову
-    ten_one = models.IntegerField(verbose_name="кількість студентів, яким замовлено", default=0)
+    ten_one = models.IntegerField(verbose_name="кількість студентів, яким замовлено додатки", default=0)
 
     # 11. Участь у виховній роботі в студентському колектив
     eleven_one = models.BooleanField(
@@ -416,7 +440,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         verbose_name="заступник завідувача кафедри на громадських засадах", default=False)
 
     # 15. Взаємовідвідування занять НПП (крім завідувача кафедри) зі складанням відгуку в журналі взаємовідвідувань
-    fifteen_one = models.IntegerField(verbose_name="кількість занять", default=0)
+    fifteen_one = models.IntegerField(verbose_name="кількість занять відвідувань занять", default=0)
 
     # 16. Участь у профорієнтаційній роботі кафедри, факультету, університету
     sixteen_one = models.IntegerField(verbose_name="кількість заходів", default=0)

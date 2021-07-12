@@ -7,6 +7,11 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         EducationalAndMethodicalWork.PROFESSOR: 120,
         EducationalAndMethodicalWork.DOCENT: 60
     }
+    LEVELS_RATE = {
+        EducationalAndMethodicalWork.LEVEL_ONE: 60,
+        EducationalAndMethodicalWork.LEVEL_TWO: 40,
+        EducationalAndMethodicalWork.LEVEL_THREE: 20,
+    }
 
     def __init__(self, report: EducationalAndMethodicalWork):
         self.report = report
@@ -23,10 +28,11 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
 
     def __calc_one(self) -> float:
         r = 0
-        if self.report.one_four:
-            r = 600 * (self.report.one_one / self.report.one_four) + \
-                250 * ((self.report.one_three - self.report.one_one) / self.report.one_four) + \
-                600 * (self.report.one_two / self.report.one_four)
+        annual_workload = self.report.generic_report_data.report_period.annual_workload
+        if annual_workload:
+            r = 600 * (self.report.one_one / annual_workload) + \
+                250 * ((self.report.one_three - self.report.one_one) / annual_workload) + \
+                600 * (self.report.one_two / annual_workload)
         return r
 
     def __calc_two(self) -> float:
@@ -51,7 +57,7 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_six(self) -> float:
-        r = self.report.six_one
+        r = (80 if self.report.six_one else 0) + (200 / self.report.six_two) if self.report.six_two else 0
         return r
 
     def __calc_seven(self) -> float:
@@ -65,9 +71,7 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_eight(self) -> float:
-        r = 60 + self.report.eight_one + \
-            40 + self.report.eight_two + \
-            20 * self.report.eight_three
+        r = self.LEVELS_RATE.get(self.report.eight_one) or 0
         return r
 
     def __calc_nine(self) -> float:

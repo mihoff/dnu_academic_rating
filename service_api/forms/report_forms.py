@@ -47,7 +47,7 @@ class BaseForm(ModelForm):
 class GenericReportDataForm(BaseForm):
     class Meta:
         model = GenericReportData
-        fields = ("assignment_duration", "main_assignment", "additional_assignment", "students_rating")
+        fields = ("assignment_duration", "assignment", "students_rating")
 
 
 class EducationalAndMethodicalWorkForm(BaseForm):

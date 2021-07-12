@@ -6,4 +6,4 @@ def auth_hook(user, token):
     profile = Profile.objects.filter(user=user).first()
     if profile and profile.position is None:
         user.delete()
-        raise DNUAuthHookException
+        raise DNUAuthHookException(user=user)
