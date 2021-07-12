@@ -88,9 +88,13 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_thirteen(self) -> float:
-        r = 35 * self.report.thirteen_one + \
-            50 * self.report.thirteen_two + \
-            25 * self.report.thirteen_three
+        LEVELS_RATE = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 35,
+            OrganizationalAndEducationalWork.SECRETARY: 50,
+            OrganizationalAndEducationalWork.MEMBER: 25,
+        }
+        r = LEVELS_RATE.get(self.report.thirteen_one)
         return r
 
     def __calc_fourteen(self) -> float:
