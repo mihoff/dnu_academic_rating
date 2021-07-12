@@ -362,7 +362,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         (NONE, "-"),
         (HEAD, "голова, заступник голови"),
         (SECRETARY, "секретар"),
-        (MEMBER, "член комісії"),
+        (MEMBER, "член"),
     )
 
     # 1. Робота в науково-методичних комісіях (підкомісіях) з вищої освіти Міністерства освіти і науки України
@@ -428,9 +428,9 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     twelve_one = models.BooleanField(default=False)
 
     # 13. Робота у складі вченої ради факультету
-    thirteen_one = models.IntegerField(verbose_name="голова, заступник голови", default=0)
-    thirteen_two = models.IntegerField(verbose_name="вчений секретар", default=0)
-    thirteen_three = models.IntegerField(verbose_name="член ради", default=0)
+    thirteen_one = models.CharField(
+        verbose_name="Робота у складі вченої ради факультету", choices=POSITION_CHOICES, default=NONE,
+        blank=True, null=True, max_length=10)
 
     # 14. Організаційна робота
     fourteen_one = models.BooleanField(
@@ -440,7 +440,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         verbose_name="заступник завідувача кафедри на громадських засадах", default=False)
 
     # 15. Взаємовідвідування занять НПП (крім завідувача кафедри) зі складанням відгуку в журналі взаємовідвідувань
-    fifteen_one = models.IntegerField(verbose_name="кількість занять відвідувань занять", default=0)
+    fifteen_one = models.IntegerField(verbose_name="кількість відвіданих занять", default=0)
 
     # 16. Участь у профорієнтаційній роботі кафедри, факультету, університету
     sixteen_one = models.IntegerField(verbose_name="кількість заходів", default=0)
