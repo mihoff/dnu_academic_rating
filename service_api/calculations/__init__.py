@@ -7,19 +7,19 @@ class BaseCalculation:
         return round(val, precision)
 
     @staticmethod
-    def _multiply(k: int, value: str) -> float:
+    def _multiply(k: float, value: str) -> float:
         return sum(k * float(i.replace(",", ".") or 0) for i in value.split(";"))
 
     @staticmethod
-    def _multiply_complex(k: int, value: str) -> float:
+    def _multiply_complex(const: float, value: str) -> float:
         """V1(K1) V2(K2) ... Vn(Kn)"""
         r = 0
         if value == "0":
             return r
 
         for i in value.split(";"):
-            for j in i.split("("):
-                r += k * (float(j.replace(')', '').replace(",", ".") or 0) / 100)
+            v, k = i.split("(")
+            r += const * float(v) * float(k.replace(')', '').replace(",", ".") or 0)
         return r
 
     @staticmethod

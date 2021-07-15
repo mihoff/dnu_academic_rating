@@ -62,12 +62,12 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
 
     def __calc_seven(self) -> float:
         """N * V * K"""
-        r = self._multiply_complex(14, self.report.seven_one) + \
-            self._multiply_complex(12, self.report.seven_two) + \
-            self._multiply_complex(20, self.report.seven_three) + \
-            self._multiply_complex(16, self.report.seven_four) + \
-            self._multiply_complex(24, self.report.seven_five) + \
-            self._multiply_complex(18, self.report.seven_six)
+        r = self._multiply_complex(14 / 100, self.report.seven_one) + \
+            self._multiply_complex(12 / 100, self.report.seven_two) + \
+            self._multiply_complex(20 / 100, self.report.seven_three) + \
+            self._multiply_complex(16 / 100, self.report.seven_four) + \
+            self._multiply_complex(24 / 100, self.report.seven_five) + \
+            self._multiply_complex(18 / 100, self.report.seven_six)
         return r
 
     def __calc_eight(self) -> float:
@@ -75,8 +75,8 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_nine(self) -> float:
-        r = self._multiply(150, self.report.nine_one) + \
-            self._multiply(30, self.report.nine_two)
+        r = self._multiply(150 / 100, self.report.nine_one) + \
+            self._multiply(30 / 100, self.report.nine_two)
         return r
 
     def __calc_ten(self) -> float:
@@ -87,40 +87,40 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_eleven(self) -> float:
-        r = self._multiply(50, self.report.eleven_one) + \
-            self._multiply(50, self.report.eleven_two) * .8
+        r = self._multiply(50 / 100, self.report.eleven_one) + \
+            self._multiply(50 / 100, self.report.eleven_two) * .8
         return r
 
     def __calc_twelve(self) -> float:
-        r = self._multiply(150, self.report.twelve_one)
+        r = self._multiply(150 / 100, self.report.twelve_one)
         return r
 
     def __calc_thirteen(self) -> float:
-        r = self._multiply(200, self.report.thirteen_one) + \
-            self._multiply(300, self.report.thirteen_two)
+        r = self._multiply(200 / 100, self.report.thirteen_one) + \
+            self._multiply(300 / 100, self.report.thirteen_two)
         return r
 
     def __calc_fourteen(self) -> float:
-        r = self._multiply(50, self.report.fourteen_one) + \
-            self._multiply(50, self.report.fourteen_two) * .8
+        r = self._multiply(50 / 100, self.report.fourteen_one) + \
+            self._multiply(50 / 100, self.report.fourteen_two) * .8
         return r
 
     def __calc_fifteen(self) -> float:
-        r = self._multiply(50, self.report.fifteen_one) + \
-            self._multiply(50, self.report.fifteen_two) * .8
+        r = self._multiply(50 / 100, self.report.fifteen_one) + \
+            self._multiply(50 / 100, self.report.fifteen_two) * .8
         return r
 
     def __calc_sixteen(self) -> float:
-        r = self._multiply(50, self.report.sixteen_one) + \
-            self._multiply(50, self.report.sixteen_two) * .8 + \
-            self._multiply(30, self.report.sixteen_one) + \
-            self._multiply(30, self.report.sixteen_two) * .8 + \
-            self._multiply(60, self.report.sixteen_one) + \
-            self._multiply(60, self.report.sixteen_two) * .8
+        r = self._multiply(50 / 100, self.report.sixteen_one) + \
+            self._multiply(50 / 100, self.report.sixteen_two) * .8 + \
+            self._multiply(30 / 100, self.report.sixteen_three) + \
+            self._multiply(30 / 100, self.report.sixteen_four) * .8 + \
+            self._multiply(60 / 100, self.report.sixteen_five) + \
+            self._multiply(60 / 100, self.report.sixteen_six) * .8
         return r
 
     def __calc_seventeen(self) -> float:
-        r = self._multiply(50, self.report.seventeen_one)
+        r = self._multiply(50 / 100, self.report.seventeen_one)
         return r
 
     def __calc_eighteen(self) -> float:
