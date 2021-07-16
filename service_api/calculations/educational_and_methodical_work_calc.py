@@ -82,13 +82,13 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
     def __calc_ten(self) -> float:
         r = self._divide(50, self.report.ten_one) + \
             self._divide(10, self.report.ten_two) + \
-            self._divide(50, self.report.ten_three) * .8 + \
-            self._divide(10, self.report.ten_four) * .8
+            self._divide(10, self.report.ten_three) + \
+            self._divide(2, self.report.ten_four)
         return r
 
     def __calc_eleven(self) -> float:
         r = self._multiply(50 / 100, self.report.eleven_one) + \
-            self._multiply(50 / 100, self.report.eleven_two) * .8
+            self._multiply(10 / 100, self.report.eleven_two)
         return r
 
     def __calc_twelve(self) -> float:
@@ -102,12 +102,12 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
 
     def __calc_fourteen(self) -> float:
         r = self._multiply(50 / 100, self.report.fourteen_one) + \
-            self._multiply(50 / 100, self.report.fourteen_two) * .8
+            self._multiply(10 / 100, self.report.fourteen_two)
         return r
 
     def __calc_fifteen(self) -> float:
         r = self._multiply(50 / 100, self.report.fifteen_one) + \
-            self._multiply(50 / 100, self.report.fifteen_two) * .8
+            self._multiply(10 / 100, self.report.fifteen_two)
         return r
 
     def __calc_sixteen(self) -> float:
