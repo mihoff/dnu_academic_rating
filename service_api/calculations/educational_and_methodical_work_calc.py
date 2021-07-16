@@ -112,11 +112,11 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
 
     def __calc_sixteen(self) -> float:
         r = self._multiply(50 / 100, self.report.sixteen_one) + \
-            self._multiply(50 / 100, self.report.sixteen_two) * .8 + \
+            self._multiply(50 * .2 / 100, self.report.sixteen_two) + \
             self._multiply(30 / 100, self.report.sixteen_three) + \
-            self._multiply(30 / 100, self.report.sixteen_four) * .8 + \
+            self._multiply(30 * .2 / 100, self.report.sixteen_four) + \
             self._multiply(60 / 100, self.report.sixteen_five) + \
-            self._multiply(60 / 100, self.report.sixteen_six) * .8
+            self._multiply(60 * .2 / 100, self.report.sixteen_six)
         return r
 
     def __calc_seventeen(self) -> float:
