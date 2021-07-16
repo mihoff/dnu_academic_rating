@@ -13,6 +13,8 @@ class GenericReportCalculation(BaseCalculation):
         for report in (EducationalAndMethodicalWork, ScientificAndInnovativeWork, OrganizationalAndEducationalWork):
             obj = report.objects.filter(generic_report_data=self.report).first()
             if obj:
-                result += obj.get_final_result()
+                obj.adjusted_result = obj.get_final_result()
+                obj.save()
+                result += obj.adjusted_result
 
         return self.apply_rounding(result)
