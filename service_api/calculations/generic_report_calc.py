@@ -15,6 +15,9 @@ class GenericReportCalculation(BaseCalculation):
             if obj:
                 obj.adjusted_result = obj.get_final_result()
                 obj.save()
-                result += obj.adjusted_result
+                if isinstance(obj, OrganizationalAndEducationalWork):
+                    result += obj.adjusted_result * 2
+                else:
+                    result += obj.adjusted_result
 
         return self.apply_rounding(result)
