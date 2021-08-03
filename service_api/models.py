@@ -21,6 +21,8 @@ FLOAT_NUMBER_BRACKETS_FLOAT_NUMBER_SEMICOLON_VALIDATOR = validators.RegexValidat
 
 
 class BaseReportModel(models.Model):
+    adjust_rate = 1
+
     generic_report_data = models.OneToOneField("GenericReportData", on_delete=models.SET_NULL, blank=True, null=True)
     result = models.FloatField(verbose_name="Підсумковий бал", default=0, validators=[validators.MinValueValidator(0)])
     adjusted_result = models.FloatField(default=0)
@@ -364,6 +366,8 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         (SECRETARY, "секретар"),
         (MEMBER, "член"),
     )
+
+    adjust_rate = 2
 
     # 1. Робота в науково-методичних комісіях (підкомісіях) з вищої освіти Міністерства освіти і науки України
     one_one = models.CharField(

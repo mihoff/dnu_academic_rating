@@ -1,6 +1,7 @@
 import logging
-
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from service_api.models import (
     ReportPeriod,
@@ -51,7 +52,7 @@ class BaseReportAdmin(admin.ModelAdmin):
 
 @admin.register(ReportPeriod)
 class ReportPeriodAdmin(admin.ModelAdmin):
-    list_display = ("report_period", "is_active", "annual_workload")
+    list_display = ("report_period", "is_active", "annual_workload", "download")
     ordering = ("report_period",)
 
     def has_delete_permission(self, request, obj=None):
@@ -62,6 +63,17 @@ class ReportPeriodAdmin(admin.ModelAdmin):
         if is_active is True:
             ReportPeriod.objects.update(is_active=False)
         return super().save_form(request, form, change)
+
+    @admin.display(description="завантажити звіт")
+    def download(self, obj):
+        return mark_safe(f"""
+        <a href="{reverse('pivot_report_all', kwargs={'report_period_id': obj.pk})}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+        </a>
+        """)
 
 
 @admin.register(GenericReportData)

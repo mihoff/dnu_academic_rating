@@ -1,7 +1,10 @@
+import codecs
+import csv
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
@@ -249,3 +252,30 @@ class ReportPdf(TemplateView, BaseView):
             }
         )
         return data
+
+
+def pivot_report_all(request, report_period_id):
+    report_period = ReportPeriod.objects.get(pk=report_period_id)
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment; filename='Report Period {report_period.report_period}.csv'"
+        }
+    )
+    response.write(codecs.BOM_UTF8)
+
+    writer = csv.writer(response)
+    writer.writerow(["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал"])
+    for i, one in enumerate(GenericReportData.objects.filter(report_period=report_period).order_by("-result"), start=1):
+        writer.writerow(
+            [
+                i,
+                one.user.profile.last_name_and_initial,
+                one.user.profile.department,
+                one.user.profile.department.faculty,
+                one.user.profile.position,
+                one.result,
+            ]
+        )
+
+    return response
