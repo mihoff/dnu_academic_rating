@@ -259,7 +259,7 @@ def pivot_report_all(request, report_period_id):
     response = HttpResponse(
         content_type="text/csv",
         headers={
-            "Content-Disposition": f"attachment; filename='Report Period {report_period.report_period}.csv'"
+            "Content-Disposition": f"attachment; filename=Report Period {report_period.report_period}.csv"
         }
     )
     response.write(codecs.BOM_UTF8)
