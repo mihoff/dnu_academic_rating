@@ -22,7 +22,7 @@ from service_api.forms.report_forms import GenericReportDataForm, EducationalAnd
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
     ScientificAndInnovativeWork, ReportPeriod
 from service_api.tables import PivotReportTable
-from user_profile.models import Profile, Position
+from user_profile.models import Profile, Position, Faculty, Department
 
 
 class BaseView(ContextMixin, LoginRequiredMixin):
@@ -254,28 +254,59 @@ class ReportPdf(TemplateView, BaseView):
         return data
 
 
-def pivot_report_all(request, report_period_id):
-    report_period = ReportPeriod.objects.get(pk=report_period_id)
-    response = HttpResponse(
-        content_type="text/csv",
-        headers={
-            "Content-Disposition": f"attachment; filename=Report Period {report_period.report_period}.csv"
-        }
-    )
-    response.write(codecs.BOM_UTF8)
+class PivotReport:
+    def __init__(self, request, report_period_id=None, level_type=None, pk=None):
+        self.request = request
+        self.report_period_id = report_period_id
+        self.level_type = level_type
+        self.pk = pk
 
-    writer = csv.writer(response)
-    writer.writerow(["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал"])
-    for i, one in enumerate(GenericReportData.objects.filter(report_period=report_period).order_by("-result"), start=1):
-        writer.writerow(
-            [
-                i,
-                one.user.profile.last_name_and_initial,
-                one.user.profile.department,
-                one.user.profile.department.faculty,
-                one.user.profile.position,
-                one.result,
-            ]
+        self.__response = None
+
+    def get_qs(self):
+        return GenericReportData.objects.filter(report_period__pk=self.report_period_id).order_by("-result")
+
+    def is_valid(self, generic_report: GenericReportData):
+        if self.level_type == Faculty.__name__.lower():
+            return generic_report.user.profile.department.faculty.pk == self.pk
+        elif self.level_type == Department.__name__.lower():
+            return generic_report.user.profile.department.pk == self.pk
+        else:
+            return True
+
+    def prepare_response(self):
+        report_period = ReportPeriod.objects.get(pk=self.report_period_id)
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={
+                "Content-Disposition": f"attachment; filename=Report Period {report_period.report_period}.csv"
+            }
         )
+        response.write(codecs.BOM_UTF8)
 
-    return response
+        writer = csv.writer(response)
+        writer.writerow(["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал"])
+        for i, one in enumerate(self.get_qs(), start=1):
+            if self.is_valid(one):
+                writer.writerow(
+                    [
+                        i,
+                        one.user.profile.last_name_and_initial,
+                        one.user.profile.department,
+                        one.user.profile.department.faculty,
+                        one.user.profile.position,
+                        one.result,
+                    ]
+                )
+
+        self.__response = response
+
+    @property
+    def response(self):
+        return self.__response
+
+
+def pivot_report_by_type(request, report_period_id, level_type=None, pk=None):
+    report = PivotReport(request, report_period_id=report_period_id, level_type=level_type, pk=pk)
+    report.prepare_response()
+    return report.response

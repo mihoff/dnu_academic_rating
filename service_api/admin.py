@@ -52,7 +52,8 @@ class BaseReportAdmin(admin.ModelAdmin):
 
 @admin.register(ReportPeriod)
 class ReportPeriodAdmin(admin.ModelAdmin):
-    list_display = ("report_period", "is_active", "annual_workload", "download")
+    list_display = ("report_period", "is_active", "annual_workload", "download", "download_faculty", 
+                    "download_department")
     ordering = ("report_period",)
 
     def has_delete_permission(self, request, obj=None):
@@ -64,7 +65,7 @@ class ReportPeriodAdmin(admin.ModelAdmin):
             ReportPeriod.objects.update(is_active=False)
         return super().save_form(request, form, change)
 
-    @admin.display(description="завантажити звіт")
+    @admin.display(description="звіт універсітету")
     def download(self, obj):
         return mark_safe(f"""
         <a href="{reverse('pivot_report_all', kwargs={'report_period_id': obj.pk})}">
@@ -74,6 +75,38 @@ class ReportPeriodAdmin(admin.ModelAdmin):
             </svg>
         </a>
         """)
+
+    @admin.display(description="звіт за факультетом")
+    def download_faculty(self, obj):
+        options = [f"""
+            <option value='{reverse('pivot_report_by_type', 
+                                    kwargs={
+                                        'report_period_id': obj.pk, 
+                                        'level_type': 'faculty',
+                                        "pk": f.pk,
+                                    })}'>{f}</option>""" for f in Faculty.objects.all()]
+        return mark_safe(f"""
+            <select onChange="window.location.href=this.value" style="width: 150px;">
+                <option>-</option>
+                {"".join(options)}
+            </select>
+        """)
+
+    @admin.display(description="звіт за кафедрою")
+    def download_department(self, obj):
+        options = [f"""
+            <option value='{reverse('pivot_report_by_type',
+                                    kwargs={
+                                        'report_period_id': obj.pk,
+                                        'level_type': 'department',
+                                        "pk": f.pk,
+                                    })}'>{f}</option>""" for f in Department.objects.all()]
+        return mark_safe(f"""
+                    <select onChange="window.location.href=this.value" style="width: 150px;">
+                        <option>-</option>
+                        {"".join(options)}
+                    </select>
+                """)
 
 
 @admin.register(GenericReportData)
