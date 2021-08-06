@@ -46,7 +46,7 @@ class GenericReportCalculation(BaseCalculation):
         return (result + cum_result) / 2
 
 
-class RelatedHeadsCalculation(BaseCalculation):
+class HeadsGetter:
     def __init__(self, department=None, faculty=None):
         self.department = department
         self.faculty = faculty
@@ -56,7 +56,6 @@ class RelatedHeadsCalculation(BaseCalculation):
 
     def __get_head_of_faculty_profile(self):
         return Profile.objects.filter(
-            # department__faculty=self.report.user.profile.department.faculty,
             department__faculty=self.faculty,
             position__cumulative_calculation=Position.BY_FACULTY
         ).first()
@@ -64,10 +63,6 @@ class RelatedHeadsCalculation(BaseCalculation):
     def __get_head_of_department_profile(self):
         return Profile.objects.filter(
             department=self.department,
-            # department=self.report.user.profile.department,
             position__cumulative_calculation=Position.BY_DEPARTMENT
         ).first()
 
-    def get_result(self) -> float:
-        # todo: calculate both
-        return self.apply_rounding()

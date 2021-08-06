@@ -13,7 +13,7 @@ from microsoft_auth.context_processors import microsoft
 
 from service_api.calculations import BaseCalculation
 from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
-from service_api.calculations.generic_report_calc import GenericReportCalculation
+from service_api.calculations.generic_report_calc import GenericReportCalculation, HeadsGetter
 from service_api.calculations.organizational_and_educational_work_calc import \
     OrganizationalAndEducationalWorkCalculation
 from service_api.calculations.scientific_and_innovative_work_calc import ScientificAndInnovativeWorkCalculation
@@ -81,10 +81,26 @@ class BaseReportFormView(FormView, BaseView):
         obj = self.get_object(ReportPeriod.get_active())
         return self.form_class(instance=obj, **self.get_form_kwargs())
 
-    def update_generic_report(self, ):
-        calc_obj = GenericReportCalculation(self.generic_report)
-        self.generic_report.result = calc_obj.get_result()
-        self.generic_report.save()
+    def update_generic_report(self):
+        self.__update_generic_report(self.generic_report)
+
+    @staticmethod
+    def __update_generic_report(generic_report):
+        calc_obj = GenericReportCalculation(generic_report)
+        generic_report.result = calc_obj.get_result()
+        generic_report.save()
+
+    def update_reports_of_heads(self):
+        profile = self.request.user.profile
+        heads = HeadsGetter(profile.department, profile.department.faculty)
+        if heads.head_of_department_profile is not None and profile != heads.head_of_department_profile:
+            generic_report = heads.head_of_department_profile.user.genericreportdata_set.filter(
+                report_period=ReportPeriod.get_active()).first()
+            self.__update_generic_report(generic_report)
+        if heads.head_of_faculty_profile is not None and profile != heads.head_of_faculty_profile:
+            generic_report = heads.head_of_faculty_profile.user.genericreportdata_set.filter(
+                report_period=ReportPeriod.get_active()).first()
+            self.__update_generic_report(generic_report)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -109,6 +125,8 @@ class BaseReportFormView(FormView, BaseView):
         f.save()
 
         self.update_generic_report()
+
+        self.update_reports_of_heads()
 
         messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
         return super().form_valid(form)
@@ -174,6 +192,8 @@ class GenericReportDataView(BaseReportFormView):
         calc_obj = self.calc_model(f)
         f.result = calc_obj.get_result()
         f.save()
+
+        self.update_reports_of_heads()
 
         messages.success(self.request, "Загальні дані збережено")
         return HttpResponseRedirect(self.get_success_url())
@@ -279,7 +299,8 @@ class PivotReport:
         response = HttpResponse(
             content_type="text/csv",
             headers={
-                "Content-Disposition": f"attachment; filename=Report Period {report_period.report_period}.csv"
+                "Content-Disposition":
+                    f"attachment; filename=Звітний період {report_period.report_period}.csv".encode("utf-8")
             }
         )
         response.write(codecs.BOM_UTF8)

@@ -4,7 +4,12 @@
 {% block title %}{{ report_name }}{% endblock %}
 
 {% block h1 %}{{ report_name }}{% endblock %}
-{% block additional_header %}<h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>{% endblock %}
+{% block additional_header %}
+    <h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>
+    {% if not is_editable %}
+        <p class="text-center">(Заповнення звітного періоду закінчено)</p>
+    {% endif %}
+{% endblock %}
 {% block content %}
     {% if generic_report or is_generic_report_data %}
         <form action="{{ view.success_url }}" method="post">
