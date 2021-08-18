@@ -1,4 +1,4 @@
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 from service_api.calculations import BaseCalculation
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, ScientificAndInnovativeWork, \
@@ -33,17 +33,17 @@ class GenericReportCalculation(BaseCalculation):
         if cumulative_opt is None:
             return result
 
-        cum_result = 0
+        data = {"result__sum": 0, "pk__count": 1}
         if cumulative_opt == Position.BY_FACULTY:
-            cum_result = GenericReportData.objects.filter(
+            data = GenericReportData.objects.filter(
                 user__profile__department__faculty=self.report.user.profile.department.faculty
-            ).exclude(pk=self.report.pk).aggregate(Sum("result"))["result__sum"]
+            ).exclude(pk=self.report.pk).aggregate(Sum("result"), Count('pk'))
         elif cumulative_opt == Position.BY_DEPARTMENT:
-            cum_result = GenericReportData.objects.filter(
+            data = GenericReportData.objects.filter(
                 user__profile__department=self.report.user.profile.department
-            ).exclude(pk=self.report.pk).aggregate(Sum("result"))["result__sum"]
+            ).exclude(pk=self.report.pk).aggregate(Sum("result"), Count('pk'))
 
-        return (result + cum_result) / 2
+        return (result + data["result__sum"]/data["pk__count"]) / 2
 
 
 class HeadsGetter:
