@@ -306,7 +306,11 @@ class PivotReport:
         response.write(codecs.BOM_UTF8)
 
         writer = csv.writer(response)
-        writer.writerow(["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал"])
+        writer.writerow(
+            ["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал",
+             EducationalAndMethodicalWork.NAME,
+             ScientificAndInnovativeWork.NAME,
+             OrganizationalAndEducationalWork.NAME])
         for i, one in enumerate(self.get_qs(), start=1):
             if self.is_valid(one):
                 writer.writerow(
@@ -317,6 +321,9 @@ class PivotReport:
                         one.user.profile.department.faculty,
                         one.user.profile.position,
                         one.result,
+                        one.educationalandmethodicalwork.adjusted_result,
+                        one.scientificandinnovativework.adjusted_result,
+                        one.organizationalandeducationalwork.adjusted_result,
                     ]
                 )
 
