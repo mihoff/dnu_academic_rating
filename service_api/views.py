@@ -305,6 +305,8 @@ class PivotReport:
         )
         response.write(codecs.BOM_UTF8)
 
+        fake_report = type("fake_report", (), {"adjusted_result": .0})
+
         writer = csv.writer(response)
         writer.writerow(
             ["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал",
@@ -321,9 +323,9 @@ class PivotReport:
                         one.user.profile.department.faculty,
                         one.user.profile.position,
                         one.result,
-                        one.educationalandmethodicalwork.adjusted_result,
-                        one.scientificandinnovativework.adjusted_result,
-                        one.organizationalandeducationalwork.adjusted_result,
+                        getattr(one, "educationalandmethodicalwork", fake_report).adjusted_result,
+                        getattr(one, "scientificandinnovativework", fake_report).adjusted_result,
+                        getattr(one, "organizationalandeducationalwork", fake_report).adjusted_result,
                     ]
                 )
 
