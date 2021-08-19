@@ -19,7 +19,7 @@ class BaseCalculation:
 
         for i in value.split(";"):
             v, k = i.split("(")
-            r += const * float(v) * float(k.replace(')', '').replace(",", ".") or 0)
+            r += const * float(v.replace(",", ".")) * float(k.replace(")", "").replace(",", ".") or 0)
         return r
 
     @staticmethod
