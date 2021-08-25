@@ -19,7 +19,7 @@ class Command(BaseCommand):
         parser.add_argument('--file-path', type=str)
 
     def handle(self, *args, **options):
-        with open(options['file_path']) as f:
+        with open(options['file_path'], encoding='utf-8-sig') as f:
             file_reader = csv.DictReader(f, delimiter=';')
             for row in file_reader:
                 email = row[self.email].lower().strip()
