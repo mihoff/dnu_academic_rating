@@ -36,10 +36,6 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {% if is_index %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'index' %}">Положення</a>
-                </li>
-
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown
                 {% if is_generic_report_data or is_educational_and_methodical_work or is_scientific_and_innovative_work or is_organizational_and_educational_work %} active{% endif %}">
