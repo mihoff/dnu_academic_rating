@@ -17,5 +17,4 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        key_path: ${{ secrets.KEY_PATH }}
-        script: . /root/update.sh
+        script: bash /root/update.sh
