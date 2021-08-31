@@ -61,7 +61,9 @@ class ReportPeriod(models.Model):
     annual_workload = models.FloatField(
         verbose_name="середньорічне навчальне навантаження в ДНУ (год.)", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
-    document = models.FileField(verbose_name="Положення", default=None, null=True)
+    document = models.FileField(
+        verbose_name="Положення", upload_to="uploads/service_api/report_period",
+        default=None, null=True, max_length=256)
 
     def __str__(self):
         return self.report_period

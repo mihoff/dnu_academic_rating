@@ -141,3 +141,4 @@ cython_debug/
 static/
 
 academic_rating/settings_local.py
+uploads/

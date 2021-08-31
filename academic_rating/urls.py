@@ -9,7 +9,7 @@ from django.urls import path, include
 from proxy_microsoft_oauth.views import logout_view, AuthenticateCallbackViewOverwrite
 from service_api.views import IndexView, EducationalAndMethodicalWorkView, ScientificAndInnovativeWorkView, \
     GenericReportDataView, ReportsView, OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView, \
-    pivot_report_by_type
+    pivot_report_by_type, document_download
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
@@ -35,6 +35,7 @@ urlpatterns = [
     path("pivot-report/<int:report_period_id>/<str:level_type>/<int:pk>", pivot_report_by_type,
          name="pivot_report_by_type"),
     path("pivot-report/<str:report_period>/", PivotReportView.as_view(), name="pivot_report"),
+    path("document-download/", document_download, name="document_download"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
