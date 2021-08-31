@@ -1,9 +1,13 @@
+import logging
+
 from django.db.models import Sum, Count
 
 from service_api.calculations import BaseCalculation
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, ScientificAndInnovativeWork, \
     OrganizationalAndEducationalWork
 from user_profile.models import Position, Profile
+
+logger = logging.getLogger()
 
 
 class GenericReportCalculation(BaseCalculation):
@@ -28,7 +32,11 @@ class GenericReportCalculation(BaseCalculation):
         return self.apply_rounding(result)
 
     def get_cumulative_result(self, result):
-        cumulative_opt = self.report.user.profile.position.cumulative_calculation
+        try:
+            cumulative_opt = self.report.user.profile.position.cumulative_calculation
+        except Exception as e:
+            logger.exception(e)
+            return result
 
         if cumulative_opt is None:
             return result
@@ -43,7 +51,7 @@ class GenericReportCalculation(BaseCalculation):
                 user__profile__department=self.report.user.profile.department
             ).exclude(pk=self.report.pk).aggregate(Sum("result"), Count('pk'))
 
-        return (result + data["result__sum"]/data["pk__count"]) / 2
+        return (result + data["result__sum"] / data["pk__count"]) / 2
 
 
 class HeadsGetter:
@@ -65,4 +73,3 @@ class HeadsGetter:
             department=self.department,
             position__cumulative_calculation=Position.BY_DEPARTMENT
         ).first()
-
