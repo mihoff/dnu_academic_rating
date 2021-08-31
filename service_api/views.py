@@ -86,9 +86,10 @@ class BaseReportFormView(FormView, BaseView):
 
     @staticmethod
     def __update_generic_report(generic_report):
-        calc_obj = GenericReportCalculation(generic_report)
-        generic_report.result = calc_obj.get_result()
-        generic_report.save()
+        if generic_report:
+            calc_obj = GenericReportCalculation(generic_report)
+            generic_report.result = calc_obj.get_result()
+            generic_report.save()
 
     def update_reports_of_heads(self):
         profile = self.request.user.profile
