@@ -71,9 +71,10 @@ class Profile(models.Model):
 
     @property
     def last_name_and_initial(self):
-        res = self.user.email
-        if self.user.last_name and self.user.first_name:
+        try:
             res = f"{self.user.last_name} {'. '.join([i[0] for i in self.user.first_name.split(' ')])}."
+        except IndexError:
+            res = self.user.email
         return res
 
     def __str__(self):
