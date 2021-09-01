@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'service_api',
     'user_profile',
     'django_tables2',
+    'feedbacks',
 ]
 
 MIDDLEWARE = [

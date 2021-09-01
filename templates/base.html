@@ -121,18 +121,15 @@
         <div class="row">
             <div class="btn-group-sm mx-auto" role="group" aria-label="Basic example">
                 <a href="http://dnu.dp.ua/" target="_blank" type="button" class="btn btn-secondary">Сайт ДНУ</a>
-                <a href="mailto:tkachenko.m20@fpm.dnu.edu.ua" type="button" class="btn btn-secondary">
-                    Написати розробнику
-                </a>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#feedback">Відгук</button>
                 <a href="{% url 'admin:index' %}" type="button" class="btn btn-secondary">Адміністрування</a>
             </div>
         </div>
     </footer>
+    {% include "feedbacks/feedback_form.html" %}
 {% endif %}
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
@@ -155,9 +152,32 @@
 {% endif %}
 
 <script>
-    $(document).ready(function () {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         $('.alert').alert();
+
+        $("#form-feedback").submit(function (e) {
+            e.preventDefault();
+            let $form = $(this);
+            if (!$("#id_feedback").val()) {
+                alert("Будь-ласка, заповніть всі обов'язвокі поля!")
+                return false;
+            }
+
+            $.ajax({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                success: function(data) {
+                    let $modalFeedback = $('#feedback');
+                    $modalFeedback.modal('hide');
+                    $modalFeedback.on('hidden.bs.modal', function (e) {
+                        $form[0].reset();
+                        alert(data);
+                    })
+                }
+            });
+        });
     });
 </script>
 

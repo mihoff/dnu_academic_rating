@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from feedbacks.views import feedbacks
 from proxy_microsoft_oauth.views import logout_view, AuthenticateCallbackViewOverwrite
 from service_api.views import IndexView, EducationalAndMethodicalWorkView, ScientificAndInnovativeWorkView, \
     GenericReportDataView, ReportsView, OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView, \
@@ -36,6 +37,8 @@ urlpatterns = [
          name="pivot_report_by_type"),
     path("pivot-report/<str:report_period>/", PivotReportView.as_view(), name="pivot_report"),
     path("document-download/", document_download, name="document_download"),
+
+    path("feedbacks/", feedbacks, name="feedbacks")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
