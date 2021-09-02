@@ -15,15 +15,16 @@ logger = logging.getLogger(__name__)
 
 
 class BaseReportAdmin(admin.ModelAdmin):
-    list_display = ("user_", "department_", "faculty_", "report_period", "result", "is_closed_",
-                    "created_at", "updated_at")
+    list_display = (
+        "user_", "department_", "faculty_", "report_period", "result", "is_closed_", "created_at", "updated_at",
+    )
 
     def get_ordering(self, request):
         one, two = "user__profile__department__faculty", "user__profile__department"
         if hasattr(self.model, "generic_report_data"):
             one = f"generic_report_data__{one}"
             two = f"generic_report_data__{two}"
-        return one, two
+        return "-updated_at", one, two
 
     @admin.display(description="Користувач", ordering="user", empty_value="")
     def user_(self, obj):

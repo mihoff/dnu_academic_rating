@@ -4,7 +4,7 @@ from microsoft_auth.models import MicrosoftAccount
 
 
 class MicrosoftAccountAdminOverride(MicrosoftAccountAdmin):
-    list_display = ["user__first_name", "user__last_name", "user__email"]
+    list_display = ["user__first_name", "user__last_name", "user__email", "last_login", "date_joined"]
     actions = ["view"]
 
     def has_add_permission(self, request):
@@ -21,6 +21,14 @@ class MicrosoftAccountAdminOverride(MicrosoftAccountAdmin):
     @admin.display(description="Електронна скриня")
     def user__email(self, obj):
         return obj.user.email if obj.user is not None else "N/A"
+
+    @admin.display(description="Дата приєднання")
+    def date_joined(self, obj):
+        return obj.user.date_joined
+
+    @admin.display(description="Дата останнього входу")
+    def last_login(self, obj):
+        return obj.user.last_login
 
 
 admin.site.unregister(MicrosoftAccount)

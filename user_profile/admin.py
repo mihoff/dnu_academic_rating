@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user_", "position_", "department_", "faculty_")
+    list_display = ("user_", "position_", "department_", "faculty_", "last_login", "date_joined")
     list_per_page = 50
 
     @admin.display(description=_("User"), ordering="user")
@@ -28,6 +28,14 @@ class ProfileAdmin(admin.ModelAdmin):
     @admin.display(description=Faculty._meta.verbose_name, empty_value="-", ordering="department__faculty")
     def faculty_(self, obj):
         return obj.department.faculty if obj.department else "-"
+
+    @admin.display(description="Дата приєднання")
+    def date_joined(self, obj):
+        return obj.user.date_joined
+
+    @admin.display(description="Дата останнього входу")
+    def last_login(self, obj):
+        return obj.user.last_login
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
