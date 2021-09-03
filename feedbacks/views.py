@@ -18,10 +18,10 @@ def feedbacks(request):
 
     f = FeedbackForm(request.POST)
     if f.is_valid():
-        f.save(commit=False)
+        feedback = f.save(commit=False)
         if request.user.is_authenticated:
-            f.user = request.user
-        f.save()
+            feedback.user = request.user
+        feedback.save()
         return HttpResponse("Дякуємо за відгук!")
     else:
         return HttpResponse("Під час збережння відгуку виникла помилка, спробуйте, будь-ласка, пізніше.")
