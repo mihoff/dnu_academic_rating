@@ -1,5 +1,7 @@
 import codecs
 import csv
+import logging
+import traceback
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,6 +25,8 @@ from service_api.models import GenericReportData, EducationalAndMethodicalWork, 
     ScientificAndInnovativeWork, ReportPeriod
 from service_api.tables import PivotReportTable
 from user_profile.models import Profile, Position, Faculty, Department
+
+logger = logging.getLogger()
 
 
 class BaseView(ContextMixin, LoginRequiredMixin):
@@ -121,13 +125,17 @@ class BaseReportFormView(FormView, BaseView):
             f.generic_report_data = GenericReportData.objects.get(
                 user=self.request.user, report_period=active_report_period)
         calc_obj = self.calc_model(f)
-        f.result = calc_obj.get_result()
-        f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
-        f.save()
+        try:
+            f.result = calc_obj.get_result()
+            f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
+            f.save()
 
-        self.update_generic_report()
+            self.update_generic_report()
 
-        self.update_reports_of_heads()
+            self.update_reports_of_heads()
+        except:
+            logger.error(f"{self.request.user}\n{form.data}\n{traceback.format_exc()}")
+            return self.form_invalid(form)
 
         messages.success(self.request, f'Дані по "{self.model.NAME}" збережено')
         return super().form_valid(form)
