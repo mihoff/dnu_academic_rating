@@ -42,7 +42,7 @@ class BaseReportAdmin(admin.ModelAdmin):
     def faculty_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
         if _obj is not None:
-            return _obj.user.profile.department.faculty
+            return getattr(_obj.user.profile.department, "faculty", None)
 
     @admin.display(description=GenericReportData.is_closed.field.verbose_name, boolean=True)
     def is_closed_(self, obj):
