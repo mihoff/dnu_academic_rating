@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user_", "position_", "department_", "faculty_", "last_login", "date_joined")
     list_per_page = 50
+    search_fields = ("user__last_name", "user__first_name", "user__email")
 
     @admin.display(description=_("User"), ordering="user")
     def user_(self, obj):

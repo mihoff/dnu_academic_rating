@@ -6,6 +6,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("last_name", "first_name", "email")
     list_filter = ("is_staff", "is_superuser")
     fields = ("email", "first_name", "last_name", "groups", "user_permissions")
+    search_fields = ('first_name', 'last_name', 'email')
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
