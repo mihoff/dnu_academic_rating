@@ -4,8 +4,13 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.templatetags.static import static
+from django.utils.safestring import mark_safe
 
 from service_api.calculations import BaseCalculation
+
+YES_SVG = f"<img src='{static('admin/img/icon-yes.svg')}' alt='False'>"
+NO_SVG = f"<img src='{static('admin/img/icon-no.svg')}' alt='False'>"
 
 NUMBER_SEMICOLON_VALIDATOR = validators.RegexValidator(
     r"\d+?(;|$)", message="Невірний формат даних. Введіть числа через крапку з комою.")
@@ -123,6 +128,11 @@ class GenericReportData(models.Model):
     @staticmethod
     def slug():
         return "generic_report_data"
+
+    def admin_reports(self):
+        report_conditions = [
+            f"{r.NAME}{YES_SVG if getattr(self, r.__name__.lower(), False) else NO_SVG}" for r in REPORT_MODELS]
+        return mark_safe("<br/>".join(report_conditions))
 
     class Meta:
         verbose_name = "Загальний звіт"
@@ -318,6 +328,9 @@ class EducationalAndMethodicalWork(BaseReportModel):
     def report_period_url(self):
         return self.generic_report_data.report_period.report_period.replace("/", "-")
 
+    def bool_admin(self):
+        return bool(self)
+
     def __str__(self):
         return self.NAME
 
@@ -500,3 +513,10 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     class Meta:
         verbose_name = 'Звіт "Організаційно-виховна робота"'
         verbose_name_plural = 'Звіти "Організаційно-виховна робота"'
+
+
+REPORT_MODELS = (
+    EducationalAndMethodicalWork,
+    ScientificAndInnovativeWork,
+    OrganizationalAndEducationalWork
+)

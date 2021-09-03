@@ -121,9 +121,14 @@ class GenericReportDataAdmin(BaseReportAdmin):
             elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
                 qs = qs.filter(user__profile__department__faculty=request.user.profile.department.faculty)
         except Exception as e:
-            logging.error(f"GenericReportDataAdmin :: {e}")
+            logging.info(f"GenericReportDataAdmin :: {e}")
 
         return qs
+
+    def get_list_display(self, request):
+        list_fields = list(super().get_list_display(request))
+        list_fields.append("admin_reports")
+        return tuple(list_fields)
 
 
 @admin.register(EducationalAndMethodicalWork)

@@ -3,8 +3,7 @@ import logging
 from django.db.models import Sum, Count
 
 from service_api.calculations import BaseCalculation
-from service_api.models import GenericReportData, EducationalAndMethodicalWork, ScientificAndInnovativeWork, \
-    OrganizationalAndEducationalWork
+from service_api.models import GenericReportData, REPORT_MODELS
 from user_profile.models import Position, Profile
 
 logger = logging.getLogger()
@@ -17,7 +16,7 @@ class GenericReportCalculation(BaseCalculation):
 
     def get_result(self) -> float:
         result = 0
-        for report in (EducationalAndMethodicalWork, ScientificAndInnovativeWork, OrganizationalAndEducationalWork):
+        for report in REPORT_MODELS:
             obj = report.objects.filter(generic_report_data=self.report).first()
             if not obj:
                 continue
