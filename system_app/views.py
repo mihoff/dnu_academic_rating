@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import ListView
 
 from system_app.models import Documents
 
 
-class DocumentsView(ListView):
+class DocumentsView(LoginRequiredMixin, ListView):
     model = Documents
     template_name = "service_app/documents.html"
 

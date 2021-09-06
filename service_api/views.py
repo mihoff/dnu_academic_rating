@@ -4,6 +4,7 @@ import logging
 import traceback
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -29,7 +30,7 @@ from user_profile.models import Profile, Position, Faculty, Department
 logger = logging.getLogger()
 
 
-class BaseView(ContextMixin, LoginRequiredMixin):
+class __BaseView(ContextMixin):
     report_period: ReportPeriod = None
     generic_report: GenericReportData = None
 
@@ -72,7 +73,11 @@ class BaseView(ContextMixin, LoginRequiredMixin):
         return data
 
 
-class BaseReportFormView(FormView, BaseView):
+class BaseView(LoginRequiredMixin, __BaseView):
+    ...
+
+
+class BaseReportFormView(BaseView, FormView):
     model: type(models.Model) = None
     calc_model: type(BaseCalculation) = None
     template_name = "base_report.html"
@@ -145,7 +150,7 @@ class BaseReportFormView(FormView, BaseView):
         return super().form_invalid(form)
 
 
-class IndexView(TemplateView, BaseView):
+class IndexView(__BaseView, TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
@@ -241,7 +246,7 @@ class OrganizationalAndEducationalWorkView(BaseReportFormView):
     calc_model = OrganizationalAndEducationalWorkCalculation
 
 
-class ReportsView(TemplateView, BaseView):
+class ReportsView(BaseView, TemplateView):
     template_name = "service_api/reports.html"
 
     def get_context_data(self, report_period: str = None, **kwargs):
@@ -255,7 +260,7 @@ class ReportsView(TemplateView, BaseView):
         return data
 
 
-class ReportPdf(TemplateView, BaseView):
+class ReportPdf(BaseView, TemplateView):
     template_name = "service_api/reports/report.html"
 
     def get_context_data(self, **kwargs):
@@ -345,6 +350,7 @@ class PivotReport:
         return self.__response
 
 
+@login_required
 def pivot_report_by_type(request, report_period_id, level_type=None, pk=None):
     report = PivotReport(request, report_period_id=report_period_id, level_type=level_type, pk=pk)
     report.prepare_response()
