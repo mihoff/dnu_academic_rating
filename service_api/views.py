@@ -349,11 +349,3 @@ def pivot_report_by_type(request, report_period_id, level_type=None, pk=None):
     report = PivotReport(request, report_period_id=report_period_id, level_type=level_type, pk=pk)
     report.prepare_response()
     return report.response
-
-
-def document_download(request):
-    report_period = ReportPeriod.get_active()
-    filename = f"Положення {report_period.report_period}.{report_period.document.name.split('.')[-1]}"
-    response = HttpResponse(report_period.document.file.read(), content_type="application/octet-stream")
-    response["Content-Disposition"] = f"attachment; filename={filename}".encode("utf-8")
-    return response

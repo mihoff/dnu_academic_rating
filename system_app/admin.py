@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 
+from system_app.models import Documents
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ("last_name", "first_name", "email")
@@ -24,4 +26,14 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+
+
+@admin.register(Documents)
+class DocumentsAdmin(admin.ModelAdmin):
+    list_display = ("name", "description", "visible")
+
+    def save_model(self, request, obj, form, change):
+        if obj.name is None:
+            obj.name = obj.file.name.replace(Documents.file.field.upload_to + "/", "").split(".")[0]
+        super().save_model(request, obj, form, change)
 

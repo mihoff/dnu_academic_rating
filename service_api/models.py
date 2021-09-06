@@ -9,6 +9,7 @@ from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 
 from service_api.calculations import BaseCalculation
+from system_app.models import Documents
 
 YES_SVG = f"<img src='{static('admin/img/icon-yes.svg')}' alt='False'>"
 NO_SVG = f"<img src='{static('admin/img/icon-no.svg')}' alt='False'>"
@@ -82,9 +83,7 @@ class ReportPeriod(models.Model):
     annual_workload = models.FloatField(
         verbose_name="середньорічне навчальне навантаження в ДНУ (год.)", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
-    document = models.FileField(
-        verbose_name="Положення", upload_to="uploads/service_api/report_period",
-        default=None, null=True, max_length=256)
+    document = models.ForeignKey(Documents, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.report_period

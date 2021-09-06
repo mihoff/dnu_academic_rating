@@ -10,7 +10,8 @@ from feedbacks.views import feedbacks
 from proxy_microsoft_oauth.views import logout_view, AuthenticateCallbackViewOverwrite
 from service_api.views import IndexView, EducationalAndMethodicalWorkView, ScientificAndInnovativeWorkView, \
     GenericReportDataView, ReportsView, OrganizationalAndEducationalWorkView, ReportPdf, PivotReportView, \
-    pivot_report_by_type, document_download
+    pivot_report_by_type
+from system_app.views import DocumentsView
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
@@ -36,7 +37,8 @@ urlpatterns = [
     path("pivot-report/<int:report_period_id>/<str:level_type>/<int:pk>", pivot_report_by_type,
          name="pivot_report_by_type"),
     path("pivot-report/<str:report_period>/", PivotReportView.as_view(), name="pivot_report"),
-    path("document-download/", document_download, name="document_download"),
+    path("documents/", DocumentsView.as_view(), name="documents"),
+    path("documents/<int:pk>", DocumentsView.as_view(), name="documents"),
 
     path("feedbacks/", feedbacks, name="feedbacks")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
