@@ -50,7 +50,7 @@ class GenericReportCalculation(BaseCalculation):
                 user__profile__department=self.report.user.profile.department
             ).exclude(pk=self.report.pk).aggregate(Sum("result"), Count('pk'))
 
-        return (result + data["result__sum"] / data["pk__count"]) / 2
+        return (result + (data["result__sum"] or 0) / (data["pk__count"] or 1)) / 2
 
 
 class HeadsGetter:

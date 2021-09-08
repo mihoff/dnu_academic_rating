@@ -45,7 +45,7 @@ def float_number_brackets_float_number_semicolon_validator(value):
 class BaseReportModel(models.Model):
     adjust_rate = 1
 
-    generic_report_data = models.OneToOneField("GenericReportData", on_delete=models.SET_NULL, blank=True, null=True)
+    generic_report_data = models.OneToOneField("GenericReportData", on_delete=models.CASCADE, blank=True, null=True)
     result = models.FloatField(verbose_name="Підсумковий бал", default=0, validators=[validators.MinValueValidator(0)])
     adjusted_result = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Додано")
