@@ -12,9 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Deploy DNU Academic Rating
-      uses: appleboy/ssh-action@master
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.HOST }}
+#         username: ${{ secrets.USERNAME }}
+#         key: ${{ secrets.SSH_KEY }}
+#         script: bash /root/update.sh
+        
+      uses: garygrossgarten/github-action-ssh@release
       with:
+        command: ls -a
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: bash /root/update.sh
+        privateKey: ${{ secrets.SSH_KEY}}
