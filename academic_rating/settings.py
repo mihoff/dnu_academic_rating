@@ -150,4 +150,7 @@ SITE_ID = 1
 
 LOCALE_PATHS = ((BASE_DIR / 'locale'), )
 
+SESSION_COOKIE_AGE = 60 * 60  # 3600 seconds === 60 minutes
+SESSION_SAVE_EVERY_REQUEST = True
+
 from academic_rating.settings_local import *
