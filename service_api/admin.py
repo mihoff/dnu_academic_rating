@@ -64,6 +64,7 @@ class BaseReportAdmin(admin.ModelAdmin):
     def report_period_(self, obj):
         return obj.report_period
 
+    @admin.display(description=GenericReportData.is_closed.field.verbose_name, boolean=True)
     def is_closed_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
         if _obj is not None:

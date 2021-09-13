@@ -58,13 +58,6 @@
                     <li class="nav-item">
                         <a class="nav-link {% if is_report %}active{% endif %}" href="{% url 'reports' %}">Мій Звіт</a>
                     </li>
-                    {% if extended_user %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if is_pivot_report %}active{% endif %}" href="{% url 'pivot_report' %}">
-                                Зведений звіт
-                            </a>
-                        </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link {% if is_documents %}active{% endif %}" href="{% url 'documents' %}">Документи</a>
                     </li>

@@ -164,26 +164,6 @@ class IndexView(__BaseView, TemplateView):
         return data
 
 
-class PivotReportView(BaseView, SingleTableView):
-    template_name = "service_api/pivot_report_test.html"
-    paginator_class = LazyPaginator
-    table_class = PivotReportTable
-
-    def get_queryset(self):
-        if self.request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-            profiles = Profile.objects.filter(department=self.request.user.profile.department)
-        elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-            profiles = Profile.objects.filter(department__faculty=self.request.user.profile.department.faculty)
-        else:
-            raise Http404
-        return profiles
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data["is_pivot_report"] = True
-        return data
-
-
 class GenericReportDataView(BaseReportFormView):
     """
         Форма загальных даних для звітів
