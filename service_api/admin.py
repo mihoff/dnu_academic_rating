@@ -19,6 +19,8 @@ class BaseReportAdmin(admin.ModelAdmin):
     list_display = (
         "user_", "department_", "faculty_", "report_period_", "result", "is_closed_", "created_at", "updated_at",
     )
+    list_per_page = 25
+    search_fields = ("user__email", "user__last_name", "user__first_name")
 
     @classmethod
     def get_cumulative(cls, request):
