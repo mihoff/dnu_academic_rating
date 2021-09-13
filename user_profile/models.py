@@ -79,7 +79,7 @@ class Profile(models.Model):
 
     def __str__(self):
         try:
-            return f"{self.user.first_name} {self.user.last_name}/{self.position.title}/{self.department.title}"
+            return f"{self.user.first_name} {self.user.last_name} ({self.position}/{self.department})"
         except AttributeError:
             return f"{self.user.first_name} {self.user.last_name}"
 
@@ -99,3 +99,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+def user_str(self):
+    try:
+        return f"{self.first_name} {self.last_name} ({self.profile.position}/{self.profile.department})"
+    except AttributeError:
+        return f"{self.first_name} {self.last_name}"
+
+
+User.add_to_class("__str__", user_str)

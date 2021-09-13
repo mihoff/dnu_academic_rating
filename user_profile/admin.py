@@ -2,7 +2,6 @@ import logging
 
 from django.contrib import admin
 
-from django.utils.translation import gettext as _
 from user_profile.models import Profile, Position, Department, Faculty
 
 logger = logging.getLogger(__name__)
@@ -14,7 +13,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_per_page = 50
     search_fields = ("user__last_name", "user__first_name", "user__email")
 
-    @admin.display(description=_("User"), ordering="user")
+    @admin.display(description="Користувач", ordering="user")
     def user_(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}"
 
@@ -49,6 +48,13 @@ class ProfileAdmin(admin.ModelAdmin):
             logging.error(f"ProfileAdmin :: {e}")
 
         return qs
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super().get_form(request, obj, change, **kwargs)
+        form.base_fields["user"].label = "Користувач"
+        form.base_fields["department"].label = Department._meta.verbose_name
+        form.base_fields["position"].label = Position._meta.verbose_name
+        return form
 
 
 @admin.register(Position)

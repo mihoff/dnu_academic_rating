@@ -1,4 +1,5 @@
 import logging
+
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -16,8 +17,23 @@ logger = logging.getLogger(__name__)
 
 class BaseReportAdmin(admin.ModelAdmin):
     list_display = (
-        "user_", "department_", "faculty_", "report_period", "result", "is_closed_", "created_at", "updated_at",
+        "user_", "department_", "faculty_", "report_period_", "result", "is_closed_", "created_at", "updated_at",
     )
+
+    @classmethod
+    def get_cumulative(cls, request):
+        try:
+            return request.user.profile.position.cumulative_calculation
+        except:
+            return None
+
+    @classmethod
+    def get_cumulative_pk(cls, request):
+        cumulative = cls.get_cumulative(request)
+        if cumulative == Position.BY_DEPARTMENT:
+            return request.user.profile.department.pk
+        elif cumulative == Position.BY_FACULTY:
+            return request.user.profile.department.faculty.pk
 
     def get_ordering(self, request):
         one, two = "user__profile__department__faculty", "user__profile__department"
@@ -44,17 +60,23 @@ class BaseReportAdmin(admin.ModelAdmin):
         if _obj is not None:
             return getattr(_obj.user.profile.department, "faculty", None)
 
-    @admin.display(description=GenericReportData.is_closed.field.verbose_name, boolean=True)
+    @admin.display(description=ReportPeriod._meta.verbose_name)
+    def report_period_(self, obj):
+        return obj.report_period
+
     def is_closed_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
         if _obj is not None:
             return _obj.is_closed
 
+    def has_add_permission(self, request):
+        return False
+
 
 @admin.register(ReportPeriod)
 class ReportPeriodAdmin(admin.ModelAdmin):
-    list_display = ("report_period", "is_active", "annual_workload", "download", "download_faculty", 
-                    "download_department")
+    list_display = (
+        "report_period", "is_active", "annual_workload", "download", "download_faculty", "download_department")
     ordering = ("report_period",)
 
     def has_delete_permission(self, request, obj=None):
@@ -80,9 +102,9 @@ class ReportPeriodAdmin(admin.ModelAdmin):
     @admin.display(description="звіт за факультетом")
     def download_faculty(self, obj):
         options = [f"""
-            <option value='{reverse('pivot_report_by_type', 
+            <option value='{reverse('pivot_report_by_type',
                                     kwargs={
-                                        'report_period_id': obj.pk, 
+                                        'report_period_id': obj.pk,
                                         'level_type': 'faculty',
                                         "pk": f.pk,
                                     })}'>{f}</option>""" for f in Faculty.objects.all()]
@@ -112,13 +134,16 @@ class ReportPeriodAdmin(admin.ModelAdmin):
 
 @admin.register(GenericReportData)
 class GenericReportDataAdmin(BaseReportAdmin):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.readonly_fields = [i.name for i in self.model._meta.fields if i.name != "is_closed"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         try:
-            if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+            if self.get_cumulative(request) == Position.BY_DEPARTMENT:
                 qs = qs.filter(user__profile__department=request.user.profile.department)
-            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+            elif self.get_cumulative(request) == Position.BY_FACULTY:
                 qs = qs.filter(user__profile__department__faculty=request.user.profile.department.faculty)
         except Exception as e:
             logging.info(f"GenericReportDataAdmin :: {e}")
@@ -129,6 +154,22 @@ class GenericReportDataAdmin(BaseReportAdmin):
         list_fields = list(super().get_list_display(request))
         list_fields.append("admin_reports")
         return tuple(list_fields)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        try:
+            export_url = reverse(
+                "pivot_report_by_type",
+                kwargs={
+                    "report_period_id": ReportPeriod.get_active().pk,
+                    "level_type": self.get_cumulative(request),
+                    "pk": self.get_cumulative_pk(request),
+                })
+        except:
+            export_url = "#"
+
+        extra_context.update({"export_url": export_url})
+        return super().changelist_view(request, extra_context)
 
 
 @admin.register(EducationalAndMethodicalWork)
