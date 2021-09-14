@@ -17,15 +17,15 @@ class UserAdmin(admin.ModelAdmin):
     def first_name_(self, obj):
         return obj.first_name
 
-    @admin.display(description=Position._meta.verbose_name, ordering="position")
+    @admin.display(description=Position._meta.verbose_name, ordering="profile__position")
     def position_(self, obj):
         return getattr(obj.profile, "position", "-")
 
-    @admin.display(description=Department._meta.verbose_name, ordering="department")
+    @admin.display(description=Department._meta.verbose_name, ordering="profile__department")
     def department_(self, obj):
         return getattr(obj.profile, "department", "-")
 
-    @admin.display(description=Faculty._meta.verbose_name, empty_value="-", ordering="department__faculty")
+    @admin.display(description=Faculty._meta.verbose_name, empty_value="-", ordering="profile__department__faculty")
     def faculty_(self, obj):
         return getattr(obj.profile, "department", None) and obj.profile.department.faculty or "-"
 
