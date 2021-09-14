@@ -11,7 +11,9 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("last_name", "first_name_", "email", "position_", "department_", "faculty_")
     list_filter = ("is_staff", "is_superuser")
     fields = ("email", "first_name", "last_name", "groups", "user_permissions")
-    search_fields = ('first_name', 'last_name', 'email')
+    search_fields = (
+        'first_name', 'last_name', 'email', "profile__position__title", "profile__department__title",
+        "profile__department__faculty__title")
 
     @admin.display(description="Ім'я По-батькові", ordering="first_name")
     def first_name_(self, obj):
