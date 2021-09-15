@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -112,7 +113,7 @@ class GenericReportData(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     report_period = models.ForeignKey(ReportPeriod, on_delete=models.SET_NULL, blank=True, null=True)
-    result = models.FloatField(default=0, validators=[validators.MinValueValidator(0)])
+    result = models.FloatField(default=0, validators=[validators.MinValueValidator(0)], verbose_name="Підсумковий бал")
     is_closed = models.BooleanField(verbose_name="Чи закрито звітний період", default=False)
 
     assignment_duration = models.FloatField(
@@ -144,6 +145,7 @@ class GenericReportData(models.Model):
     def slug():
         return "generic_report_data"
 
+    @admin.display(description="Всі звіти")
     def admin_reports(self):
         report_conditions = [
             f"{r.NAME}{YES_SVG if getattr(self, r.__name__.lower(), False) else NO_SVG}" for r in REPORT_MODELS]

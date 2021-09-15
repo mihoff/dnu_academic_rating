@@ -17,7 +17,8 @@ logger = logging.getLogger(__name__)
 
 class BaseReportAdmin(admin.ModelAdmin):
     list_display = (
-        "user_", "department_", "faculty_", "report_period_", "result", "is_closed_", "created_at", "updated_at",
+        "user_", "position_", "department_", "faculty_", "report_period_",
+        "result", "is_closed_", "created_at", "updated_at",
     )
     list_per_page = 25
     search_fields = ("user__email", "user__last_name", "user__first_name")
@@ -49,6 +50,10 @@ class BaseReportAdmin(admin.ModelAdmin):
         _obj = getattr(obj, "generic_report_data", obj)
         if _obj is not None:
             return _obj.user.profile.last_name_and_initial
+
+    @admin.display(description=Position._meta.verbose_name, ordering="user__profile__position")
+    def position_(self, obj):
+        return (getattr(obj, 'user', None) or obj.generic_report_data.user).profile.position
 
     @admin.display(description=Department._meta.verbose_name, ordering="user__profile__department")
     def department_(self, obj):
