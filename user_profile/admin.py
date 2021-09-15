@@ -12,28 +12,29 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user_", "position_", "department_", "faculty_", "last_login", "date_joined")
     list_per_page = 50
     search_fields = ("user__last_name", "user__first_name", "user__email")
+    ordering = ("-user__last_login",)
 
-    @admin.display(description="Користувач", ordering="user")
+    @admin.display(description="Користувач", ordering="user__last_name")
     def user_(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}"
 
     @admin.display(description=Position._meta.verbose_name, ordering="position")
     def position_(self, obj):
-        return f"{obj.position if obj.position else '-'}"
+        return obj.position
 
     @admin.display(description=Department._meta.verbose_name, ordering="department")
     def department_(self, obj):
-        return f"{obj.department if obj.department else '-'}"
+        return obj.department
 
     @admin.display(description=Faculty._meta.verbose_name, empty_value="-", ordering="department__faculty")
     def faculty_(self, obj):
         return obj.department.faculty if obj.department else "-"
 
-    @admin.display(description="Дата приєднання")
+    @admin.display(description="Дата приєднання", ordering="user__date_joined")
     def date_joined(self, obj):
         return obj.user.date_joined
 
-    @admin.display(description="Дата останнього входу")
+    @admin.display(description="Дата останнього входу", ordering="user__last_login")
     def last_login(self, obj):
         return obj.user.last_login
 
