@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class BaseReportAdmin(admin.ModelAdmin):
     list_display = (
         "user_", "position_", "department_", "faculty_", "report_period_",
-        "result", "is_closed_", "created_at", "updated_at",
+        "result", "is_closed_", "updated_at",
     )
     list_per_page = 25
     search_fields = ("user__email", "user__last_name", "user__first_name")
