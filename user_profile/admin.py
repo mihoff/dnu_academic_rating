@@ -16,7 +16,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     @admin.display(description="Користувач", ordering="user__last_name")
     def user_(self, obj):
-        return f"{obj.user.first_name} {obj.user.last_name}"
+        return f"{obj.user.last_name} {obj.user.first_name} "
 
     @admin.display(description=Position._meta.verbose_name, ordering="position")
     def position_(self, obj):
