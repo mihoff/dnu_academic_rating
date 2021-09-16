@@ -7,11 +7,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
 from django.views.generic.base import ContextMixin
-from django_tables2 import LazyPaginator, SingleTableView
 from microsoft_auth.context_processors import microsoft
 
 from service_api.calculations import BaseCalculation
@@ -24,8 +23,7 @@ from service_api.forms.report_forms import GenericReportDataForm, EducationalAnd
     OrganizationalAndEducationalWorkForm, ScientificAndInnovativeWorkForm
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
     ScientificAndInnovativeWork, ReportPeriod
-from service_api.tables import PivotReportTable
-from user_profile.models import Profile, Position, Faculty, Department
+from user_profile.models import Faculty, Department
 
 logger = logging.getLogger()
 

@@ -22,5 +22,4 @@ class DocumentsView(LoginRequiredMixin, ListView):
             response = HttpResponse(obj.file.read(), content_type="application/octet-stream")
             response["Content-Disposition"] = f"attachment; filename={filename}".encode("utf-8")
             return response
-        return super(DocumentsView, self).get(request, *args, **kwargs)
-
+        return super().get(request, *args, **kwargs)

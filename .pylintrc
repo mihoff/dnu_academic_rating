@@ -1,6 +1,7 @@
 [MASTER]
-ignore=third_party
+ignore=third_party,migrations
 jobs=4
+disable=C0103,C0115,C0114
 
 [FORMAT]
 

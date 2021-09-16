@@ -23,5 +23,5 @@ def feedbacks(request):
             feedback.user = request.user
         feedback.save()
         return HttpResponse("Дякуємо за відгук!")
-    else:
-        return HttpResponse("Під час збережння відгуку виникла помилка, спробуйте, будь-ласка, пізніше.")
+
+    return HttpResponse("Під час збережння відгуку виникла помилка, спробуйте, будь-ласка, пізніше.")

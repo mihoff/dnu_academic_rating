@@ -45,11 +45,10 @@ class BaseReportAdmin(admin.ModelAdmin):
             two = f"generic_report_data__{two}"
         return "-updated_at", one, two
 
-    @admin.display(description="Користувач", ordering="user", empty_value="")
+    @admin.display(description="Користувач", ordering="user")
     def user_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
-        if _obj is not None:
-            return _obj.user.profile.last_name_and_initial
+        return _obj.user.profile.last_name_and_initial if _obj is not None else ""
 
     @admin.display(description=Position._meta.verbose_name, ordering="user__profile__position")
     def position_(self, obj):
@@ -58,14 +57,12 @@ class BaseReportAdmin(admin.ModelAdmin):
     @admin.display(description=Department._meta.verbose_name, ordering="user__profile__department")
     def department_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
-        if _obj is not None:
-            return _obj.user.profile.department
+        return _obj.user.profile.department if _obj is not None else ""
 
     @admin.display(description=Faculty._meta.verbose_name, ordering="user__profile__department__faculty")
     def faculty_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
-        if _obj is not None:
-            return getattr(_obj.user.profile.department, "faculty", None)
+        return getattr(_obj.user.profile.department, "faculty", None) if _obj is not None else ""
 
     @admin.display(description=ReportPeriod._meta.verbose_name)
     def report_period_(self, obj):

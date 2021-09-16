@@ -50,6 +50,7 @@ class UserAdmin(admin.ModelAdmin):
 
     def save_form(self, request, form, change):
         user = super().save_form(request, form, change)
+        user.email = user.email.lower()
         user.username = user.email
         user.set_unusable_password()
         return user

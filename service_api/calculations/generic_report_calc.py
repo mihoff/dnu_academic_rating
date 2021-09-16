@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from django.db.models import Sum, Count
 
@@ -33,8 +34,8 @@ class GenericReportCalculation(BaseCalculation):
     def get_cumulative_result(self, result):
         try:
             cumulative_opt = self.report.user.profile.position.cumulative_calculation
-        except Exception as e:
-            logger.exception(e)
+        except:
+            logger.exception(traceback.format_exc())
             return result
 
         if cumulative_opt is None:

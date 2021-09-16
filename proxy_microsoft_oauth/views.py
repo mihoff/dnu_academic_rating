@@ -1,3 +1,6 @@
+import logging
+import traceback
+
 from django.contrib.auth import logout
 from django.contrib.sites.models import Site
 from django.shortcuts import redirect, render
@@ -5,6 +8,8 @@ from microsoft_auth.utils import get_scheme
 from microsoft_auth.views import AuthenticateCallbackView
 
 from proxy_microsoft_oauth.exceptions import DNUAuthHookException
+
+logger = logging.getLogger()
 
 
 def logout_view(request):
@@ -27,3 +32,5 @@ class AuthenticateCallbackViewOverwrite(AuthenticateCallbackView):
                 "proxy_microsoft_oauth/auth_hook_exception.html",
                 context={"user__": e.user__}
             )
+        except:
+            logger.error(traceback.format_exc())

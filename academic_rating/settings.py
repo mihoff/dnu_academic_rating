@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'microsoft_auth.backends.MicrosoftAuthenticationBackend',
+    'proxy_microsoft_oauth.backends.ProxyMicrosoftAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
 
