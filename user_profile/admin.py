@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import admin
+from django.db.models import Q
 
 from user_profile.models import Profile, Position, Department, Faculty
 
@@ -38,11 +39,23 @@ class ProfileAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         try:
             if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-                qs = qs.filter(department=request.user.profile.department)
-            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-                qs = qs.filter(department__faculty=request.user.profile.department.faculty)
+                qs = qs.filter(
+                    Q(
+                        Q(department=request.user.profile.department) |
+                        Q(position__isnull=True) |
+                        Q(department__isnull=True)
+                    ) & Q(user__is_superuser=False)
+                )
+            elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(
+                    Q(
+                        Q(department__faculty=request.user.profile.department.faculty) |
+                        Q(position__isnull=True) |
+                        Q(department__isnull=True)
+                    ) & Q(user__is_superuser=False)
+                )
         except Exception as e:
-            logging.error(f"ProfileAdmin :: {e}")
+            logging.info(f"ProfileAdmin :: {e}")
 
         return qs
 

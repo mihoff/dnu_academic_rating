@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.contrib.auth.apps import AuthConfig as UserAuthConfig
+from django.contrib.auth.models import User
 from django.core import validators
+from django.db.models import Q
 
 from system_app.models import Documents
 from user_profile.models import Department, Position, Faculty
@@ -33,9 +34,6 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
-        if not request.user.is_superuser:
-            form.base_fields.pop("groups", None)
-            form.base_fields.pop("user_permissions", None)
         form.base_fields["email"].required = True
         form.base_fields["first_name"].required = True
         form.base_fields["first_name"].label = "Ім'я По-батькові"
@@ -44,6 +42,11 @@ class UserAdmin(admin.ModelAdmin):
                 r"(\w+\s\w+){1}", message="Невірний формат: Ім'я та По-батькові повинні бути вказані через пробіл"))
         form.base_fields["last_name"].required = True
         return form
+
+    def get_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            return super().get_fields(request, obj)
+        return ["email", "first_name", "last_name"]
 
     def save_form(self, request, form, change):
         user = super().save_form(request, form, change)
@@ -55,9 +58,21 @@ class UserAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         try:
             if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-                qs = qs.filter(profile__department=request.user.profile.department)
-            elif self.request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-                qs = qs.filter(profile__department__faculty=request.user.profile.department.faculty)
+                qs = qs.filter(
+                    Q(
+                        Q(profile__department=request.user.profile.department) |
+                        Q(profile__position__isnull=True) |
+                        Q(profile__department__isnull=True)
+                    ) & Q(is_superuser=False)
+                )
+            elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(
+                    Q(
+                        Q(profile__department__faculty=request.user.profile.department.faculty) |
+                        Q(profile__position__isnull=True) |
+                        Q(profile__department__isnull=True)
+                    ) & Q(is_superuser=False)
+                )
         except:
             pass
 
@@ -78,4 +93,3 @@ class DocumentsAdmin(admin.ModelAdmin):
         if obj.name is None:
             obj.name = obj.file.name.replace(Documents.file.field.upload_to + "/", "").split(".")[0]
         super().save_model(request, obj, form, change)
-
