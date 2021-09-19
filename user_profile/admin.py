@@ -66,6 +66,12 @@ class ProfileAdmin(admin.ModelAdmin):
         form.base_fields["position"].label = Position._meta.verbose_name
         return form
 
+    def save_model(self, request, obj, form, change):
+        if obj.position.cumulative_calculation is not None:
+            obj.user.is_staff = True
+            obj.user.save()
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
