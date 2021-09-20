@@ -9,25 +9,26 @@ logger = logging.getLogger(__name__)
 
 
 def get_cumulative_qs(qs, user):
-    try:
-        if user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-            qs = qs.filter(
-                Q(
-                    Q(department=user.profile.department) |
-                    Q(position__isnull=True) |
-                    Q(department__isnull=True)
-                ) & Q(user__is_superuser=False)
-            )
-        elif user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-            qs = qs.filter(
-                Q(
-                    Q(department__faculty=user.profile.department.faculty) |
-                    Q(position__isnull=True) |
-                    Q(department__isnull=True)
-                ) & Q(user__is_superuser=False)
-            )
-    except Exception as e:
-        logging.info(f"ProfileAdmin :: {e}")
+    if not user.is_superuser:
+        try:
+            if user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                qs = qs.filter(
+                    Q(
+                        Q(department=user.profile.department) |
+                        Q(position__isnull=True) |
+                        Q(department__isnull=True)
+                    ) & Q(user__is_superuser=False)
+                )
+            elif user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                qs = qs.filter(
+                    Q(
+                        Q(department__faculty=user.profile.department.faculty) |
+                        Q(position__isnull=True) |
+                        Q(department__isnull=True)
+                    ) & Q(user__is_superuser=False)
+                )
+        except Exception as e:
+            logging.info(f"ProfileAdmin :: {e}")
 
     return qs
 

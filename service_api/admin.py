@@ -10,6 +10,7 @@ from service_api.models import (
     EducationalAndMethodicalWork,
     ScientificAndInnovativeWork,
     OrganizationalAndEducationalWork)
+from user_profile.admin import get_cumulative_qs
 from user_profile.models import Department, Faculty, Position
 
 logger = logging.getLogger(__name__)
@@ -144,16 +145,7 @@ class GenericReportDataAdmin(BaseReportAdmin):
         self.readonly_fields = [i.name for i in self.model._meta.fields if i.name != "is_closed"]
 
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        try:
-            if self.get_cumulative(request) == Position.BY_DEPARTMENT:
-                qs = qs.filter(user__profile__department=request.user.profile.department)
-            elif self.get_cumulative(request) == Position.BY_FACULTY:
-                qs = qs.filter(user__profile__department__faculty=request.user.profile.department.faculty)
-        except Exception as e:
-            logging.info(f"GenericReportDataAdmin :: {e}")
-
-        return qs
+        return get_cumulative_qs(super().get_queryset(request), request.user)
 
     def get_list_display(self, request):
         list_fields = list(super().get_list_display(request))
@@ -162,18 +154,18 @@ class GenericReportDataAdmin(BaseReportAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        try:
-            export_url = reverse(
-                "pivot_report_by_type",
-                kwargs={
-                    "report_period_id": ReportPeriod.get_active().pk,
-                    "level_type": self.get_cumulative(request),
-                    "pk": self.get_cumulative_pk(request),
-                })
-        except:
-            export_url = "#"
-
-        extra_context.update({"export_url": export_url})
+        kwargs = {"report_period_id": ReportPeriod.get_active().pk}
+        if not request.user.is_superuser:
+            try:
+                kwargs.update(
+                    {
+                        "level_type": self.get_cumulative(request),
+                        "pk": self.get_cumulative_pk(request)
+                    }
+                )
+            except:
+                ...
+        extra_context.update({"export_url": reverse("pivot_report_all", kwargs=kwargs)})
         return super().changelist_view(request, extra_context)
 
 
