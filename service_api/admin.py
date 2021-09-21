@@ -1,7 +1,8 @@
 import logging
+import traceback
 
 from django.contrib import admin
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
 from service_api.models import (
@@ -164,8 +165,12 @@ class GenericReportDataAdmin(BaseReportAdmin):
                     }
                 )
             except:
-                ...
-        extra_context.update({"export_url": reverse("pivot_report_all", kwargs=kwargs)})
+                logger.error(traceback.format_exc())
+                kwargs = {}
+        if kwargs:
+            extra_context.update({"export_url": reverse("pivot_report_all", kwargs=kwargs)})
+        else:
+            extra_context.update({"export_url": "#", "onclick": "alert('Для звіту не достатньо даних!');"})
         return super().changelist_view(request, extra_context)
 
 
