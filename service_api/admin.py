@@ -156,7 +156,9 @@ class GenericReportDataAdmin(BaseReportAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         kwargs = {"report_period_id": ReportPeriod.get_active().pk}
-        if not request.user.is_superuser:
+        if request.user.is_superuser:
+            extra_context.update({"export_url": reverse("pivot_report_all", kwargs=kwargs)})
+        else:
             try:
                 kwargs.update(
                     {
@@ -164,13 +166,11 @@ class GenericReportDataAdmin(BaseReportAdmin):
                         "pk": self.get_cumulative_pk(request)
                     }
                 )
+                extra_context.update({"export_url": reverse("pivot_report_by_type", kwargs=kwargs)})
             except:
                 logger.error(traceback.format_exc())
-                kwargs = {}
-        if kwargs:
-            extra_context.update({"export_url": reverse("pivot_report_all", kwargs=kwargs)})
-        else:
-            extra_context.update({"export_url": "#", "onclick": "alert('Для звіту не достатньо даних!');"})
+                extra_context.update({"export_url": "#", "onclick": "alert('Для звіту не достатньо даних!');"})
+
         return super().changelist_view(request, extra_context)
 
 
