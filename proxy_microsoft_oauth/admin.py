@@ -4,9 +4,10 @@ from microsoft_auth.models import MicrosoftAccount
 
 
 class MicrosoftAccountAdminOverride(MicrosoftAccountAdmin):
-    list_display = ["user__first_name", "user__last_name", "user__email", "last_login", "date_joined"]
+    list_display = ["user__last_name", "user__first_name", "user__email", "last_login", "date_joined", "microsoft_id"]
     actions = ["view"]
     ordering = ("-user__last_login",)
+    search_fields = ("user__last_name", "user__first_name", "user__email")
 
     def has_add_permission(self, request):
         return False

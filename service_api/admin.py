@@ -2,7 +2,7 @@ import logging
 import traceback
 
 from django.contrib import admin
-from django.urls import reverse, NoReverseMatch
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from service_api.models import (
