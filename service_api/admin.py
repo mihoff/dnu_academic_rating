@@ -2,6 +2,7 @@ import logging
 import traceback
 
 from django.contrib import admin
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
@@ -11,7 +12,6 @@ from service_api.models import (
     EducationalAndMethodicalWork,
     ScientificAndInnovativeWork,
     OrganizationalAndEducationalWork)
-from user_profile.admin import get_cumulative_qs
 from user_profile.models import Department, Faculty, Position
 
 logger = logging.getLogger(__name__)
@@ -146,7 +146,29 @@ class GenericReportDataAdmin(BaseReportAdmin):
         self.readonly_fields = [i.name for i in self.model._meta.fields if i.name != "is_closed"]
 
     def get_queryset(self, request):
-        return get_cumulative_qs(super().get_queryset(request), request.user)
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            try:
+                if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                    qs = qs.filter(
+                        Q(
+                            Q(user__profile__department=request.user.profile.department) |
+                            Q(user__profile__position__isnull=True) |
+                            Q(user__profile__department__isnull=True)
+                        ) & Q(user__is_superuser=False)
+                    )
+                elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                    qs = qs.filter(
+                        Q(
+                            Q(user__profile__department__faculty=request.user.profile.department.faculty) |
+                            Q(user__profile__position__isnull=True) |
+                            Q(user__profile__department__isnull=True)
+                        ) & Q(user__is_superuser=False)
+                    )
+            except Exception as e:
+                logging.info(f"ProfileAdmin :: {e}")
+
+        return qs
 
     def get_list_display(self, request):
         list_fields = list(super().get_list_display(request))

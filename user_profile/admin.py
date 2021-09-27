@@ -8,31 +8,6 @@ from user_profile.models import Profile, Position, Department, Faculty
 logger = logging.getLogger(__name__)
 
 
-def get_cumulative_qs(qs, user):
-    if not user.is_superuser:
-        try:
-            if user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-                qs = qs.filter(
-                    Q(
-                        Q(department=user.profile.department) |
-                        Q(position__isnull=True) |
-                        Q(department__isnull=True)
-                    ) & Q(user__is_superuser=False)
-                )
-            elif user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-                qs = qs.filter(
-                    Q(
-                        Q(department__faculty=user.profile.department.faculty) |
-                        Q(position__isnull=True) |
-                        Q(department__isnull=True)
-                    ) & Q(user__is_superuser=False)
-                )
-        except Exception as e:
-            logging.info(f"ProfileAdmin :: {e}")
-
-    return qs
-
-
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user_", "position_", "department_", "faculty_", "last_login")
@@ -61,7 +36,29 @@ class ProfileAdmin(admin.ModelAdmin):
         return obj.user.last_login
 
     def get_queryset(self, request):
-        return get_cumulative_qs(super().get_queryset(request), request.user)
+        qs = super().get_queryset(request)
+        if not request.user.is_superuser:
+            try:
+                if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                    qs = qs.filter(
+                        Q(
+                            Q(department=request.user.profile.department) |
+                            Q(position__isnull=True) |
+                            Q(department__isnull=True)
+                        ) & Q(user__is_superuser=False)
+                    )
+                elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                    qs = qs.filter(
+                        Q(
+                            Q(department__faculty=request.user.profile.department.faculty) |
+                            Q(position__isnull=True) |
+                            Q(department__isnull=True)
+                        ) & Q(user__is_superuser=False)
+                    )
+            except Exception as e:
+                logging.info(f"ProfileAdmin :: {e}")
+
+        return qs
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
