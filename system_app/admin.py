@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.apps import AuthConfig as UserAuthConfig
 from django.contrib.auth.models import User
 from django.core import validators
@@ -94,3 +95,11 @@ class DocumentsAdmin(admin.ModelAdmin):
         if obj.name is None:
             obj.name = obj.file.name.replace(Documents.file.field.upload_to + "/", "").split(".")[0]
         super().save_model(request, obj, form, change)
+
+
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    date_hierarchy = "action_time"
+    list_filter = ["content_type", "action_flag"]
+    search_fields = ["object_repr", "change_message"]
+    list_display = ["action_time", "user", "content_type", "action_flag"]

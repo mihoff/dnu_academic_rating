@@ -23,7 +23,8 @@ class BaseReportAdmin(admin.ModelAdmin):
         "result", "is_closed_", "updated_at",
     )
     list_per_page = 25
-    search_fields = ("user__email", "user__last_name", "user__first_name")
+    search_fields = ("user__email", "user__last_name", "user__first_name", "user__profile__department__title",
+                     "user__profile__department__faculty__title")
 
     @classmethod
     def get_cumulative(cls, request):
@@ -47,7 +48,7 @@ class BaseReportAdmin(admin.ModelAdmin):
             two = f"generic_report_data__{two}"
         return "-updated_at", one, two
 
-    @admin.display(description="Користувач", ordering="user")
+    @admin.display(description="Користувач", ordering="user__last_name")
     def user_(self, obj):
         _obj = getattr(obj, "generic_report_data", obj)
         return _obj.user.profile.last_name_and_initial if _obj is not None else ""
