@@ -11,7 +11,8 @@ class Command(BaseCommand):
     help = 'Export all users to csv file. Will be placed to /tmp/export_empty_report_users_{timestamp}.csv'
 
     def handle(self, *args, **options):
-        with open(f"/tmp/export_empty_report_users_{datetime.now().strftime('%Y_%m_%d')}.csv", 'w', newline='') as f:
+        f_name = f"/tmp/export_empty_report_users_{datetime.now().strftime('%Y_%m_%d')}.csv"
+        with open(f_name, 'w', newline='', encoding='utf8') as f:
             fieldnames = ["Прізвище", "Ім'я По батькові", "Факультет", "Кафедра", "Посада", "Був в системі"]
             writer = csv.DictWriter(f, fieldnames=fieldnames)
 
@@ -26,8 +27,8 @@ class Command(BaseCommand):
             ):
                 writer.writerow(
                     {
-                        "Прізвище": p.user.first_name,
-                        "Ім'я По батькові": p.user.last_name,
+                        "Прізвище": p.user.last_name,
+                        "Ім'я По батькові": p.user.first_name,
                         "Факультет": getattr(p.department, "faculty", None),
                         "Кафедра": p.department,
                         "Посада": p.position,
