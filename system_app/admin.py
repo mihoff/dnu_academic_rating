@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.apps import AuthConfig as UserAuthConfig
@@ -104,3 +106,9 @@ class LogEntryAdmin(admin.ModelAdmin):
     list_filter = ["content_type", "action_flag"]
     search_fields = ["object_repr", "change_message"]
     list_display = ["action_time", "user", "content_type", "action_flag"]
+
+    def get_object(self, request, object_id, from_field=None):
+        obj = super().get_object(request, object_id, from_field)
+        if obj:
+            obj.change_message = str(json.loads(obj.change_message))
+        return obj
