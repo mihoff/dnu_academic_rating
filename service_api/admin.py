@@ -196,6 +196,15 @@ class GenericReportDataAdmin(BaseReportAdmin):
 
         return super().changelist_view(request, extra_context)
 
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super(GenericReportDataAdmin, self).get_form(request, obj, change, **kwargs)
+        if obj is not None and not obj.all_reports_done():
+            form.base_fields["is_closed"].widget.attrs["onclick"] = \
+                "alert('Працівник має не заповнені звіти. Після закриття Звітного періоду редагування даних " \
+                "для працівника буде заборонено');"
+        return form
+
+
 
 @admin.register(EducationalAndMethodicalWork)
 class EducationalAndMethodicalWorkAdmin(BaseReportAdmin):

@@ -151,6 +151,9 @@ class GenericReportData(models.Model):
             f"{r.NAME}{YES_SVG if getattr(self, r.__name__.lower(), False) else NO_SVG}" for r in REPORT_MODELS]
         return mark_safe("<br/>".join(report_conditions))
 
+    def all_reports_done(self):
+        return all(getattr(self, r.__name__.lower(), False) for r in REPORT_MODELS)
+
     class Meta:
         verbose_name = "Загальний звіт"
         verbose_name_plural = "Загальні звіти"
