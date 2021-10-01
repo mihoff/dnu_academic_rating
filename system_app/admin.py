@@ -109,6 +109,6 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     def get_object(self, request, object_id, from_field=None):
         obj = super().get_object(request, object_id, from_field)
-        if obj:
+        if obj and obj.change_message:
             obj.change_message = str(json.loads(obj.change_message))
         return obj
