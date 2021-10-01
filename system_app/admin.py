@@ -58,25 +58,26 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        try:
-            if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
-                qs = qs.filter(
-                    Q(
-                        Q(profile__department=request.user.profile.department) |
-                        Q(profile__position__isnull=True) |
-                        Q(profile__department__isnull=True)
-                    ) & Q(is_superuser=False)
-                )
-            elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
-                qs = qs.filter(
-                    Q(
-                        Q(profile__department__faculty=request.user.profile.department.faculty) |
-                        Q(profile__position__isnull=True) |
-                        Q(profile__department__isnull=True)
-                    ) & Q(is_superuser=False)
-                )
-        except:
-            pass
+        if not request.user.is_superuser:
+            try:
+                if request.user.profile.position.cumulative_calculation == Position.BY_DEPARTMENT:
+                    qs = qs.filter(
+                        Q(
+                            Q(profile__department=request.user.profile.department) |
+                            Q(profile__position__isnull=True) |
+                            Q(profile__department__isnull=True)
+                        ) & Q(is_superuser=False)
+                    )
+                elif request.user.profile.position.cumulative_calculation == Position.BY_FACULTY:
+                    qs = qs.filter(
+                        Q(
+                            Q(profile__department__faculty=request.user.profile.department.faculty) |
+                            Q(profile__position__isnull=True) |
+                            Q(profile__department__isnull=True)
+                        ) & Q(is_superuser=False)
+                    )
+            except:
+                pass
 
         return qs
 
