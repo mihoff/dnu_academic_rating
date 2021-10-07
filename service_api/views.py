@@ -301,7 +301,7 @@ class PivotReport:
 
         writer = csv.writer(response)
         writer.writerow(
-            ["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Підсумковий Бал",
+            ["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Відпрацьовано Місяців", "Доля Ставки", "Підсумковий Бал",
              EducationalAndMethodicalWork.NAME,
              ScientificAndInnovativeWork.NAME,
              OrganizationalAndEducationalWork.NAME])
@@ -314,6 +314,8 @@ class PivotReport:
                         one.user.profile.department,
                         one.user.profile.department.faculty,
                         one.user.profile.position,
+                        one.assignment_duration,
+                        one.assignment,
                         one.result,
                         getattr(one, "educationalandmethodicalwork", fake_report).adjusted_result,
                         getattr(one, "scientificandinnovativework", fake_report).adjusted_result,
