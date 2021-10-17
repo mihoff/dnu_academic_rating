@@ -103,9 +103,9 @@ def save_user_profile(sender, instance, **kwargs):
 
 def user_str(self):
     try:
-        return f"{self.first_name} {self.last_name} ({self.profile.position or '-'}/{self.profile.department or '-'})"
+        return f"{self.last_name} {self.first_name} ({self.profile.position or '-'}/{self.profile.department or '-'})"
     except AttributeError:
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.last_name} {self.first_name}"
 
 
 User.add_to_class("__str__", user_str)
