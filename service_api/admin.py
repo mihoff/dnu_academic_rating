@@ -23,8 +23,10 @@ class BaseReportAdmin(admin.ModelAdmin):
         "result", "is_closed_", "updated_at",
     )
     list_per_page = 25
-    search_fields = ("user__email", "user__last_name", "user__first_name", "user__profile__department__title",
-                     "user__profile__department__faculty__title")
+    search_fields = (
+        "generic_report_data__user__email", "generic_report_data__user__last_name",
+        "generic_report_data__user__first_name", "generic_report_data__user__profile__department__title",
+        "generic_report_data__user__profile__department__faculty__title")
 
     @classmethod
     def get_cumulative(cls, request):
@@ -142,6 +144,9 @@ class ReportPeriodAdmin(admin.ModelAdmin):
 
 @admin.register(GenericReportData)
 class GenericReportDataAdmin(BaseReportAdmin):
+    search_fields = ("user__email", "user__last_name", "user__first_name", "user__profile__department__title",
+                     "user__profile__department__faculty__title")
+
     def __init__(self, *args):
         super().__init__(*args)
         self.readonly_fields = [i.name for i in self.model._meta.fields if i.name != "is_closed"]
