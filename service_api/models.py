@@ -49,6 +49,7 @@ class BaseReportModel(models.Model):
     generic_report_data = models.OneToOneField("GenericReportData", on_delete=models.CASCADE, blank=True, null=True)
     result = models.FloatField(verbose_name="Підсумковий бал", default=0, validators=[validators.MinValueValidator(0)])
     adjusted_result = models.FloatField(default=0)
+    place = models.IntegerField(verbose_name="Місце за рейтингом", default=0)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Додано")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Останнє редагування")
 
@@ -115,6 +116,7 @@ class GenericReportData(models.Model):
     report_period = models.ForeignKey(ReportPeriod, on_delete=models.SET_NULL, blank=True, null=True)
     result = models.FloatField(default=0, validators=[validators.MinValueValidator(0)], verbose_name="Підсумковий бал")
     is_closed = models.BooleanField(verbose_name="Чи закрито звітний період", default=False)
+    place = models.IntegerField(verbose_name="Місце за рейтингом", default=0)
 
     assignment_duration = models.FloatField(
         verbose_name="Кількість відпрацьованих місяців за звітний період", default=10,

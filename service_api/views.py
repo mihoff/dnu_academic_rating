@@ -15,15 +15,16 @@ from microsoft_auth.context_processors import microsoft
 
 from service_api.calculations import BaseCalculation
 from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
-from service_api.calculations.generic_report_calc import GenericReportCalculation, HeadsGetter
+from service_api.calculations.generic_report_calc import GenericReportCalculation, update_generic_report
+from service_api.calculations.heads_calc import HeadsGetter, HeadCalculation
 from service_api.calculations.organizational_and_educational_work_calc import \
     OrganizationalAndEducationalWorkCalculation
 from service_api.calculations.scientific_and_innovative_work_calc import ScientificAndInnovativeWorkCalculation
 from service_api.forms.report_forms import GenericReportDataForm, EducationalAndMethodicalWorkForm, \
     OrganizationalAndEducationalWorkForm, ScientificAndInnovativeWorkForm
 from service_api.models import GenericReportData, EducationalAndMethodicalWork, OrganizationalAndEducationalWork, \
-    ScientificAndInnovativeWork, ReportPeriod
-from user_profile.models import Faculty, Department
+    ScientificAndInnovativeWork, ReportPeriod, REPORT_MODELS
+from user_profile.models import Faculty, Department, Position
 
 logger = logging.getLogger()
 
@@ -53,10 +54,9 @@ class __BaseView(ContextMixin):
                 and self.request.user.profile.position.cumulative_calculation is not None:
             extended_user = True
 
-        if self.generic_report:
-            is_editable = not self.generic_report.is_closed
-        elif self.report_period:
-            is_editable = self.report_period.is_active
+        if not self.report_period or not self.report_period.is_active or \
+                (self.generic_report and self.generic_report.is_closed):
+            is_editable = False
         else:
             is_editable = True
 
@@ -88,27 +88,16 @@ class BaseReportFormView(BaseView, FormView):
         obj = self.get_object(ReportPeriod.get_active())
         return self.form_class(instance=obj, **self.get_form_kwargs())
 
-    def update_generic_report(self):
-        self.__update_generic_report(self.generic_report)
+    def update_reports_of_heads(self, reports: tuple = REPORT_MODELS):
+        heads = HeadsGetter(self.request.user)
 
-    @staticmethod
-    def __update_generic_report(generic_report):
-        if generic_report:
-            calc_obj = GenericReportCalculation(generic_report)
-            generic_report.result = calc_obj.get_result()
-            generic_report.save()
+        if heads.head_of_department is not None and self.request.user != heads.head_of_department:
+            heads_calc = HeadCalculation(heads.head_of_department, self.report_period)
+            heads_calc.update(opt=Position.BY_DEPARTMENT, report_models=reports)
 
-    def update_reports_of_heads(self):
-        profile = self.request.user.profile
-        heads = HeadsGetter(profile.department, profile.department.faculty)
-        if heads.head_of_department_profile is not None and profile != heads.head_of_department_profile:
-            generic_report = heads.head_of_department_profile.user.genericreportdata_set.filter(
-                report_period=ReportPeriod.get_active()).first()
-            self.__update_generic_report(generic_report)
-        if heads.head_of_faculty_profile is not None and profile != heads.head_of_faculty_profile:
-            generic_report = heads.head_of_faculty_profile.user.genericreportdata_set.filter(
-                report_period=ReportPeriod.get_active()).first()
-            self.__update_generic_report(generic_report)
+        if heads.head_of_faculty is not None and self.request.user != heads.head_of_faculty:
+            heads_calc = HeadCalculation(heads.head_of_faculty, self.report_period)
+            heads_calc.update(opt=Position.BY_FACULTY, report_models=reports)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -133,9 +122,9 @@ class BaseReportFormView(BaseView, FormView):
             f.adjusted_result = self.model.raw_calculation(f.result, self.generic_report)
             f.save()
 
-            self.update_generic_report()
+            update_generic_report(self.generic_report)
 
-            self.update_reports_of_heads()
+            self.update_reports_of_heads(reports=(self.model,))
         except:
             logger.error(f"{self.request.user}\n{form.data}\n{traceback.format_exc()}")
             return self.form_invalid(form)
@@ -276,7 +265,7 @@ class PivotReport:
         self.__response = None
 
     def get_qs(self):
-        return GenericReportData.objects.filter(report_period__pk=self.report_period_id).order_by("-result")
+        return GenericReportData.objects.filter(report_period__pk=self.report_period_id).order_by("place")
 
     def is_valid(self, generic_report: GenericReportData):
         if self.level_type == Faculty.__name__.lower():
@@ -297,14 +286,18 @@ class PivotReport:
         )
         response.write(codecs.BOM_UTF8)
 
-        fake_report = type("fake_report", (), {"adjusted_result": .0})
+        dummy_report = type("dummy_report", (), {"adjusted_result": .0, "place": self.get_qs().count(), "result": 0})
 
         writer = csv.writer(response)
         writer.writerow(
-            ["#", "ПІБ", "Кафедра", "Факультет", "Посада", "Відпрацьовано Місяців", "Доля Ставки", "Підсумковий Бал",
+            ["Місце", "ПІБ", "Кафедра", "Факультет", "Посада", "Відпрацьовано Місяців",
+             "Доля Ставки", "Сумарне Місце", "Підсумковий Бал",
              EducationalAndMethodicalWork.NAME,
+             f"Місце {EducationalAndMethodicalWork.NAME}",
              ScientificAndInnovativeWork.NAME,
-             OrganizationalAndEducationalWork.NAME])
+             f"Місце {ScientificAndInnovativeWork.NAME}",
+             OrganizationalAndEducationalWork.NAME,
+             f"Місце {OrganizationalAndEducationalWork.NAME}"])
         for i, one in enumerate(self.get_qs(), start=1):
             if self.is_valid(one):
                 writer.writerow(
@@ -316,10 +309,14 @@ class PivotReport:
                         one.user.profile.position,
                         one.assignment_duration,
                         one.assignment,
+                        one.place,
                         one.result,
-                        getattr(one, "educationalandmethodicalwork", fake_report).adjusted_result,
-                        getattr(one, "scientificandinnovativework", fake_report).adjusted_result,
-                        getattr(one, "organizationalandeducationalwork", fake_report).adjusted_result,
+                        getattr(one, "educationalandmethodicalwork", dummy_report).adjusted_result,
+                        getattr(one, "educationalandmethodicalwork", dummy_report).place,
+                        getattr(one, "scientificandinnovativework", dummy_report).adjusted_result,
+                        getattr(one, "scientificandinnovativework", dummy_report).place,
+                        getattr(one, "organizationalandeducationalwork", dummy_report).adjusted_result,
+                        getattr(one, "organizationalandeducationalwork", dummy_report).place,
                     ]
                 )
 

@@ -4,7 +4,8 @@ from service_api.models import OrganizationalAndEducationalWork
 
 class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
 
-    def __init__(self, report: OrganizationalAndEducationalWork):
+    def __init__(self, report: OrganizationalAndEducationalWork, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.report = report
 
     def get_result(self) -> float:

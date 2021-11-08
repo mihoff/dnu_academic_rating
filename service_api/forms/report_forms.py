@@ -53,16 +53,16 @@ class GenericReportDataForm(BaseForm):
 class EducationalAndMethodicalWorkForm(BaseForm):
     class Meta:
         model = EducationalAndMethodicalWork
-        exclude = ("generic_report_data", "result", "adjusted_result")
+        exclude = ("generic_report_data", "result", "adjusted_result", "place")
 
 
 class ScientificAndInnovativeWorkForm(BaseForm):
     class Meta:
         model = ScientificAndInnovativeWork
-        exclude = ("generic_report_data", "result", "adjusted_result")
+        exclude = ("generic_report_data", "result", "adjusted_result", "place")
 
 
 class OrganizationalAndEducationalWorkForm(BaseForm):
     class Meta:
         model = OrganizationalAndEducationalWork
-        exclude = ("generic_report_data", "result", "adjusted_result")
+        exclude = ("generic_report_data", "result", "adjusted_result", "place")

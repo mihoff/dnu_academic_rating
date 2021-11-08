@@ -1,4 +1,7 @@
 class BaseCalculation:
+    def __init__(self, skip_adjustment: bool = False):
+        self.skip_adjustment = skip_adjustment
+
     def get_result(self):
         raise NotImplementedError
 

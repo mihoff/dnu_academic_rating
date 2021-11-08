@@ -13,7 +13,8 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         EducationalAndMethodicalWork.LEVEL_THREE: 20,
     }
 
-    def __init__(self, report: EducationalAndMethodicalWork):
+    def __init__(self, report: EducationalAndMethodicalWork, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.report = report
 
     def get_result(self):
