@@ -11,6 +11,12 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     {% if is_editable and not is_pdf %}<title>РВ | {% block title %}{% endblock %}</title>{% endif %}
 
+    <meta property="og:title" content="Рейтинг Викладача" />
+    <meta property="og:site_name" content="Рейтинг Викладача"/>
+    <meta property="og:description" content="Рейтингове оцінювання професійної діяльності НПП є складовою внутрішньої
+системи забезпечення якості вищої освіти та освітньої діяльності у ДНУ." />
+    <meta property="og:image" content="{% static 'favicon.ico' %}" />
+
     <style>
         .footer {
             position: fixed;
