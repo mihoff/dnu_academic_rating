@@ -98,13 +98,12 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_fourteen(self) -> float:
-        r = (250 if self.report.fourteen_one else 0) + \
-            (100 if self.report.fourteen_two else 0)
+        r = 250 if self.report.fourteen_one else 0
         return r
 
     def __calc_fifteen(self) -> float:
-        r = 5 * self.report.fifteen_one
-        return r
+        # r = 5 * self.report.fifteen_one
+        return 0
 
     def __calc_sixteen(self) -> float:
         r = 20 * self.report.sixteen_one

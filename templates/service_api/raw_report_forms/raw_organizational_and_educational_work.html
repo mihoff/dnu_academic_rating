@@ -233,13 +233,12 @@
         <td></td>
         <td><label for="{{ form.eleven_one.id_for_label }}">{{ form.eleven_one.label }}</label></td>
         <td>{{ form.eleven_one }}{{ form.eleven_one.errors }}</td>
-        <td></td>
+        <td rowspan="2">Загальна кількість здобувачів, у яких НПП є куратором</td>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.eleven_two.id_for_label }}">{{ form.eleven_two.label }}</label></td>
         <td>{{ form.eleven_two }}{{ form.eleven_two.errors }}</td>
-        <td></td>
     </tr>
 
     <tr>
@@ -266,7 +265,9 @@
 
     <tr>
         <th class="table-active">3.14</th>
-        <th scope="row" colspan="3" class="table-active">Організаційна робота</th>
+        <th scope="row" colspan="3" class="table-active">
+            Відповідальна особаіз забезпечення діяльності разової спеціалізованої вченої ради
+        </th>
     </tr>
     <tr>
         <td></td>
@@ -274,23 +275,21 @@
         <td>{{ form.fourteen_one }}{{ form.fourteen_one.errors }}</td>
         <td></td>
     </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.fourteen_two.id_for_label }}">{{ form.fourteen_two.label }}</label></td>
-        <td>{{ form.fourteen_two }}{{ form.fourteen_two.errors }}</td>
-        <td></td>
-    </tr>
 
     <tr>
         <th class="table-active">3.15</th>
-        <th scope="row" colspan="3" class="table-active">
-            Взаємовідвідування занять НПП (крім завідувача кафедри) зі складанням відгуку в журналі взаємовідвідувань
-        </th>
+        <th scope="row" colspan="3" class="table-active">Організаційна робота</th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.fifteen_one.id_for_label }}">{{ form.fifteen_one.label }}</label></td>
         <td>{{ form.fifteen_one }}{{ form.fifteen_one.errors }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.fifteen_two.id_for_label }}">{{ form.fifteen_two.label }}</label></td>
+        <td>{{ form.fifteen_two }}{{ form.fifteen_two.errors }}</td>
         <td></td>
     </tr>
 
@@ -424,6 +423,84 @@
         <td><label for="{{ form.twenty_two_one.id_for_label }}"></label></td>
         <td>{{ form.twenty_two_one }}{{ form.twenty_two_one.errors }}</td>
         <td></td>
+    </tr>
+
+    <tr>
+        <th class="table-active">3.23</th>
+        <th scope="row" colspan="3" class="table-active">
+            Розроблення нормативних документів ДНУ з питань організації навчальної, наукової, науково-дослідної,
+            виховної роботи, міжнародної діяльності тощо
+        </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_three_one.id_for_label }}">{{ form.twenty_three_one.label }}</label></td>
+        <td>{{ form.twenty_three_one }}{{ form.twenty_three_one.errors }}</td>
+        <td>У разі декількох робіт слід вказати кожне значення через крапку з комою</td>
+    </tr>
+
+    <tr>
+        <th class="table-active">3.24</th>
+        <th scope="row" colspan="3" class="table-active">
+            Адміністрування офіційної вебсторінки факультету, кафедри, збірника наукових праць, фахового журналу,
+            програмного забезпечення рейтингу, репозиторію, системи office 365 факультету
+        </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_four_one.id_for_label }}"></label></td>
+        <td>{{ form.twenty_four_one }}{{ form.twenty_four_one.errors }}</td>
+        <td>Кількість видів робіт</td>
+    </tr>
+
+    <tr>
+        <th class="table-active">3.25</th>
+        <th scope="row" colspan="3" class="table-active">
+            Керівництво збірною ДНУ
+        </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_five_one.id_for_label }}"></label></td>
+        <td>{{ form.twenty_five_one }}{{ form.twenty_five_one.errors }}</td>
+        <td>Для викладачів кафедри фізвиховання та спорту</td>
+    </tr>
+
+    <tr>
+        <th class="table-active">3.26</th>
+        <th scope="row" colspan="3" class="table-active">Тренер збірної</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_six_one.id_for_label }}">{{ form.twenty_six_one.label }}</label></td>
+        <td>{{ form.twenty_six_one }}{{ form.twenty_six_one.errors }}</td>
+        <td rowspan="2">Для викладачів кафедри фізвиховання та спорту</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_six_two.id_for_label }}">{{ form.twenty_six_two.label }}</label></td>
+        <td>{{ form.twenty_six_two }}{{ form.twenty_six_two.errors }}</td>
+    </tr>
+
+    <tr>
+        <th class="table-active">3.27</th>
+        <th scope="row" colspan="3" class="table-active">Тренер збірної</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_seven_one.id_for_label }}">{{ form.twenty_seven_one.label }}</label></td>
+        <td>{{ form.twenty_seven_one }}{{ form.twenty_seven_one.errors }}</td>
+        <td rowspan="2">Для викладачів кафедри фізвиховання та спорту</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_seven_two.id_for_label }}">{{ form.twenty_seven_two.label }}</label></td>
+        <td>{{ form.twenty_seven_two }}{{ form.twenty_seven_two.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.twenty_seven_three.id_for_label }}">{{ form.twenty_seven_three.label }}</label></td>
+        <td>{{ form.twenty_seven_three }}{{ form.twenty_seven_three.errors }}</td>
     </tr>
 
     </tbody>

@@ -162,12 +162,12 @@ class BaseReportFormView(BaseView, FormView):
             f.generic_report_data = GenericReportData.objects.get(
                 user=self.request.user, report_period=active_report_period
             )
-        calc_obj = self.calc_model(f)
+        # calc_obj = self.calc_model(f)
         try:
-            f.result = calc_obj.get_result()
-            f.adjusted_result = self.model.raw_calculation(
-                f.result, self.generic_report
-            )
+            # f.result = calc_obj.get_result()
+            # f.adjusted_result = self.model.raw_calculation(
+            #     f.result, self.generic_report
+            # )
             f.save()
 
             # self.update_generic_report()

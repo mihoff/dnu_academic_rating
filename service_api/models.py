@@ -167,12 +167,21 @@ class EducationalAndMethodicalWork(BaseReportModel):
     NAME = "Навчально-методична робота"
 
     NONE = None
+    HONORED_WORKER_OF_EDUCATION_OF_UKRAINE = "honored_worker_of_education_of_ukraine"
+    EXCELLENT_EDUCATION = "excellent_education"
+    HONORED_PROFESSOR_LECTURER_OF_DNU = "honored_professor_lecturer_of_dnu"
+    HONORED_LECTURER_OF_DNU = "honored_lecturer_of_dnu"
     PROFESSOR = "professor"
     DOCENT = "docent"
     POSITION_CHOICES = (
         (NONE, "Не отримано"),
+        (HONORED_WORKER_OF_EDUCATION_OF_UKRAINE, "Заслужений працівник освіти України"),
+        (EXCELLENT_EDUCATION, "Відмінник освіти"),
+        (HONORED_PROFESSOR_LECTURER_OF_DNU, "Заслужений професор(викладач) ДНУ"),
+        (HONORED_LECTURER_OF_DNU ,"Заслужений викладач ДНУ"),
         (PROFESSOR, "Професор"),
         (DOCENT, "Доцент"),
+
     )
 
     LEVEL_ONE = "І освітній рівень"
@@ -198,142 +207,166 @@ class EducationalAndMethodicalWork(BaseReportModel):
         verbose_name="загальне навчальне навантаження працівника (год.) за рік", default=0,
         validators=[validators.MinValueValidator(0), validators.MaxValueValidator(600)])
 
-    # 2 Рецензування навчально-методичних матеріалів
+    # 2 Розробка та затвердження нової освітньої (освітньо-професійної або освітньо-наукової) програми
     two_one = models.CharField(
-        max_length=256, verbose_name="методичних вказівок (рекомендацій)", default="0",
+        max_length=256, verbose_name="розробка та затвердження", default="0",
         validators=[float_number_semicolon_validator])
     two_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0",
+        validators=[float_number_semicolon_validator])
+
+    # 3 Розробка нових
+    three_one = models.CharField(
+        max_length=256, verbose_name="навчальних планів", default="0", validators=[number_semicolon_validator])
+    three_two = models.CharField(
+        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[number_semicolon_validator])
+    three_three = models.CharField(
+        max_length=256, verbose_name="навчальних планів", default="0", validators=[number_semicolon_validator])
+    three_four = models.CharField(
+        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[number_semicolon_validator])
+
+    # 4 Виконання обов’язків гаранта ОП І освітнього рівня/ІІ ОР/ІІІ ОР
+    four_one = models.CharField(
+        max_length=32, verbose_name="", choices=LEVELS_CHOICES, default=NONE, null=True, blank=True)
+
+    # 5 Підготовка справи та успішне проходження експертизи
+    five_one = models.CharField(
+        max_length=256, verbose_name="ліцензійної", default="0", validators=[float_number_semicolon_validator])
+    five_two = models.CharField(
+        max_length=256, verbose_name="акредитаційної", default="0", validators=[float_number_semicolon_validator])
+
+    # 6 Публікації
+    six_one = models.CharField(
+        max_length=256, verbose_name="курс лекцій", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+    six_two = models.CharField(
+        max_length=256, verbose_name="навчально-методичні рекомендації", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+    six_three = models.CharField(
+        max_length=256, verbose_name="підручник в Україні", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+    six_four = models.CharField(
+        max_length=256, verbose_name="навчальний посібник в Україні", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+    six_five = models.CharField(
+        max_length=256, verbose_name="підручник за кордоном офіційною мовою ЄС", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+    six_six = models.CharField(
+        max_length=256, verbose_name="навчальний посібник за кордоном офіційною мовою ЄС", default="0",
+        validators=[float_number_brackets_float_number_semicolon_validator])
+
+    # 7 Редагування та переклад підручників, навчальних посібників, методичних матеріалів тощо
+    seven_one = models.CharField(
+        max_length=256, verbose_name="редагування",
+        default="0", validators=[float_number_semicolon_validator])
+    seven_two = models.CharField(
+        max_length=256, verbose_name="переклад", default="0",
+        validators=[float_number_semicolon_validator])
+
+    # 8 Розробка та оновлення робочої програми навчальної дисципліниза умови відповідного затвердження
+    # та розміщення на сайті (у разі введення нової дисципліни)
+    eight_one = models.CharField(
+        max_length=256, verbose_name="розробка", default="0",
+        validators=[float_number_semicolon_validator])
+    eight_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0",
+        validators=[float_number_semicolon_validator])
+
+    # 9 Підготовка нової (оновлення) лекційної презентації
+    nine_one = models.IntegerField(verbose_name="розробка", default=0)
+    nine_two = models.IntegerField(verbose_name="оновлення", default=0)
+
+    # 10 Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
+    ten_one = models.CharField(
+        max_length=256, verbose_name="розробка і підготовка", default="0",
+        validators=[float_number_semicolon_validator])
+    ten_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+
+    # 11 Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
+    eleven_one = models.IntegerField(verbose_name="розробка і підготовка", default=0)
+    eleven_two = models.IntegerField(verbose_name="оновлення", default=0)
+
+    # 12 Підготовка комп’ютерного програмного забезпечення навчальних дисциплін
+    twelve_one = models.CharField(
+        max_length=256, verbose_name="підготовка", default="0", validators=[float_number_semicolon_validator])
+    twelve_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+
+    # 13 Розробка і впровадження нових форм, методів і технологій навчання,
+    # зокрема, інтерактивних методів навчання (ділових ігор, ситуативних вправ, кейс-методів, тощо)
+    thirteen_one = models.CharField(
+        max_length=256, verbose_name="розробка і впровадження", default="0",
+        validators=[float_number_semicolon_validator])
+
+    # 14 Розробка складових електронних освітніх ресурсів (ЕОР)
+    # відповідно до положення за умови розміщення на ресурсі ДНУ
+    fourteen_one = models.CharField(
+        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
+    fourteen_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+
+    # 15 Розробка програм і завдань до вступних випробувань
+    fifteen_one = models.CharField(
+        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
+    fifteen_two = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+    fifteen_three = models.CharField(
+        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
+    fifteen_four = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+    fifteen_five = models.CharField(
+        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
+    fifteen_six = models.CharField(
+        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
+
+    # 16 Рецензування навчально-методичних матеріалів
+    sixteen_one = models.CharField(
         max_length=256, verbose_name="навчально-методичних посібників, посібників", default="0",
         validators=[float_number_semicolon_validator])
-    two_three = models.CharField(
+    sixteen_two = models.CharField(
         max_length=256,
         verbose_name="навчально-методичних матеріалів (підручників, посібників тощо), "
                      "що подаються МОН України на закрите рецензування",
         default="0", validators=[float_number_semicolon_validator])
 
-    # 3 Експертиза
-    three_one = models.IntegerField(
+    # 17 Експертиза
+    seventeen_one = models.IntegerField(
         verbose_name="нормативних документів, наданих МОН України для публічного обговорення",
         default=0, validators=[validators.MinValueValidator(0)])
-    three_two = models.IntegerField(
+    seventeen_two = models.IntegerField(
         verbose_name="конкурсних дипломних проєктів і робіт", default=0, validators=[validators.MinValueValidator(0)])
-    three_three = models.IntegerField(
+    seventeen_three = models.IntegerField(
         verbose_name="конкурсних робіт МАН", default=0, validators=[validators.MinValueValidator(0)])
 
-    # 4 Розроблення нормативних документів ДНУ  з питань організації навчальної, наукової, науково-дослідної,
-    # виховної роботи, міжнародної діяльності тощо
-    four_one = models.CharField(
-        max_length=256, verbose_name="кількість виконавців одного документу", default="0",
-        validators=[number_semicolon_validator])
-
-    # 5 Редагування (переклад) підручників, навчальних посібників, методичних матеріалів тощо
-    five_one = models.CharField(
-        max_length=256, verbose_name="редагування (кількість друкованих аркушів)",
-        default="0", validators=[float_number_semicolon_validator])
-    five_two = models.CharField(
-        max_length=256, verbose_name="переклад (кількість друкованих аркушів)", default="0",
-        validators=[float_number_semicolon_validator])
-
-    # 6 Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
+    # 18 Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
     # проектами ТEMPUS, ERASMUS+
     # выконавець True - False
-    six_one = models.BooleanField(verbose_name="В ролі керівника", default=False)
-    six_two = models.IntegerField(verbose_name="В ролі виконавця", default=0, help_text="Кількість участників проєкту")
+    eighteen_one = models.BooleanField(verbose_name="Керівник", default=False)
+    eighteen_two = models.IntegerField(verbose_name="Кількість виконвавців проєкту", default=0)
 
-    # 7 Публікації
-    seven_one = models.CharField(
-        max_length=256, verbose_name="курс лекцій", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
-    seven_two = models.CharField(
-        max_length=256, verbose_name="навчально-методичні рекомендації", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
-    seven_three = models.CharField(
-        max_length=256, verbose_name="підручник в Україні", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
-    seven_four = models.CharField(
-        max_length=256, verbose_name="навчальний посібник в Україні", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
-    seven_five = models.CharField(
-        max_length=256, verbose_name="підручник за кордоном", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
-    seven_six = models.CharField(
-        max_length=256, verbose_name="навчальний посібник за кордоном", default="0",
-        validators=[float_number_brackets_float_number_semicolon_validator])
+    # 19 Підготовка концертних програм і персональних художніх виставок, спортивних заходів
+    nineteen_one = models.IntegerField(default=0, verbose_name="міжнародного рівня")
+    nineteen_two = models.IntegerField(default=0, verbose_name="всеукраїнського рівня")
+    nineteen_three = models.IntegerField(default=0, verbose_name="регіонального рівня")
 
-    # 8 Виконання обов’язків гаранта ОП І освітнього рівня/ІІ ОР/ІІІ ОР
-    eight_one = models.CharField(
-        max_length=32, verbose_name="", choices=LEVELS_CHOICES, default=NONE, null=True, blank=True)
+    # 20 Підготовка лауреата виставки, творчого конкурсу для творчих спеціальностей
+    # (для кафедр творчого спрямування)
+    twenty_one = models.IntegerField(default=0, verbose_name="міжнародного рівня")
+    twenty_two = models.IntegerField(default=0, verbose_name="всеукраїнського рівня")
+    twenty_three = models.IntegerField(default=0, verbose_name="регіонального рівня")
 
-    # 9 Розробка НМКД
-    nine_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[number_semicolon_validator])
-    nine_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[number_semicolon_validator])
+    # 21 Підготовка призера змагань (для викладачів кафедри фізичного виховання і спорту)
+    twenty_one_one = models.IntegerField(default=0, verbose_name="олімпіади, чемпіонату світу")
+    twenty_one_two = models.IntegerField(default=0, verbose_name="чемпіонату Європи")
+    twenty_one_three = models.IntegerField(default=0, verbose_name="чемпіонату України")
 
-    # 10 Розробка нових
-    ten_one = models.CharField(
-        max_length=256, verbose_name="навчальних планів", default="0", validators=[number_semicolon_validator])
-    ten_two = models.CharField(
-        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[number_semicolon_validator])
-    ten_three = models.CharField(
-        max_length=256, verbose_name="навчальних планів", default="0", validators=[number_semicolon_validator])
-    ten_four = models.CharField(
-        max_length=256, verbose_name="робочих навчальних планів", default="0", validators=[number_semicolon_validator])
+    # 22 Підготовка учасника змагань (для викладачів кафедри фізичного виховання і спорту)
+    twenty_two_one = models.IntegerField(default=0, verbose_name="олімпіади, чемпіонату світу")
+    twenty_two_two = models.IntegerField(default=0, verbose_name="чемпіонату Європи")
 
-    # 11 Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
-    eleven_one = models.CharField(
-        max_length=256, verbose_name="розробка і підготовка", default="0",
-        validators=[float_number_semicolon_validator])
-    eleven_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-
-    # 12 Розробка та затвердження нової освітньої (освітньо-професійної або освітньо-наукової) програми
-    twelve_one = models.CharField(
-        max_length=256, verbose_name="розробка та затвердження", default="0",
-        validators=[float_number_semicolon_validator])
-
-    # 13 Підготовка справи та успішне проходження експертизи
-    thirteen_one = models.CharField(
-        max_length=256, verbose_name="ліцензійної", default="0", validators=[float_number_semicolon_validator])
-    thirteen_two = models.CharField(
-        max_length=256, verbose_name="акредитаційної", default="0", validators=[float_number_semicolon_validator])
-
-    # 14 Підготовка комп’ютерного програмного забезпечення навчальних дисциплін
-    fourteen_one = models.CharField(
-        max_length=256, verbose_name="підготовка", default="0", validators=[float_number_semicolon_validator])
-    fourteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-
-    # 15 Розробка складових ЕОР
-    fifteen_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
-    fifteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-
-    # 16 Розробка програм і завдань до вступних випробувань
-    sixteen_one = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
-    sixteen_two = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-    sixteen_three = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
-    sixteen_four = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-    sixteen_five = models.CharField(
-        max_length=256, verbose_name="розробка", default="0", validators=[float_number_semicolon_validator])
-    sixteen_six = models.CharField(
-        max_length=256, verbose_name="оновлення", default="0", validators=[float_number_semicolon_validator])
-
-    # 17 Розробка і впровадження нових форм, методів і технологій навчання
-    seventeen_one = models.CharField(
-        max_length=256, verbose_name="розробка і впровадження", default="0",
-        validators=[float_number_semicolon_validator])
-
-    # 18 Підготовка концертних програм і персональних художніх виставок, спортивних заходів
-    eighteen_one = models.IntegerField(default=0)
-
-    # 19 Отримання звання
-    nineteen_one = models.CharField(max_length=30, choices=POSITION_CHOICES, default=NONE, null=True, blank=True)
+    # 23 Отримання звання
+    twenty_three_one = models.CharField(max_length=50, choices=POSITION_CHOICES, default=NONE, null=True, blank=True)
 
     @staticmethod
     def get_report(user, report_period: ReportPeriod):
@@ -460,8 +493,8 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     ten_one = models.IntegerField(verbose_name="кількість студентів, яким замовлено додатки", default=0)
 
     # 11. Участь у виховній роботі в студентському колектив
-    eleven_one = models.BooleanField(
-        verbose_name="виконання обов’язків куратора (наставника) академічної групи", default=False)
+    eleven_one = models.IntegerField(
+        verbose_name="Виконання обов’язків куратора (наставника) академічної групи", default=0)
     eleven_two = models.BooleanField(verbose_name="проведення виховної роботи в гуртожитках", default=False)
 
     # 12. Робота у складі вченої ради ДНУ
@@ -472,15 +505,15 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         verbose_name="Робота у складі вченої ради факультету", choices=POSITION_CHOICES, default=NONE,
         blank=True, null=True, max_length=10)
 
-    # 14. Організаційна робота
-    fourteen_one = models.BooleanField(
+    # 14 Відповідальна особа із забезпечення діяльності разової спеціалізованої вченої ради
+    fourteen_one = models.IntegerField(verbose_name="Кількість захищених робіт", default=0)
+
+    # 15. Організаційна робота
+    fifteen_one = models.BooleanField(
         verbose_name="завідувача кафедри (у тому числі відвідування занять завідувачем кафедри зі складанням відгуку, "
                      "проведення засідань кафедри, участь у засіданнях  деканату факультету)", default=False)
-    fourteen_two = models.BooleanField(
+    fifteen_two = models.BooleanField(
         verbose_name="заступник завідувача кафедри на громадських засадах", default=False)
-
-    # 15. Взаємовідвідування занять НПП (крім завідувача кафедри) зі складанням відгуку в журналі взаємовідвідувань
-    fifteen_one = models.IntegerField(verbose_name="кількість відвіданих занять", default=0)
 
     # 16. Участь у профорієнтаційній роботі кафедри, факультету, університету
     sixteen_one = models.IntegerField(verbose_name="кількість заходів", default=0)
@@ -517,6 +550,26 @@ class OrganizationalAndEducationalWork(BaseReportModel):
 
     # 22. Керівництво волонтерським проектом студентів
     twenty_two_one = models.BooleanField(default=False)
+
+    # 23 Розроблення нормативних документів ДНУ з питань організації навчальної, наукової,
+    # науково-дослідної, виховної роботи, міжнародної діяльності тощо
+    twenty_three_one = models.IntegerField(verbose_name="Кількість виконавців одного документу", default=0)
+
+    # 24 Адміністрування офіційної вебсторінки факультету, кафедри, збірника наукових праць, фахового журналу,
+    # програмного забезпечення рейтингу, репозиторію, системи office 365 факультету
+    twenty_four_one = models.IntegerField(verbose_name="кількість видів робіт", default=0)
+
+    # 25 Керівництво збірною
+    twenty_five_one = models.BooleanField(verbose_name="ДНУ", default=False)
+
+    # 26 Тренер збірної
+    twenty_six_one = models.BooleanField(verbose_name="України", default=False)
+    twenty_six_two = models.BooleanField(verbose_name="області", default=False)
+
+    # 27 Головний суддя змагань
+    twenty_seven_one = models.BooleanField(verbose_name="міжнародних", default=False)
+    twenty_seven_two = models.BooleanField(verbose_name="національних", default=False)
+    twenty_seven_three = models.BooleanField(verbose_name="обласних", default=False)
 
     @staticmethod
     def get_report(user, report_period):
