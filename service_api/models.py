@@ -322,7 +322,7 @@ class EducationalAndMethodicalWork(BaseReportModel):
 
     # 16 Рецензування навчально-методичних матеріалів
     sixteen_one = models.CharField(
-        max_length=256, verbose_name="навчально-методичних посібників, посібників", default="0",
+        max_length=256, verbose_name="Підручників, навчально-методичних посібників, посібників", default="0",
         validators=[float_number_semicolon_validator])
     sixteen_two = models.CharField(
         max_length=256,
