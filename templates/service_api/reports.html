@@ -7,7 +7,8 @@
 {% block content %}
     <h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>
     {% if generic_report %}
-        <table class="table table-bordered table-sm table-hover">
+        {% if generic_report.result %}
+            <table class="table table-bordered table-sm table-hover">
             <thead>
             <tr class="table-active">
                 <th scope="col">Назва</th>
@@ -78,6 +79,11 @@
             </tr>
             </tbody>
         </table>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                Триває збір даних, будь ласка, зачекайте завершення обробки.
+            </div>
+        {% endif %}
     {% else %}
         <div class="alert alert-danger" role="alert">
             Дані відсутні в системі або обраний період неактивний, будь ласка, перейдіть за посиланням:
