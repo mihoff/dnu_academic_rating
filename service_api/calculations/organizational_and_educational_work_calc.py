@@ -3,24 +3,48 @@ from service_api.models import OrganizationalAndEducationalWork
 
 
 class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
-
     def __init__(self, report: OrganizationalAndEducationalWork):
         self.report = report
 
     def get_result(self) -> float:
-        result = self.__calc_one() + self.__calc_two() + self.__calc_three() + self.__calc_four() + \
-                 self.__calc_five() + self.__calc_six() + self.__calc_seven() + self.__calc_eight() + \
-                 self.__calc_nine() + self.__calc_ten() + self.__calc_eleven() + self.__calc_twelve() + \
-                 self.__calc_thirteen() + self.__calc_fourteen() + self.__calc_fifteen() + self.__calc_sixteen() + \
-                 self.__calc_seventeen() + self.__calc_eighteen() + self.__calc_nineteen() + self.__calc_twenty() + \
-                 self.__calc_twenty_one() + self.__calc_twenty_two()
+        result = (
+            self.__calc_one()
+            + self.__calc_two()
+            + self.__calc_three()
+            + self.__calc_four()
+            + self.__calc_five()
+            + self.__calc_six()
+            + self.__calc_seven()
+            + self.__calc_eight()
+            + self.__calc_nine()
+            + self.__calc_ten()
+            + self.__calc_eleven()
+            + self.__calc_twelve()
+            + self.__calc_thirteen()
+            + self.__calc_fourteen()
+            + self.__calc_fifteen()
+            + self.__calc_sixteen()
+            + self.__calc_seventeen()
+            + self.__calc_eighteen()
+            + self.__calc_nineteen()
+            + self.__calc_twenty()
+            + self.__calc_twenty_one()
+            + self.__calc_twenty_two()
+            + self.__calc_twenty_three()
+            + self.__calc_twenty_four()
+            + self.__calc_twenty_five()
+            + self.__calc_twenty_six()
+            + self.__calc_twenty_seven()
+        )
         return self.apply_rounding(result)
 
     def __calc_one(self) -> float:
-        r = {OrganizationalAndEducationalWork.NONE: 0,
-             OrganizationalAndEducationalWork.HEAD: 100,
-             OrganizationalAndEducationalWork.SECRETARY: 100,
-             OrganizationalAndEducationalWork.MEMBER: 50}.get(self.report.one_one) or 0
+        r = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 100,
+            OrganizationalAndEducationalWork.SECRETARY: 100,
+            OrganizationalAndEducationalWork.MEMBER: 50,
+        }.get(self.report.one_one) or 0
         return r
 
     def __calc_two(self) -> float:
@@ -36,30 +60,31 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
             OrganizationalAndEducationalWork.NONE: 0,
             OrganizationalAndEducationalWork.HEAD: 50,
             OrganizationalAndEducationalWork.SECRETARY: 50,
-            OrganizationalAndEducationalWork.MEMBER: 25}
+            OrganizationalAndEducationalWork.MEMBER: 25,
+        }
         FACULTY_POSITIONS = {
             OrganizationalAndEducationalWork.NONE: 0,
             OrganizationalAndEducationalWork.HEAD: 30,
             OrganizationalAndEducationalWork.SECRETARY: 30,
-            OrganizationalAndEducationalWork.MEMBER: 15}
+            OrganizationalAndEducationalWork.MEMBER: 15,
+        }
 
-        r = UNIVERSITY_POSITIONS.get(self.report.four_one) + \
-            UNIVERSITY_POSITIONS.get(self.report.four_two) + \
-            FACULTY_POSITIONS.get(self.report.four_three) + \
-            UNIVERSITY_POSITIONS.get(self.report.four_four) + \
-            FACULTY_POSITIONS.get(self.report.four_five) + \
-            FACULTY_POSITIONS.get(self.report.four_six)
+        r = (
+            UNIVERSITY_POSITIONS.get(self.report.four_one)
+            + UNIVERSITY_POSITIONS.get(self.report.four_two)
+            + FACULTY_POSITIONS.get(self.report.four_three)
+            + UNIVERSITY_POSITIONS.get(self.report.four_four)
+            + FACULTY_POSITIONS.get(self.report.four_five)
+            + FACULTY_POSITIONS.get(self.report.four_six)
+        )
         return r
 
     def __calc_five(self) -> float:
-        r = 50 * self.report.five_one + \
-            50 * self.report.five_two + \
-            20 * self.report.five_three
+        r = 50 * self.report.five_one + 50 * self.report.five_two + 20 * self.report.five_three
         return r
 
     def __calc_six(self) -> float:
-        r = (250 if self.report.six_one else 0) + \
-            (150 if self.report.six_two else 0)
+        r = (250 if self.report.six_one else 0) + (150 if self.report.six_two else 0)
         return r
 
     def __calc_seven(self) -> float:
@@ -67,11 +92,11 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_eight(self) -> float:
-        r = 5 * self.report.eight_one
+        r = 3 * self.report.eight_one
         return r
 
     def __calc_nine(self) -> float:
-        r = 5 * self.report.nine_one
+        r = 3 * self.report.nine_one
         return r
 
     def __calc_ten(self) -> float:
@@ -79,8 +104,7 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_eleven(self) -> float:
-        r = (50 if self.report.eleven_one else 0) + \
-            (10 if self.report.eleven_two else 0)
+        r = 50 * self.report.eleven_one / 12 + (10 if self.report.eleven_two else 0)
         return r
 
     def __calc_twelve(self) -> float:
@@ -94,30 +118,34 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
             OrganizationalAndEducationalWork.SECRETARY: 50,
             OrganizationalAndEducationalWork.MEMBER: 25,
         }
-        r = LEVELS_RATE.get(self.report.thirteen_one)
+        r = LEVELS_RATE.get(self.report.thirteen_one) or 0
         return r
 
     def __calc_fourteen(self) -> float:
-        r = 250 if self.report.fourteen_one else 0
+        r = 15 * self.report.fourteen_one
         return r
 
     def __calc_fifteen(self) -> float:
-        # r = 5 * self.report.fifteen_one
-        return 0
+        r = 250 if self.report.fifteen_one else 0 + 100 if self.report.fifteen_two else 0
+        return r
 
     def __calc_sixteen(self) -> float:
         r = 20 * self.report.sixteen_one
         return r
 
     def __calc_seventeen(self) -> float:
-        r = (300 if self.report.seventeen_one else 0) + \
-            (250 if self.report.seventeen_two else 0) + \
-            (30 if self.report.seventeen_three else 0) + \
-            15 * self.report.seventeen_four + \
-            20 * self.report.seventeen_five + \
-            20 * self.report.seventeen_six + \
-            10 * self.report.seventeen_seven + \
-            20 * self.report.seventeen_eight
+        r = (
+            (300 if self.report.seventeen_one else 0)
+            + (250 if self.report.seventeen_two else 0)
+            + (30 if self.report.seventeen_three else 0)
+            + (10 * self.report.seventeen_four)
+            if (10 * self.report.seventeen_four < 150)
+            else 150
+            + 20 * self.report.seventeen_five
+            + 15 * self.report.seventeen_six
+            + 5 * self.report.seventeen_seven
+            + 15 * self.report.seventeen_eight
+        )
         return r
 
     def __calc_eighteen(self) -> float:
@@ -138,4 +166,32 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
 
     def __calc_twenty_two(self) -> float:
         r = 50 if self.report.twenty_two_one else 0
+        return r
+
+    def __calc_twenty_three(self) -> float:
+        r = self._divide(50, self.report.twenty_three_one)
+        return r
+
+    def __calc_twenty_four(self) -> float:
+        r = 50 * self.report.twenty_four_one
+        return r
+
+    def __calc_twenty_five(self) -> float:
+        r = 50 if self.report.twenty_five_one else 0
+        return r
+
+    def __calc_twenty_six(self) -> float:
+        r = 200 if self.report.twenty_six_one else 0 + 100 if self.report.twenty_six_two else 0
+        return r
+
+    def __calc_twenty_seven(self) -> float:
+        r = (
+            150
+            if self.report.twenty_seven_one
+            else 0 + 100
+            if self.report.twenty_seven_two
+            else 0 + 30
+            if self.report.twenty_seven_three
+            else 0
+        )
         return r

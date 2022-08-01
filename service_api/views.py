@@ -10,7 +10,7 @@ from django.db import models
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
-from django.views.generic.base import ContextMixin
+from django.views.generic.base import ContextMixin, View
 from microsoft_auth.context_processors import microsoft
 
 from service_api.calculations import BaseCalculation
@@ -39,6 +39,10 @@ from service_api.models import (
     OrganizationalAndEducationalWork,
     ScientificAndInnovativeWork,
     ReportPeriod,
+    TeacherResults,
+    HeadsOfDepartmentsResults,
+    FacultyResults,
+    DecansResults,
 )
 from user_profile.models import Faculty, Department
 
@@ -52,9 +56,7 @@ class __BaseView(ContextMixin):
     def dispatch(self, request, *args, **kwargs):
         report_period_str = (kwargs.get("report_period") or "").replace("-", "/")
         if report_period_str:
-            self.report_period = ReportPeriod.objects.filter(
-                report_period=report_period_str
-            ).first()
+            self.report_period = ReportPeriod.objects.filter(report_period=report_period_str).first()
         else:
             self.report_period = ReportPeriod.get_active()
 
@@ -123,25 +125,15 @@ class BaseReportFormView(BaseView, FormView):
     def update_reports_of_heads(self):
         profile = self.request.user.profile
         heads = HeadsGetter(profile.department, profile.department.faculty)
-        if (
-            heads.head_of_department_profile is not None
-            and profile != heads.head_of_department_profile
-        ):
-            generic_report = (
-                heads.head_of_department_profile.user.genericreportdata_set.filter(
-                    report_period=ReportPeriod.get_active()
-                ).first()
-            )
+        if heads.head_of_department_profile is not None and profile != heads.head_of_department_profile:
+            generic_report = heads.head_of_department_profile.user.genericreportdata_set.filter(
+                report_period=ReportPeriod.get_active()
+            ).first()
             self.__update_generic_report(generic_report)
-        if (
-            heads.head_of_faculty_profile is not None
-            and profile != heads.head_of_faculty_profile
-        ):
-            generic_report = (
-                heads.head_of_faculty_profile.user.genericreportdata_set.filter(
-                    report_period=ReportPeriod.get_active()
-                ).first()
-            )
+        if heads.head_of_faculty_profile is not None and profile != heads.head_of_faculty_profile:
+            generic_report = heads.head_of_faculty_profile.user.genericreportdata_set.filter(
+                report_period=ReportPeriod.get_active()
+            ).first()
             self.__update_generic_report(generic_report)
 
     def get_context_data(self, **kwargs):
@@ -201,9 +193,7 @@ class GenericReportDataView(BaseReportFormView):
 
     model = GenericReportData
     form_class = GenericReportDataForm
-    report_template_path = (
-        "service_api/raw_report_forms/raw_generic_report_data_view.html"
-    )
+    report_template_path = "service_api/raw_report_forms/raw_generic_report_data_view.html"
     success_url = reverse_lazy("generic_report_data")
     calc_model = GenericReportCalculation
 
@@ -233,9 +223,7 @@ class EducationalAndMethodicalWorkView(BaseReportFormView):
 
     model = EducationalAndMethodicalWork
     form_class = EducationalAndMethodicalWorkForm
-    report_template_path = (
-        "service_api/raw_report_forms/raw_educational_and_methodical_work.html"
-    )
+    report_template_path = "service_api/raw_report_forms/raw_educational_and_methodical_work.html"
     success_url = reverse_lazy("educational_and_methodical_work")
     calc_model = EducationalAndMethodicalWorkCalculation
 
@@ -247,9 +235,7 @@ class ScientificAndInnovativeWorkView(BaseReportFormView):
 
     model = ScientificAndInnovativeWork
     form_class = ScientificAndInnovativeWorkForm
-    report_template_path = (
-        "service_api/raw_report_forms/raw_scientific_and_innovative_work.html"
-    )
+    report_template_path = "service_api/raw_report_forms/raw_scientific_and_innovative_work.html"
     success_url = reverse_lazy("scientific_and_innovative_work")
     calc_model = ScientificAndInnovativeWorkCalculation
 
@@ -261,9 +247,7 @@ class OrganizationalAndEducationalWorkView(BaseReportFormView):
 
     model = OrganizationalAndEducationalWork
     form_class = OrganizationalAndEducationalWorkForm
-    report_template_path = (
-        "service_api/raw_report_forms/raw_organizational_and_educational_work.html"
-    )
+    report_template_path = "service_api/raw_report_forms/raw_organizational_and_educational_work.html"
     success_url = reverse_lazy("organizational_and_educational_work")
     calc_model = OrganizationalAndEducationalWorkCalculation
 
@@ -276,9 +260,7 @@ class ReportsView(BaseView, TemplateView):
         data.update(
             {
                 "is_report": True,
-                "report_periods": GenericReportData.objects.filter(
-                    user=self.request.user
-                ),
+                "report_periods": GenericReportData.objects.filter(user=self.request.user),
             }
         )
         return data
@@ -297,18 +279,14 @@ class ReportPdf(BaseView, TemplateView):
         ):
             report_instances[_model.slug()] = None
             if hasattr(self.generic_report, _model.__name__.lower()):
-                report_instances[_model.slug()] = _form(
-                    instance=getattr(self.generic_report, _model.__name__.lower())
-                )
+                report_instances[_model.slug()] = _form(instance=getattr(self.generic_report, _model.__name__.lower()))
 
         data.update(
             {
                 **report_instances,
                 "is_editable": False,
                 "is_pdf": True,
-                GenericReportData.slug(): GenericReportDataForm(
-                    instance=self.generic_report
-                )
+                GenericReportData.slug(): GenericReportDataForm(instance=self.generic_report)
                 if self.generic_report
                 else None,
                 "report_name": f"Рейтингові бали {self.request.user.profile.last_name_and_initial} "
@@ -328,9 +306,7 @@ class PivotReport:
         self.__response = None
 
     def get_qs(self):
-        return GenericReportData.objects.filter(
-            report_period__pk=self.report_period_id
-        ).order_by("-result")
+        return GenericReportData.objects.filter(report_period__pk=self.report_period_id).order_by("-result")
 
     def is_valid(self, generic_report: GenericReportData):
         if self.level_type == Faculty.__name__.lower():
@@ -382,15 +358,9 @@ class PivotReport:
                         one.assignment_duration,
                         one.assignment,
                         one.result,
-                        getattr(
-                            one, "educationalandmethodicalwork", fake_report
-                        ).adjusted_result,
-                        getattr(
-                            one, "scientificandinnovativework", fake_report
-                        ).adjusted_result,
-                        getattr(
-                            one, "organizationalandeducationalwork", fake_report
-                        ).adjusted_result,
+                        getattr(one, "educationalandmethodicalwork", fake_report).adjusted_result,
+                        getattr(one, "scientificandinnovativework", fake_report).adjusted_result,
+                        getattr(one, "organizationalandeducationalwork", fake_report).adjusted_result,
                     ]
                 )
 
@@ -403,8 +373,173 @@ class PivotReport:
 
 @login_required
 def pivot_report_by_type(request, report_period_id, level_type=None, pk=None):
-    report = PivotReport(
-        request, report_period_id=report_period_id, level_type=level_type, pk=pk
-    )
+    report = PivotReport(request, report_period_id=report_period_id, level_type=level_type, pk=pk)
     report.prepare_response()
     return report.response
+
+
+class ReportView(View):
+    REPORT_MODEL: None
+
+    def get_headers(self) -> list[str]:
+        raise NotImplementedError
+
+    def get_values(self, report: "REPORT_MODEL") -> list[str]:
+        raise NotImplementedError
+
+    def get_qs(self, report_period: ReportPeriod):
+        raise NotImplementedError
+
+    def get(self, request, report_period_id: int):
+        report_period = ReportPeriod.objects.get(pk=report_period_id)
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={
+                "Content-Disposition": f"attachment; filename={self.REPORT_MODEL.file_name}_{report_period.report_period}.csv"
+            },
+        )
+        response.write(codecs.BOM_UTF8)
+
+        writer = csv.writer(response)
+        writer.writerow(self.get_headers())
+        for t_result in self.get_qs(report_period):
+            writer.writerow(self.get_values(t_result))
+        return response
+
+
+class TeachersReportView(ReportView):
+    REPORT_MODEL = TeacherResults
+
+    def get_headers(self):
+        return [
+            "Місце",
+            "ПІБ",
+            "Кафедра",
+            "Факультет",
+            "Посада",
+            "Розрахована сума місць робіт",
+            "Чистий Бал " + EducationalAndMethodicalWork.NAME,
+            "Бал " + EducationalAndMethodicalWork.NAME,
+            "Місце " + EducationalAndMethodicalWork.NAME,
+            "Чистий Бал " + ScientificAndInnovativeWork.NAME,
+            "Бал " + ScientificAndInnovativeWork.NAME,
+            "Місце " + ScientificAndInnovativeWork.NAME,
+            "Чистий Бал " + OrganizationalAndEducationalWork.NAME,
+            "Бал " + OrganizationalAndEducationalWork.NAME,
+            "Місце " + OrganizationalAndEducationalWork.NAME,
+            "Відпрацьовано місяців",
+            "Доля ставки",
+            "Cтудентський бал",
+        ]
+
+    def get_values(self, report: REPORT_MODEL):
+        return [
+            report.place,
+            report.generic_report_data.user.profile.last_name_and_initial,
+            report.generic_report_data.user.profile.department,
+            report.generic_report_data.user.profile.department.faculty,
+            report.generic_report_data.user.profile.position,
+            report.scores_sum,
+            report.generic_report_data.educationalandmethodicalwork.result,
+            report.generic_report_data.educationalandmethodicalwork.adjusted_result,
+            report.educationalandmethodicalwork_place,
+            report.generic_report_data.scientificandinnovativework.result,
+            report.generic_report_data.scientificandinnovativework.adjusted_result,
+            report.scientificandinnovativework_place,
+            report.generic_report_data.organizationalandeducationalwork.result,
+            report.generic_report_data.organizationalandeducationalwork.adjusted_result,
+            report.organizationalandeducationalwork_place,
+            report.generic_report_data.assignment_duration,
+            report.generic_report_data.assignment,
+            report.generic_report_data.students_rating,
+        ]
+
+    def get_qs(self, report_period: ReportPeriod):
+        return self.REPORT_MODEL.objects.filter(generic_report_data__report_period=report_period).order_by("place")
+
+
+class HeadsOfDepartmentsReportView(ReportView):
+    REPORT_MODEL = HeadsOfDepartmentsResults
+
+    def get_headers(self):
+        return [
+            "Місце",
+            "ПІБ",
+            "Кафедра",
+            "Факультет",
+            "Посада",
+            "Сума балів кафедри",
+            "Кількість працівників кафедри",
+            "Особисті бали",
+            "Отримані бали",
+        ]
+
+    def get_values(self, report: REPORT_MODEL) -> list[str]:
+        return [
+            report.place,
+            report.teacher_result.generic_report_data.user.profile.last_name_and_initial,
+            report.teacher_result.generic_report_data.user.profile.department,
+            report.teacher_result.generic_report_data.user.profile.department.faculty,
+            report.teacher_result.generic_report_data.user.profile.position,
+            report.related_to_department_sum,
+            report.related_to_department_count,
+            report.teacher_result.scores_sum,
+            report.scores_sum,
+        ]
+
+    def get_qs(self, report_period: ReportPeriod):
+        return self.REPORT_MODEL.objects.filter(
+            teacher_result__generic_report_data__report_period=report_period
+        ).order_by("place")
+
+
+class FacultiesReportView(ReportView):
+    REPORT_MODEL = FacultyResults
+
+    def get_headers(self):
+        return [
+            "Місце",
+            "Факультет",
+            "Сума балів факультету",
+        ]
+
+    def get_values(self, report: REPORT_MODEL) -> list[str]:
+        return [
+            report.place,
+            report.faculty.title,
+            report.scores_sum,
+        ]
+
+    def get_qs(self, report_period: ReportPeriod):
+        return self.REPORT_MODEL.objects.filter(report_period=report_period).order_by("place")
+
+
+class DecansReportView(ReportView):
+    REPORT_MODEL = DecansResults
+
+    def get_headers(self):
+        return [
+            "Місце",
+            "ПІБ",
+            "Кафедра",
+            "Факультет",
+            "Посада",
+            "Особисте місце",
+            "Сума балів деканату",
+        ]
+
+    def get_values(self, report: REPORT_MODEL) -> list[str]:
+        return [
+            report.place,
+            report.teacher_result.generic_report_data.user.profile.last_name_and_initial,
+            report.teacher_result.generic_report_data.user.profile.department,
+            report.teacher_result.generic_report_data.user.profile.department.faculty,
+            report.teacher_result.generic_report_data.user.profile.position,
+            report.own_place,
+            report.sum_place,
+        ]
+
+    def get_qs(self, report_period: ReportPeriod):
+        return self.REPORT_MODEL.objects.filter(
+            teacher_result__generic_report_data__report_period=report_period
+        ).order_by("place")

@@ -22,12 +22,9 @@ class GenericReportCalculation(BaseCalculation):
             if not obj:
                 continue
 
-            obj.adjusted_result = obj.get_final_result()
-            obj.save()
-
             result += obj.adjusted_result * obj.adjust_rate
 
-        result = self.get_cumulative_result(result)
+        # result = self.get_cumulative_result(result)
 
         return self.apply_rounding(result)
 

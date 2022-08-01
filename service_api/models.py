@@ -11,6 +11,7 @@ from django.utils.safestring import mark_safe
 
 from service_api.calculations import BaseCalculation
 from system_app.models import Documents
+from user_profile.models import Faculty
 
 YES_SVG = f"<img src='{static('admin/img/icon-yes.svg')}' alt='False'>"
 NO_SVG = f"<img src='{static('admin/img/icon-no.svg')}' alt='False'>"
@@ -699,6 +700,50 @@ class OrganizationalAndEducationalWork(BaseReportModel):
     class Meta:
         verbose_name = 'Звіт "Організаційно-виховна робота"'
         verbose_name_plural = 'Звіти "Організаційно-виховна робота"'
+
+
+class TeacherResults(models.Model):
+    file_name = "teachers_results"
+
+    generic_report_data = models.OneToOneField(GenericReportData, on_delete=models.CASCADE)
+
+    educationalandmethodicalwork_place = models.IntegerField(null=True, blank=True)
+    organizationalandeducationalwork_place = models.IntegerField(null=True, blank=True)
+    scientificandinnovativework_place = models.IntegerField(null=True, blank=True)
+
+    scores_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    place = models.IntegerField(null=True, blank=True)
+
+
+class HeadsOfDepartmentsResults(models.Model):
+    file_name = "heads_of_departments_results"
+
+    teacher_result = models.OneToOneField(TeacherResults, on_delete=models.CASCADE)
+
+    related_to_department_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    related_to_department_count = models.IntegerField(null=True, blank=True)
+
+    scores_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    place = models.IntegerField(null=True, blank=True)
+
+
+class DecansResults(models.Model):
+    file_name = "decans_results"
+
+    teacher_result = models.OneToOneField(TeacherResults, on_delete=models.CASCADE)
+    own_place = models.IntegerField(null=True, blank=True)
+    sum_place = models.IntegerField(null=True, blank=True)
+    place = models.IntegerField(null=True, blank=True)
+
+
+class FacultyResults(models.Model):
+    file_name = "faculty_results"
+
+    report_period = models.ForeignKey(ReportPeriod, on_delete=models.CASCADE)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+
+    scores_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    place = models.IntegerField(null=True, blank=True)
 
 
 REPORT_MODELS = (EducationalAndMethodicalWork, ScientificAndInnovativeWork, OrganizationalAndEducationalWork)
