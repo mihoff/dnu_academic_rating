@@ -61,11 +61,11 @@ class BaseReportModel(models.Model):
     @staticmethod
     def raw_calculation(raw_result, generic_report):
         try:
-            # Корекция базовых баллов относительно ставки
-            assignment_correction = raw_result / generic_report.assignment
+            # # Корекция базовых баллов относительно ставки
+            # result = raw_result / generic_report.assignment
 
             # Коррекция баллов относительно колличества отработанних месяцев
-            result = assignment_correction / (generic_report.assignment_duration / 10)
+            result = raw_result / (generic_report.assignment_duration / 10)
         except (ZeroDivisionError, AttributeError):
             result = 0.0
         return BaseCalculation.apply_rounding(result)
