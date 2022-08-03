@@ -85,7 +85,6 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_seven(self) -> float:
-        """N * V * K"""
         r = self._multiply(5, self.report.seven_one) + self._multiply(10, self.report.seven_two)
         return r
 
@@ -152,7 +151,7 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_eighteen(self) -> float:
-        r = 60 if self.report.eighteen_one else 0 + (200 / self.report.eighteen_two) if self.report.eighteen_two else 0
+        r = 80 if self.report.eighteen_one else 0 + (200 / self.report.eighteen_two) if self.report.eighteen_two else 0
         return r
 
     def _calc_nineteen(self) -> float:

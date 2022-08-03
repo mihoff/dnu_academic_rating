@@ -32,7 +32,7 @@ class Command(BaseCommand):
         for own_place, t_result in enumerate(
             TeacherResults.objects.filter(
                 generic_report_data__user__profile__position__cumulative_calculation=Position.BY_FACULTY
-            ).order_by("-scores_sum"),
+            ).order_by("-place"),
             start=1,
         ):
             faculty = FacultyResults.objects.get(

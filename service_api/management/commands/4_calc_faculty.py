@@ -32,7 +32,7 @@ class Command(BaseCommand):
             TeacherResults.objects.filter(generic_report_data__report_period=report_period)
             .exclude(generic_report_data__user__profile__position__cumulative_calculation=Position.BY_FACULTY)
             .values("generic_report_data__user__profile__department__faculty")
-            .annotate(Sum("scores_sum"))
+            .annotate(Sum("place"))
         ):
             if FacultyResults.objects.filter(
                 report_period=report_period,
@@ -42,17 +42,17 @@ class Command(BaseCommand):
                     report_period=report_period,
                     faculty_id=t_result["generic_report_data__user__profile__department__faculty"],
                 ).first()
-                faculty.scores_sum = t_result["scores_sum__sum"]
+                faculty.places_sum = t_result["place__sum"]
                 faculty.save()
             else:
                 FacultyResults.objects.create(
                     report_period=report_period,
                     faculty_id=t_result["generic_report_data__user__profile__department__faculty"],
-                    scores_sum=t_result["scores_sum__sum"],
+                    places_sum=t_result["place__sum"],
                 )
 
         for place, faculty_result in enumerate(
-            FacultyResults.objects.filter(report_period=report_period).order_by("-scores_sum"), start=1
+            FacultyResults.objects.filter(report_period=report_period).order_by("-places_sum"), start=1
         ):
             faculty_result.place = place
             faculty_result.save()

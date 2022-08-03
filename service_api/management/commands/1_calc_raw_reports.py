@@ -28,8 +28,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         report_period = ReportPeriod.objects.get(is_active=True)
         for profile in Profile.objects.filter(department__isnull=False):
-            if profile.id == 174:
-                print()
             self.stdout.write(f"Calculating for {profile.user.username}...", ending=" ")
             generic_reports = profile.user.genericreportdata_set.filter(report_period=report_period)
             if not generic_reports:

@@ -44,30 +44,30 @@ class Command(BaseCommand):
                     generic_report_data__report_period=report_period,
                 )
                 .exclude(pk=teacher_result.pk)
-                .aggregate(Sum("scores_sum"), Count("pk"))
+                .aggregate(Sum("place"), Count("pk"))
             )
 
             if HeadsOfDepartmentsResults.objects.filter(teacher_result=teacher_result).exists():
                 head = HeadsOfDepartmentsResults.objects.filter(teacher_result=teacher_result).first()
-                head.related_to_department_sum = related_teachers_sum["scores_sum__sum"]
+                head.related_to_department_sum = related_teachers_sum["place__sum"]
                 head.related_to_department_count = related_teachers_sum["pk__count"]
-                head.scores_sum = related_teachers_sum["scores_sum__sum"] / related_teachers_sum["pk__count"] + 2 * (
-                    head.scores_sum or 0
+                head.place = related_teachers_sum["place__sum"] / related_teachers_sum["pk__count"] + 2 * (
+                    head.place or 0
                 )
             else:
                 HeadsOfDepartmentsResults.objects.create(
                     teacher_result=teacher_result,
-                    related_to_department_sum=related_teachers_sum["scores_sum__sum"],
+                    related_to_department_sum=related_teachers_sum["place__sum"],
                     related_to_department_count=related_teachers_sum["pk__count"],
-                    scores_sum=related_teachers_sum["scores_sum__sum"] / related_teachers_sum["pk__count"]
-                    + 2 * (teacher_result.scores_sum or 0),
+                    place=related_teachers_sum["place__sum"] / related_teachers_sum["pk__count"]
+                    + 2 * (teacher_result.place or 0),
                 )
             self.stdout.write(f"calculated", style_func=self.style.SUCCESS)
 
         for place, head in enumerate(
             HeadsOfDepartmentsResults.objects.filter(
                 teacher_result__generic_report_data__report_period=report_period
-            ).order_by("-scores_sum"),
+            ).order_by("-place"),
             start=1,
         ):
             head.place = place

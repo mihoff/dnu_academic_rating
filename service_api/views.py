@@ -500,14 +500,14 @@ class FacultiesReportView(ReportView):
         return [
             "Місце",
             "Факультет",
-            "Сума балів факультету",
+            "Сума місць факультету",
         ]
 
     def get_values(self, report: REPORT_MODEL) -> list[str]:
         return [
             report.place,
             report.faculty.title,
-            report.scores_sum,
+            report.places_sum,
         ]
 
     def get_qs(self, report_period: ReportPeriod):

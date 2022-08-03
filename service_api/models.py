@@ -742,7 +742,7 @@ class FacultyResults(models.Model):
     report_period = models.ForeignKey(ReportPeriod, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
 
-    scores_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    places_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
     place = models.IntegerField(null=True, blank=True)
 
 
