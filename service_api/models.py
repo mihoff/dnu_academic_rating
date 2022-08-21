@@ -731,7 +731,6 @@ class DecansResults(models.Model):
     file_name = "decans_results"
 
     teacher_result = models.OneToOneField(TeacherResults, on_delete=models.CASCADE)
-    own_place = models.IntegerField(null=True, blank=True)
     sum_place = models.IntegerField(null=True, blank=True)
     place = models.IntegerField(null=True, blank=True)
 
@@ -743,6 +742,9 @@ class FacultyResults(models.Model):
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
 
     places_sum = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+    places_sum_count = models.IntegerField(null=True, blank=True)
+    places_sum_average = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
+
     place = models.IntegerField(null=True, blank=True)
 
 

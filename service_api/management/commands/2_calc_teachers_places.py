@@ -1,11 +1,6 @@
-import csv
-from datetime import datetime
-
 from django.core.management.base import BaseCommand
-from django.db.models import Q
 
 from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
-from service_api.calculations.generic_report_calc import GenericReportCalculation
 from service_api.calculations.organizational_and_educational_work_calc import (
     OrganizationalAndEducationalWorkCalculation,
 )
@@ -18,7 +13,6 @@ from service_api.models import (
     OrganizationalAndEducationalWork,
     TeacherResults,
 )
-from user_profile.models import Profile
 
 MODEL_CALC_MAP = {
     EducationalAndMethodicalWork.__name__.lower(): EducationalAndMethodicalWorkCalculation,

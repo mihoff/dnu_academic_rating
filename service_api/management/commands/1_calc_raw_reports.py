@@ -12,6 +12,7 @@ from service_api.models import (
     EducationalAndMethodicalWork,
     ScientificAndInnovativeWork,
     OrganizationalAndEducationalWork,
+    GenericReportData,
 )
 from user_profile.models import Profile
 
@@ -31,9 +32,9 @@ class Command(BaseCommand):
             self.stdout.write(f"Calculating for {profile.user.username}...", ending=" ")
             generic_reports = profile.user.genericreportdata_set.filter(report_period=report_period)
             if not generic_reports:
-                self.stdout.write("No reports found", style_func=self.style.ERROR)
-                continue
-            generic_report = generic_reports.first()
+                generic_report = GenericReportData.objects.create(user=profile.user, report_period=report_period)
+            else:
+                generic_report = generic_reports.first()
             for report_model in REPORT_MODELS:
                 report = getattr(generic_report, report_model.__name__.lower(), None)
                 if not report:

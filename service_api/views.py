@@ -387,10 +387,10 @@ class ReportView(View):
     def get_values(self, report: "REPORT_MODEL") -> list[str]:
         raise NotImplementedError
 
-    def get_qs(self, report_period: ReportPeriod):
+    def get_qs(self, report_period: ReportPeriod, faculty_id: int = None, department_id: int = None):
         raise NotImplementedError
 
-    def get(self, request, report_period_id: int):
+    def get(self, request, report_period_id: int, faculty_id: int = None, department_id: int = None):
         report_period = ReportPeriod.objects.get(pk=report_period_id)
         response = HttpResponse(
             content_type="text/csv",
@@ -402,7 +402,7 @@ class ReportView(View):
 
         writer = csv.writer(response)
         writer.writerow(self.get_headers())
-        for t_result in self.get_qs(report_period):
+        for t_result in self.get_qs(report_period, faculty_id, department_id):
             writer.writerow(self.get_values(t_result))
         return response
 
@@ -454,7 +454,7 @@ class TeachersReportView(ReportView):
             report.generic_report_data.students_rating,
         ]
 
-    def get_qs(self, report_period: ReportPeriod):
+    def get_qs(self, report_period: ReportPeriod, faculty=None, department=None):
         return self.REPORT_MODEL.objects.filter(generic_report_data__report_period=report_period).order_by("place")
 
 
@@ -487,7 +487,7 @@ class HeadsOfDepartmentsReportView(ReportView):
             report.scores_sum,
         ]
 
-    def get_qs(self, report_period: ReportPeriod):
+    def get_qs(self, report_period: ReportPeriod, faculty=None, department=None):
         return self.REPORT_MODEL.objects.filter(
             teacher_result__generic_report_data__report_period=report_period
         ).order_by("place")
@@ -501,6 +501,8 @@ class FacultiesReportView(ReportView):
             "Місце",
             "Факультет",
             "Сума місць факультету",
+            "Кількість працівників факультету",
+            "Середній бал факультету",
         ]
 
     def get_values(self, report: REPORT_MODEL) -> list[str]:
@@ -508,9 +510,11 @@ class FacultiesReportView(ReportView):
             report.place,
             report.faculty.title,
             report.places_sum,
+            report.places_sum_count,
+            report.places_sum_average,
         ]
 
-    def get_qs(self, report_period: ReportPeriod):
+    def get_qs(self, report_period: ReportPeriod, faculty=None, department=None):
         return self.REPORT_MODEL.objects.filter(report_period=report_period).order_by("place")
 
 
@@ -524,7 +528,6 @@ class DecansReportView(ReportView):
             "Кафедра",
             "Факультет",
             "Посада",
-            "Особисте місце",
             "Сума балів деканату",
         ]
 
@@ -535,11 +538,10 @@ class DecansReportView(ReportView):
             report.teacher_result.generic_report_data.user.profile.department,
             report.teacher_result.generic_report_data.user.profile.department.faculty,
             report.teacher_result.generic_report_data.user.profile.position,
-            report.own_place,
             report.sum_place,
         ]
 
-    def get_qs(self, report_period: ReportPeriod):
+    def get_qs(self, report_period: ReportPeriod, faculty=None, department=None):
         return self.REPORT_MODEL.objects.filter(
             teacher_result__generic_report_data__report_period=report_period
         ).order_by("place")

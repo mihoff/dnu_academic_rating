@@ -1,26 +1,12 @@
-import csv
-from datetime import datetime
-
 from django.core.management.base import BaseCommand
-from django.db.models import Q, Sum, Count
+from django.db.models import Sum, Count
 
-from service_api.calculations.educational_and_methodical_work_calc import EducationalAndMethodicalWorkCalculation
-from service_api.calculations.generic_report_calc import GenericReportCalculation
-from service_api.calculations.organizational_and_educational_work_calc import (
-    OrganizationalAndEducationalWorkCalculation,
-)
-from service_api.calculations.scientific_and_innovative_work_calc import ScientificAndInnovativeWorkCalculation
 from service_api.models import (
     ReportPeriod,
-    REPORT_MODELS,
-    EducationalAndMethodicalWork,
-    ScientificAndInnovativeWork,
-    OrganizationalAndEducationalWork,
     TeacherResults,
-    HeadsOfDepartmentsResults,
     FacultyResults,
 )
-from user_profile.models import Profile, Department, Position
+from user_profile.models import Position
 
 
 class Command(BaseCommand):
@@ -32,7 +18,7 @@ class Command(BaseCommand):
             TeacherResults.objects.filter(generic_report_data__report_period=report_period)
             .exclude(generic_report_data__user__profile__position__cumulative_calculation=Position.BY_FACULTY)
             .values("generic_report_data__user__profile__department__faculty")
-            .annotate(Sum("place"))
+            .annotate(Sum("scores_sum"), Count("scores_sum"))
         ):
             if FacultyResults.objects.filter(
                 report_period=report_period,
@@ -42,17 +28,21 @@ class Command(BaseCommand):
                     report_period=report_period,
                     faculty_id=t_result["generic_report_data__user__profile__department__faculty"],
                 ).first()
-                faculty.places_sum = t_result["place__sum"]
+                faculty.places_sum = t_result["scores_sum__sum"]
+                faculty.places_sum_count = t_result["scores_sum__count"]
+                faculty.places_sum_average = t_result["scores_sum__sum"] / t_result["scores_sum__count"]
                 faculty.save()
             else:
                 FacultyResults.objects.create(
                     report_period=report_period,
                     faculty_id=t_result["generic_report_data__user__profile__department__faculty"],
-                    places_sum=t_result["place__sum"],
+                    places_sum=t_result["scores_sum__sum"],
+                    places_sum_count=t_result["scores_sum__count"],
+                    places_sum_average=t_result["scores_sum__sum"] / t_result["scores_sum__count"],
                 )
 
         for place, faculty_result in enumerate(
-            FacultyResults.objects.filter(report_period=report_period).order_by("-places_sum"), start=1
+            FacultyResults.objects.filter(report_period=report_period).order_by("places_sum_average"), start=1
         ):
             faculty_result.place = place
             faculty_result.save()
