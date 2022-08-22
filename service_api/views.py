@@ -260,7 +260,11 @@ class ReportsView(BaseView, TemplateView):
         data.update(
             {
                 "is_report": True,
-                "report_periods": GenericReportData.objects.filter(user=self.request.user),
+                "user_reports": GenericReportData.objects.filter(user=self.request.user),
+                "teacher_result": TeacherResults.objects.filter(
+                    generic_report_data__user=self.request.user,
+                    generic_report_data__report_period=data["report_period"],
+                ).first(),
             }
         )
         return data

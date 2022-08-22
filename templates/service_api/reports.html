@@ -7,7 +7,7 @@
 {% block content %}
     <h2 class="text-center"><b>{{ report_period }}</b> навчальний рік</h2>
     {% if generic_report %}
-        {% if not generic_report.result %}
+        {% if not teacher_result %}
             <div class="alert alert-info" role="alert">
                 Триває збір даних. Результат буде доступний після завершення звітнього періоду.
             </div>
@@ -50,23 +50,23 @@
             </tr>
             <tr>
                 <td>Навчально-методична робота</td>
-                <td>{{ generic_report.educationalandmethodicalwork.adjusted_result|default:"0,0" }}</td>
+                <td>{{ teacher_result.generic_report_data.educationalandmethodicalwork.adjusted_result|default:"0,0" }}</td>
             </tr>
             <tr>
                 <td>Науково-інноваційна робота</td>
-                <td>{{ generic_report.scientificandinnovativework.adjusted_result|default:"0,0" }}</td>
+                <td>{{ teacher_result.generic_report_data.scientificandinnovativework.adjusted_result|default:"0,0" }}</td>
             </tr>
             <tr>
                 <td>Організаційно-виховна робота</td>
-                <td>{{ generic_report.organizationalandeducationalwork.adjusted_result|default:"0,0" }}</td>
+                <td>{{ teacher_result.generic_report_data.organizationalandeducationalwork.adjusted_result|default:"0,0" }}</td>
             </tr>
             <tr>
                 <td>Бал за наслідками анонімного анкетування студентів</td>
-                <td>{{ generic_report.students_rating }}</td>
+                <td>{{ teacher_result.generic_report_data.students_rating }}</td>
             </tr>
             <tr>
                 <td>Рейтинговий бал працівника</td>
-                <td>{{ generic_report.result }}</td>
+                <td>{{ teacher_result.generic_report_data.result }}</td>
             </tr>
             <tr class="table-active">
                 <td colspan="2" class="text-center">
@@ -100,7 +100,7 @@
                         Змінити звітний період
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {% for period in report_periods %}
+                        {% for period in user_reports %}
                             <a class="dropdown-item {% if period.report_period == report_period %}active{% endif %}"
                                href="{% if period.report_period != report_period %}{% url 'reports' period.report_period.report_period|period_url_replace %}{% else %}#{% endif %}">
                                 {{ period.report_period }}
