@@ -143,6 +143,7 @@ class BaseReportFormView(BaseView, FormView):
                 "report_name": self.model.NAME,
                 f"is_{self.model.slug()}": True,
                 "report_template_path": self.report_template_path,
+                "is_pdf": False,
             }
         )
         return data
@@ -259,6 +260,7 @@ class ReportsView(BaseView, TemplateView):
         data = super().get_context_data(**kwargs)
         data.update(
             {
+                "is_pdf": False,
                 "is_report": True,
                 "user_reports": GenericReportData.objects.filter(user=self.request.user),
                 "teacher_result": TeacherResults.objects.filter(
