@@ -12,5 +12,6 @@ setup(
         "pylint==2.8.3",
         "gunicorn==20.1.0",
         "django_tables2==2.4.0",
+        "whitenoise==6.4.0",
     ],
 )

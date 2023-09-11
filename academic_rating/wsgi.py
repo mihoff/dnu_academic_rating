@@ -11,6 +11,10 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from whitenoise import WhiteNoise
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'academic_rating.settings')
 
 application = get_wsgi_application()
+if os.getenv("WHITE_NOISE_ROOT_PATH"):
+    application = WhiteNoise(application, root=os.getenv("WHITE_NOISE_ROOT_PATH"))
