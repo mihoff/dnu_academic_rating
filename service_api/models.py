@@ -505,40 +505,25 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         null=True,
     )
 
-    # 5. Організація та проведення загальнодержавних наукових конференцій, симпозіумів і семінарів
-    five_one = models.IntegerField(verbose_name="голова оргкомітету", default=0)
-    five_two = models.IntegerField(verbose_name="вчений секретар оргкомітету", default=0)
-    five_three = models.IntegerField(verbose_name="член оргкомітету", default=0)
-
-    # 6. Виконання обов’язків заступника декана факультету на громадських засадах
+    # 5. Виконання обов’язків заступника декана факультету на громадських засадах
     # з навчальної роботи (з інших видів діяльності)
-    six_one = models.BooleanField(verbose_name="навчальна робота", default=False)
-    six_two = models.BooleanField(verbose_name="інші види діяльності", default=False)
+    five_one = models.BooleanField(verbose_name="навчальна робота", default=False)
+    five_two = models.BooleanField(verbose_name="інші види діяльності", default=False)
 
-    # 7. Робота секретарем ЕК
-    seven_one = models.IntegerField(verbose_name="кількість відпрацьованих днів", default=0)
+    # 6. Робота секретарем ЕК
+    six_one = models.IntegerField(verbose_name="кількість відпрацьованих днів", default=0)
 
-    # 8. Здійснення процедур нормоконтролю випускних кваліфікаційних робіт
-    eight_one = models.IntegerField(verbose_name="кількість перевірених робіт", default=0)
-
-    # 9. Перевірка випускних кваліфікаційних робіт на плагіат
-    nine_one = models.IntegerField(verbose_name="кількість робіт", default=0)
-
-    # 10. Виконання обов’язків відповідального за організацію замовлення додатків DIPLOMA SUPLIMENT,
+    # 7. Виконання обов’язків відповідального за організацію замовлення додатків DIPLOMA SUPLIMENT,
     # включаючи переклад на іноземну мову
-    ten_one = models.IntegerField(verbose_name="кількість студентів, яким замовлено додатки", default=0)
+    seven_one = models.IntegerField(verbose_name="кількість студентів, яким замовлено додатки", default=0)
 
-    # 11. Участь у виховній роботі в студентському колектив
-    eleven_one = models.IntegerField(
+    # 8. Участь у виховній роботі в студентському колектив
+    eight_one = models.IntegerField(
         verbose_name="Виконання обов’язків куратора (наставника) академічної групи", default=0
     )
-    eleven_two = models.BooleanField(verbose_name="проведення виховної роботи в гуртожитках", default=False)
 
-    # 12. Робота у складі вченої ради ДНУ
-    twelve_one = models.BooleanField(default=False)
-
-    # 13. Робота у складі вченої ради факультету
-    thirteen_one = models.CharField(
+    # 9. Робота у складі вченої ради ДНУ
+    nine_one = models.CharField(
         verbose_name="Робота у складі вченої ради факультету",
         choices=POSITION_CHOICES,
         default=NONE,
@@ -547,81 +532,85 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         max_length=10,
     )
 
-    # 14 Відповідальна особа із забезпечення діяльності разової спеціалізованої вченої ради
-    fourteen_one = models.IntegerField(verbose_name="Кількість захищених робіт", default=0)
+    # 10. Робота у складі вченої ради факультету
+    ten_one = models.CharField(
+        verbose_name="Робота у складі вченої ради факультету",
+        choices=POSITION_CHOICES,
+        default=NONE,
+        blank=True,
+        null=True,
+        max_length=10,
+    )
 
-    # 15. Організаційна робота
-    fifteen_one = models.BooleanField(
+    # 11. Організаційна робота
+    eleven_one = models.BooleanField(
         verbose_name="завідувача кафедри (у тому числі відвідування занять завідувачем кафедри зі складанням відгуку, "
         "проведення засідань кафедри, участь у засіданнях  деканату факультету)",
         default=False,
     )
-    fifteen_two = models.BooleanField(verbose_name="заступник завідувача кафедри на громадських засадах", default=False)
+    eleven_two = models.BooleanField(verbose_name="заступник завідувача кафедри на громадських засадах", default=False)
 
-    # 16. Участь у профорієнтаційній роботі кафедри, факультету, університету
-    sixteen_one = models.IntegerField(verbose_name="кількість заходів", default=0)
+    # 12. Участь у профорієнтаційній роботі кафедри, факультету, університету
+    twelve_one = models.IntegerField(
+        verbose_name="участь у профорієнтаційній роботі", 
+        default=0, 
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(100)]
+    )
 
-    # 17. Робота в приймальній комісії (відповідно до наказів)
-    seventeen_one = models.BooleanField(verbose_name="відповідальний секретар", default=False)
-    seventeen_two = models.BooleanField(verbose_name="заступник відповідального секретаря", default=False)
-    seventeen_three = models.BooleanField(
+    # 13. Робота в приймальній комісії (відповідно до наказів)
+    thirteen_one = models.BooleanField(verbose_name="відповідальний секретар", default=False)
+    thirteen_two = models.BooleanField(verbose_name="заступник відповідального секретаря", default=False)
+    thirteen_three = models.BooleanField(
         verbose_name="голова предметної екзаменаційної комісії, комісії зі співбесіди", default=False
     )
-    seventeen_four = models.IntegerField(verbose_name="робота у відбірковій комісії", default=0)
-    seventeen_five = models.IntegerField(
+    thirteen_four = models.IntegerField(verbose_name="робота у відбірковій комісії", default=0)
+    thirteen_five = models.IntegerField(
         verbose_name="член комісії зі співбесіді, предметної екзаменаційної комісії", default=0
     )
-    seventeen_six = models.IntegerField(
+    thirteen_six = models.IntegerField(
         verbose_name="робота у групі контролю й введення даних до ЄДЕБО (відповідальний за введення даних до ЄДЕБО)",
         default=0,
     )
-    seventeen_seven = models.IntegerField(
+    thirteen_seven = models.IntegerField(
         verbose_name="робота у складі асистентської групи приймальної комісії", default=0
     )
-    seventeen_eight = models.IntegerField(verbose_name="робота в апеляційній комісії", default=0)
+    thirteen_eight = models.IntegerField(verbose_name="робота в апеляційній комісії", default=0)
 
-    # 18. Введення персональних даних викладачів в ЄДЕБО та їхня періодична актуалізація, а також перевірка
-    # персональних даних студентів випускних курсів, що виконують співробітники на факультетах протягом
-    # навчального року (окрім роботи в межах діяльності приймальної комісії)
-    eighteen_one = models.BooleanField(default=False)
-
-    # 19. Участь у підготовці та проведенні студентських та учнівських олімпіад, турнірів, конкурсів,
+    # 14. Участь у підготовці та проведенні студентських та учнівських олімпіад, турнірів, конкурсів,
     # олімпіад ДНУ для вступників
-    nineteen_one = models.IntegerField(default=0)
+    fourteen_one = models.IntegerField(default=0)
 
-    # 20. Участь в організації та проведенні позанавчальних культурно-спортивних заходів
-    twenty_zero_one = models.IntegerField(default=0)
+    # 15. Участь в організації та проведенні позанавчальних культурно-спортивних заходів
+    fifteen_one = models.IntegerField(default=0)
 
-    # 21. Робота на виборних посадах у профспілковому комітеті ДНУ
-    twenty_one_one = models.BooleanField(default=False)
+    # 16. Робота на виборних посадах у профспілковому комітеті ДНУ
+    sixteen_one = models.BooleanField(default=False)
 
-    # 22. Керівництво волонтерським проектом студентів
-    twenty_two_one = models.BooleanField(default=False)
+    # 17. Керівництво волонтерським проектом студентів
+    seventeen_one = models.BooleanField(default=False)
 
-    # 23 Розроблення нормативних документів ДНУ з питань організації навчальної, наукової,
+    # 18 Розроблення нормативних документів ДНУ з питань організації навчальної, наукової,
     # науково-дослідної, виховної роботи, міжнародної діяльності тощо
-    twenty_three_one = models.CharField(
+    eighteen_one = models.CharField(
         max_length=256,
         verbose_name="Кількість виконавців одного документу",
         default="0",
         validators=[float_number_semicolon_validator],
     )
 
-    # 24 Адміністрування офіційної вебсторінки факультету, кафедри, збірника наукових праць, фахового журналу,
+    # 19 Адміністрування офіційної вебсторінки факультету, кафедри, збірника наукових праць, фахового журналу,
     # програмного забезпечення рейтингу, репозиторію, системи office 365 факультету
-    twenty_four_one = models.IntegerField(verbose_name="кількість видів робіт", default=0)
+    nineteen_one = models.IntegerField(verbose_name="кількість видів робіт", default=0)
 
-    # 25 Керівництво збірною
-    twenty_five_one = models.BooleanField(verbose_name="ДНУ", default=False)
+    # 20 Тренер збірної
+    twenty_zero_one = models.BooleanField(verbose_name="України", default=False)
+    twenty_zero_two = models.BooleanField(verbose_name="області", default=False)
+    twenty_zero_three = models.BooleanField(verbose_name="ДНУ", default=False)
 
-    # 26 Тренер збірної
-    twenty_six_one = models.BooleanField(verbose_name="України", default=False)
-    twenty_six_two = models.BooleanField(verbose_name="області", default=False)
-
-    # 27 Головний суддя змагань
-    twenty_seven_one = models.BooleanField(verbose_name="міжнародних", default=False)
-    twenty_seven_two = models.BooleanField(verbose_name="національних", default=False)
-    twenty_seven_three = models.BooleanField(verbose_name="обласних", default=False)
+    # 21 Головний суддя змагань
+    twenty_one_one = models.BooleanField(verbose_name="міжнародних", default=False)
+    twenty_one_two = models.BooleanField(verbose_name="національних", default=False)
+    twenty_one_three = models.BooleanField(verbose_name="обласних", default=False)
 
     @staticmethod
     def get_report(user, report_period):
