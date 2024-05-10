@@ -46,7 +46,6 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_two(self) -> float:
-        print(self.report.two_one, self.report.two_two, self.report.two_three, self.report.two_four)
         r = 50 * self.report.two_one + 30 * self.report.two_two + 25 * self.report.two_three + 10 * self.report.two_four
         return r
 
