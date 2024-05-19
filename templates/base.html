@@ -156,6 +156,7 @@
         document.addEventListener(
             "DOMContentLoaded",
             function (e) {
+                window.history.replaceState(null, null, "?next=/");
                 window.microsoft.login = new window.microsoft.objects.LoginController({
                     'authorization_url': '{{ microsoft_authorization_url }}'
                 });
