@@ -441,7 +441,7 @@ class OrganizationalAndEducationalWork(BaseReportModel):
         (MEMBER, "член"),
     )
 
-    adjust_rate = 2
+    adjust_rate = 1
 
     # 1. Робота в науково-методичних комісіях (підкомісіях) з вищої освіти Міністерства освіти і науки України
     one_one = models.CharField(
