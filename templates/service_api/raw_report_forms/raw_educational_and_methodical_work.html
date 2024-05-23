@@ -36,46 +36,28 @@
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.two_one.id_for_label }}">{{ form.two_one.label }}</label></td>
+        <td>Розробка та затвердження:</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.two_one.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.two_one.label }}</span>
+            </label>
+        </td>
         <td>{{ form.two_one }}{{ form.two_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі декількох робіт слід вказати через кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.two_two.id_for_label }}">{{ form.two_two.label }}</label></td>
+        <td>
+            <label for="{{ form.two_two.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.two_two.label }}</span>
+            </label>
+        </td>
         <td>{{ form.two_two }}{{ form.two_two.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.3</th>
-        <th scope="row" colspan="3" class="table-active">Розробка та оновлення навчальних планів</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td>Розробка нових:</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.three_one.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.three_one.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.three_one }}{{ form.three_one.errors }}</td>
-        <td rowspan="2">Кількість виконавців. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.three_two.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.three_two.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.three_two }}{{ form.three_two.errors }}</td>
     </tr>
     <tr>
         <td></td>
@@ -86,22 +68,39 @@
     <tr>
         <td></td>
         <td>
-            <label for="{{ form.three_three.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.three_three.label }}</span>
+            <label for="{{ form.two_three.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.two_three.label }}</span>
             </label>
         </td>
-        <td>{{ form.three_three }}{{ form.three_three.errors }}</td>
-        <td rowspan="2">Кількість виконавців. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
+        <td>{{ form.two_three }}{{ form.two_three.errors }}</td>
         </td>
     </tr>
     <tr>
         <td></td>
         <td>
-            <label for="{{ form.three_four.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.three_four.label }}</span>
+            <label for="{{ form.two_four.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.two_four.label }}</span>
             </label>
         </td>
-        <td>{{ form.three_four }}{{ form.three_four.errors }}</td>
+        <td>{{ form.two_four }}{{ form.two_four.errors }}</td>
+    </tr>
+
+    <tr>
+        <th class="table-active">1.3</th>
+        <th scope="row" colspan="3" class="table-active">Розробка та оновлення навчальних планів</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.three_one.id_for_label }}">{{ form.three_one.label }}</label></td>
+        <td>{{ form.three_one }}{{ form.three_one.errors }}</td>
+        <td rowspan="2">Оновлення навчальних планів – 20% від визначеного значення показника.
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.three_two.id_for_label }}">{{ form.three_two.label }}</label></td>
+        <td>{{ form.three_two }}{{ form.three_two.errors }}</td>
+        <td></td>
     </tr>
 
     <tr>
@@ -121,27 +120,64 @@
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.five_one.id_for_label }}">{{ form.five_one.label }}</label></td>
+        <td>Ліцензійної:</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.five_one.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.five_one.label }}</span>
+            </label>
+        </td>
         <td>{{ form.five_one }}{{ form.five_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.five_two.id_for_label }}">{{ form.five_two.label }}</label></td>
+        <td>
+            <label for="{{ form.five_two.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.five_two.label }}</span>
+            </label>
+        </td>
         <td>{{ form.five_two }}{{ form.five_two.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Акредитаційної:</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.five_three.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.five_three.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.five_three }}{{ form.five_three.errors }}</td>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.five_four.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.five_four.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.five_four }}{{ form.five_four.errors }}</td>
     </tr>
 
     <tr>
         <th class="table-active">1.6</th>
         <th scope="row" colspan="3" class="table-active">
-            Публікації
+            Публікації видань методичних матеріалів
         </th>
     </tr>
     <tr>
         <td></td>
-        <td colspan="3">Видання методичних матеріалів:</td>
+        <td colspan="3">Курсу лекцій:</td>
     </tr>
     <tr>
         <td></td>
@@ -151,7 +187,7 @@
             </label>
         </td>
         <td>{{ form.six_one }}{{ form.six_one.errors }}</td>
-        <td rowspan="2">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
+        <td rowspan="5">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
             який визначено кафедрою. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
@@ -166,7 +202,7 @@
     </tr>
     <tr>
         <td></td>
-        <td colspan="3">Видання за рекомендацією вченої ради ДНУ:</td>
+        <td colspan="3">Навчально-методичних рекомендацій:</td>
     </tr>
     <tr>
         <td></td>
@@ -176,9 +212,7 @@
             </label>
         </td>
         <td>{{ form.six_three }}{{ form.six_three.errors }}</td>
-        <td rowspan="4">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
-            який визначено кафедрою. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
-        </td>
+        <td></td>
     </tr>
     <tr>
         <td></td>
@@ -189,59 +223,117 @@
         </td>
         <td>{{ form.six_four }}{{ form.six_four.errors }}</td>
     </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.six_five.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.six_five.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.six_five }}{{ form.six_five.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.six_six.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.six_six.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.six_six }}{{ form.six_six.errors }}</td>
-    </tr>
-
+    
     <tr>
         <th class="table-active">1.7</th>
         <th scope="row" colspan="3" class="table-active">
-            Редагування та переклад підручників, навчальних посібників, методичних матеріалів тощо
+            Публікації видань за рекомендацією вченої ради ДНУ
         </th>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.seven_one.id_for_label }}">{{ form.seven_one.label }}</label></td>
+        <td colspan="3">Підручника в Україні:</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_one.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_one.label }}</span>
+            </label>
+        </td>
         <td>{{ form.seven_one }}{{ form.seven_one.errors }}</td>
-        <td rowspan="2">Кількість друкованих аркушів. У разі виконання декількох робіт слід вказати кожне значення через
-            крапку з комою
+        <td rowspan="11">Формат: V(K), де V - кількість друкованих аркушів, K - відсоток загального результату,
+            який визначено кафедрою. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
         </td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.seven_two.id_for_label }}">{{ form.seven_two.label }}</label></td>
+        <td>
+            <label for="{{ form.seven_two.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_two.label }}</span>
+            </label>
+        </td>
         <td>{{ form.seven_two }}{{ form.seven_two.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">Підручника за кордоном офіційною мовою ЄС:</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_three.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_three.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_three }}{{ form.seven_three.errors }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_four.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_four.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_four }}{{ form.seven_four.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">Навчального посібника в Україні:</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_five.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_five.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_five }}{{ form.seven_five.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_six.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_six.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_six }}{{ form.seven_six.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">Навчального посібника за кордоном офіційною мовою ЄС:</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_seven.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_seven.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_seven }}{{ form.seven_seven.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.seven_eight.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.seven_eight.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.seven_eight }}{{ form.seven_eight.errors }}</td>
     </tr>
 
     <tr>
         <th class="table-active">1.8</th>
         <th scope="row" colspan="3" class="table-active">
-            Розробка та оновлення робочої програми навчальної дисципліни за умови відповідного затвердження та
-            розміщення на сайті (у разі введення нової дисципліни)
+            Підготовка нової (оновлення) лекційної презентації
         </th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.eight_one.id_for_label }}">{{ form.eight_one.label }}</label></td>
         <td>{{ form.eight_one }}{{ form.eight_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою.
-            У разі декількох робіт слід вказати кожне значення через крапку з комою.
-        </td>
+        <td rowspan="2">Кількість годин лекцій</td>
     </tr>
     <tr>
         <td></td>
@@ -251,235 +343,69 @@
 
     <tr>
         <th class="table-active">1.9</th>
-        <th scope="row" colspan="3" class="table-active">
-            Підготовка нової (оновлення) лекційної презентації
+        <th class="table-active" colspan="3">
+            Запровадження у навчальний процес нових лабораторних /практичних  робіт, 
+            що потребують використання спеціалізованого лабораторного/програмного забезпечення  
         </th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.nine_one.id_for_label }}">{{ form.nine_one.label }}</label></td>
         <td>{{ form.nine_one }}{{ form.nine_one.errors }}</td>
-        <td rowspan="2">Кількість презентацій</td>
-    </tr>
-    <tr>
         <td></td>
-        <td><label for="{{ form.nine_two.id_for_label }}">{{ form.nine_two.label }}</label></td>
-        <td>{{ form.nine_two }}{{ form.nine_two.errors }}</td>
     </tr>
 
     <tr>
         <th class="table-active">1.10</th>
-        <th scope="row" colspan="3" class="table-active">
-            Розробка і підготовка нових лабораторних робіт на лабораторному устаткуванні
-        </th>
+        <th scope="row" colspan="3" class="table-active">Розробка програм і завдань до вступних випробувань</th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.ten_one.id_for_label }}">{{ form.ten_one.label }}</label></td>
         <td>{{ form.ten_one }}{{ form.ten_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою.
-            У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
-        </td>
+        <td></td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.ten_two.id_for_label }}">{{ form.ten_two.label }}</label></td>
+        <td><label for="{{ form.ten_two.id_for_label }}">{{ form.ten_one.label }}</label></td>
         <td>{{ form.ten_two }}{{ form.ten_two.errors }}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><label for="{{ form.ten_three.id_for_label }}">{{ form.ten_three.label }}</label></td>
+        <td>{{ form.ten_three }}{{ form.ten_three.errors }}</td>
+        <td></td>
     </tr>
 
     <tr>
         <th class="table-active">1.11</th>
         <th scope="row" colspan="3" class="table-active">
-            Розробка і підготовка нових практичних, лабораторних робіт, комп’ютерних практикумів
+            Рецензування навчально-методичних матеріалів: підручників, навчально-методичних посібників, посібників
         </th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.eleven_one.id_for_label }}">{{ form.eleven_one.label }}</label></td>
         <td>{{ form.eleven_one }}{{ form.eleven_one.errors }}</td>
-        <td rowspan="2">Кількість годин, на яку розраховані розроблені (оновлені) практичні, лабораторні роботи, комп’ютерні практикуми
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.eleven_two.id_for_label }}">{{ form.eleven_two.label }}</label></td>
-        <td>{{ form.eleven_two }}{{ form.eleven_two.errors }}</td>
+        <td>За наявності рецензій</td>
     </tr>
 
     <tr>
         <th class="table-active">1.12</th>
-        <th class="table-active" colspan="3">Підготовка комп’ютерного програмного забезпечення навчальних
-            дисциплін
+        <th scope="row" colspan="3" class="table-active">
+            Експертиза конкурсних студентських робіт, починаючи з другого туру;  конкурсних робіт МАН
         </th>
     </tr>
     <tr>
         <td></td>
         <td><label for="{{ form.twelve_one.id_for_label }}">{{ form.twelve_one.label }}</label></td>
         <td>{{ form.twelve_one }}{{ form.twelve_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twelve_two.id_for_label }}">{{ form.twelve_two.label }}</label></td>
-        <td>{{ form.twelve_two }}{{ form.twelve_two.errors }}</td>
+        <td>За одну роботу за наявності підстав (завдання), рецензій</td>
     </tr>
 
     <tr>
         <th class="table-active">1.13</th>
-        <th class="table-active" colspan="3">
-            Розробка і впровадження нових форм, методів і технологій навчання, зокрема, інтерактивних методів навчання
-            (ділових ігор, ситуативних вправ, кейс-методів, тощо)
-        </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.thirteen_one.id_for_label }}">{{ form.thirteen_one.label }}</label></td>
-        <td>{{ form.thirteen_one }}{{ form.thirteen_one.errors }}</td>
-        <td>Відсоток загального результату за одну розробку, який визначено кафедрою.
-            У разі виконання декількох робіт слід вказати кожне значення через крапку з комою.
-        </td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.14</th>
-        <th class="table-active" colspan="3">
-            Розробка складових електронних освітніх ресурсів (ЕОР) відповідно до положення за умови розміщення на ресурсі ДНУ </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.fourteen_one.id_for_label }}">{{ form.fourteen_one.label }}</label></td>
-        <td>{{ form.fourteen_one }}{{ form.fourteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.fourteen_two.id_for_label }}">{{ form.fourteen_two.label }}</label></td>
-        <td>{{ form.fourteen_two }}{{ form.fourteen_two.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.15</th>
-        <th class="table-active" colspan="3">Розробка програм і завдань до вступних випробувань</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td colspan="3">На перший ОР зі скороченим терміном навчання</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_one.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_one.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_one }}{{ form.fifteen_one.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_two.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_two.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_two }}{{ form.fifteen_two.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td colspan="3">На перший ОР на базі ПЗСО</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_three.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_three.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_three }}{{ form.fifteen_three.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_four.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_four.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_four }}{{ form.fifteen_four.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td colspan="3">На другий ОР</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_five.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_five.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_five }}{{ form.fifteen_five.errors }}</td>
-        <td rowspan="2">Відсоток загального результату, який визначено кафедрою. У разі виконання декількох робіт слід вказати
-            кожне значення через крапку з комою.
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <label for="{{ form.fifteen_six.id_for_label }}">
-                <span style="margin-left: 40px;">&#10095; {{ form.fifteen_six.label }}</span>
-            </label>
-        </td>
-        <td>{{ form.fifteen_six }}{{ form.fifteen_six.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.16</th>
-        <th scope="row" colspan="3" class="table-active">Рецензування навчально-методичних матеріалів</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.sixteen_one.id_for_label }}">{{ form.sixteen_one.label }}</label></td>
-        <td>{{ form.sixteen_one }}{{ form.sixteen_one.errors }}</td>
-        <td rowspan="2">Кількість друкованих аркушів. У разі виконання декількох робіт слід вказати кожне значення через крапку з комою</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.sixteen_two.id_for_label }}">{{ form.sixteen_two.label }}</label></td>
-        <td>{{ form.sixteen_two }}{{ form.sixteen_two.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.17</th>
-        <th scope="row" colspan="3" class="table-active">Експертиза</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.seventeen_one.id_for_label }}">{{ form.seventeen_one.label }}</label></td>
-        <td>{{ form.seventeen_one }}{{ form.seventeen_one.errors }}</td>
-        <td rowspan="3">Кількість робіт</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.seventeen_two.id_for_label }}">{{ form.seventeen_two.label }}</label></td>
-        <td>{{ form.seventeen_two }}{{ form.seventeen_two.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.seventeen_three.id_for_label }}">{{ form.seventeen_three.label }}</label></td>
-        <td>{{ form.seventeen_three }}{{ form.seventeen_three.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.18</th>
         <th scope="row" colspan="3" class="table-active">
             Виконання робіт за міжнародними договорами, зокрема програми двох дипломів, контрактами,
             проєктами ТEMPUS, ERASMUS+
@@ -487,112 +413,108 @@
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.eighteen_one.id_for_label }}">{{ form.eighteen_one.label }}</label></td>
-        <td>{{ form.eighteen_one }}{{ form.eighteen_one.errors }}</td>
-        <td>Загальне значення</td>
+        <td><label for="{{ form.thirteen_one.id_for_label }}">{{ form.thirteen_one.label }}</label></td>
+        <td>{{ form.thirteen_one }}{{ form.thirteen_one.errors }}</td>
+        <td></td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.eighteen_two.id_for_label }}">{{ form.eighteen_two.label }}</label></td>
-        <td>{{ form.eighteen_two }}{{ form.eighteen_two.errors }}</td>
-        <td>Кількість виконавців </td>
+        <td><label for="{{ form.thirteen_two.id_for_label }}">{{ form.thirteen_two.label }}</label></td>
+        <td>{{ form.thirteen_two }}{{ form.thirteen_two.errors }}</td>
+        <td></td>
     </tr>
 
     <tr>
-        <th class="table-active">1.19</th>
-        <th class="table-active" colspan="3">Підготовка концертних програм і персональних художніх виставок,
-            спортивних заходів
+        <th class="table-active">1.14</th>
+        <th scope="row" colspan="3" class="table-active">
+            Персональна участь (підготовка та участь студента чи групи студентів) у концертних програмах, 
+            персональних художніх виставках, творчих конкурсах, спортивних змаганнях
         </th>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.nineteen_one.id_for_label }}">{{ form.nineteen_one.label }}</label></td>
-        <td>{{ form.nineteen_one }}{{ form.nineteen_one.errors }}</td>
-        <td rowspan="3">Кількість заходів</td>
+        <td>Міжнародного рівня:</td>
+        <td></td>
+        <td rowspan="9">Для кафедр творчого спрямування за захід</td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.nineteen_two.id_for_label }}">{{ form.nineteen_two.label }}</label></td>
-        <td>{{ form.nineteen_two }}{{ form.nineteen_two.errors }}</td>
+        <td>
+            <label for="{{ form.fourteen_one.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_one.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_one }}{{ form.fourteen_one.errors }}</td>
+        </td>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.nineteen_three.id_for_label }}">{{ form.nineteen_three.label }}</label></td>
-        <td>{{ form.nineteen_three }}{{ form.nineteen_three.errors }}</td>
+        <td>
+            <label for="{{ form.fourteen_two.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_two.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_two }}{{ form.fourteen_two.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Всеукраїнського рівня:</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.fourteen_three.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_three.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_three }}{{ form.fourteen_three.errors }}</td>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.fourteen_four.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_four.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_four }}{{ form.fourteen_four.errors }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Регіонального рівня:</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.fourteen_five.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_five.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_five }}{{ form.fourteen_five.errors }}</td>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <label for="{{ form.fourteen_six.id_for_label }}">
+                <span style="margin-left: 40px;">&#10095; {{ form.fourteen_six.label }}</span>
+            </label>
+        </td>
+        <td>{{ form.fourteen_six }}{{ form.fourteen_six.errors }}</td>
     </tr>
 
     <tr>
-        <th class="table-active">1.20</th>
-        <th class="table-active" colspan="3">
-            Підготовка лауреата виставки, творчого конкурсу для творчих спеціальностей (для кафедр творчого спрямування)
-        </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_one.id_for_label }}">{{ form.twenty_one.label }}</label></td>
-        <td>{{ form.twenty_one }}{{ form.twenty_one.errors }}</td>
-        <td rowspan="3">Кількість переможців</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_two.id_for_label }}">{{ form.twenty_two.label }}</label></td>
-        <td>{{ form.twenty_two }}{{ form.twenty_two.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_three.id_for_label }}">{{ form.twenty_three.label }}</label></td>
-        <td>{{ form.twenty_three }}{{ form.twenty_three.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.21</th>
-        <th class="table-active" colspan="3">
-            Підготовка призера змагань (для викладачів кафедри фізичного виховання і спорту)
-        </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_one_one.id_for_label }}">{{ form.twenty_one_one.label }}</label></td>
-        <td>{{ form.twenty_one_one }}{{ form.twenty_one_one.errors }}</td>
-        <td rowspan="3">Кількість переможців</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_one_two.id_for_label }}">{{ form.twenty_one_two.label }}</label></td>
-        <td>{{ form.twenty_one_two }}{{ form.twenty_one_two.errors }}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_one_three.id_for_label }}">{{ form.twenty_one_three.label }}</label></td>
-        <td>{{ form.twenty_one_three }}{{ form.twenty_one_three.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.22</th>
-        <th class="table-active" colspan="3">
-            Підготовка учасника змагань (для викладачів кафедри фізичного виховання і спорту)
-        </th>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_two_one.id_for_label }}">{{ form.twenty_two_one.label }}</label></td>
-        <td>{{ form.twenty_two_one }}{{ form.twenty_two_one.errors }}</td>
-        <td rowspan="2">Кількість переможців</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><label for="{{ form.twenty_two_two.id_for_label }}">{{ form.twenty_two_two.label }}</label></td>
-        <td>{{ form.twenty_two_two }}{{ form.twenty_two_two.errors }}</td>
-    </tr>
-
-    <tr>
-        <th class="table-active">1.23</th>
+        <th class="table-active">1.15</th>
         <th class="table-active" colspan="3">Отримання звання</th>
     </tr>
     <tr>
         <td></td>
-        <td><label for="{{ form.twenty_three_one.id_for_label }}"></label></td>
-        <td>{{ form.twenty_three_one }}{{ form.twenty_three_one.errors }}</td>
+        <td><label for="{{ form.fifteen_one.id_for_label }}"></label></td>
+        <td>{{ form.fifteen_one }}{{ form.fifteen_one.errors }}</td>
         <td></td>
     </tr>
 

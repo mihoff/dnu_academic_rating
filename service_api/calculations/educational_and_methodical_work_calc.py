@@ -29,13 +29,6 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
             + self._calc_thirteen()
             + self._calc_fourteen()
             + self._calc_fifteen()
-            + self._calc_sixteen()
-            + self._calc_seventeen()
-            + self._calc_eighteen()
-            + self._calc_nineteen()
-            + self._calc_twenty_one()
-            + self._calc_twenty_two()
-            + self._calc_twenty_three()
             + self._students_result()
         )
 
@@ -53,16 +46,11 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_two(self) -> float:
-        r = self._multiply(150 / 100, self.report.two_one) + self._multiply(150 * 0.3 / 100, self.report.two_two)
+        r = 50 * self.report.two_one + 30 * self.report.two_two + 25 * self.report.two_three + 10 * self.report.two_four
         return r
 
     def _calc_three(self) -> float:
-        r = (
-            self._divide(50, self.report.three_one)
-            + self._divide(10, self.report.three_two)
-            + self._divide(int(50 * 0.2), self.report.three_three)
-            + self._divide(int(10 * 0.2), self.report.three_four)
-        )
+        r = 50 * self.report.three_one + int(50 * 0.2) * self.report.three_two
         return r
 
     def _calc_four(self) -> float:
@@ -70,107 +58,63 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_five(self) -> float:
-        r = self._multiply(200 / 100, self.report.five_one) + self._multiply(300 / 100, self.report.five_two)
+        r = 100 * self.report.five_one + 30 * self.report.five_two + 150 * self.report.five_three + 50 * self.report.five_four
         return r
 
     def _calc_six(self) -> float:
         r = (
-            self._multiply_complex(14 / 100, self.report.six_one)
-            + self._multiply_complex(12 / 100, self.report.six_two)
+            self._multiply_complex(25 / 100, self.report.six_one)
+            + self._multiply_complex(25 * 0.3 / 100, self.report.six_two)
             + self._multiply_complex(20 / 100, self.report.six_three)
-            + self._multiply_complex(16 / 100, self.report.six_four)
-            + self._multiply_complex(24 / 100, self.report.six_five)
-            + self._multiply_complex(18 / 100, self.report.six_six)
+            + self._multiply_complex(20 * 0.3 / 100, self.report.six_four)
         )
         return r
-
+    
     def _calc_seven(self) -> float:
-        r = self._multiply(5, self.report.seven_one) + self._multiply(10, self.report.seven_two)
+        r = (
+            self._multiply_complex(50 / 100, self.report.seven_one)
+            + self._multiply_complex(50 * 0.3 / 100, self.report.seven_two)
+            + self._multiply_complex(100 / 100, self.report.seven_three)
+            + self._multiply_complex(100 * 0.3 / 100, self.report.seven_four)
+            + self._multiply_complex(40 / 100, self.report.seven_five)
+            + self._multiply_complex(40 * 0.3 / 100, self.report.seven_six)
+            + self._multiply_complex(80 / 100, self.report.seven_seven)
+            + self._multiply_complex(80 * 0.3 / 100, self.report.seven_eight)
+        )
         return r
 
     def _calc_eight(self) -> float:
-        r = self._multiply(20 / 100, self.report.eight_one) + self._multiply(5 / 100, self.report.eight_two)
+        r = 1 * self.report.eight_one + 0.5 * self.report.eight_two
         return r
 
     def _calc_nine(self) -> float:
-        r = (
-            5 * self.report.nine_one / self.report.generic_report_data.assignment
-            + 1 * self.report.nine_two / self.report.generic_report_data.assignment
-        )
+        r = 15 * self.report.nine_one
         return r
 
     def _calc_ten(self) -> float:
-        r = (
-            self._multiply(50 / 100, self.report.ten_one) / self.report.generic_report_data.assignment
-            + self._multiply(10 / 100, self.report.ten_two) / self.report.generic_report_data.assignment
-        )
+        r = 30 * self.report.ten_one + 20 * self.report.ten_two + 40 * self.report.ten_three
         return r
 
     def _calc_eleven(self) -> float:
-        r = (
-            10 * self.report.eleven_one / self.report.generic_report_data.assignment
-            + 2 * self.report.eleven_two / self.report.generic_report_data.assignment
-        )
+        r = 4 * self.report.eleven_one
         return r
 
     def _calc_twelve(self) -> float:
-        r = (
-            self._multiply(50 / 100, self.report.twelve_one) / self.report.generic_report_data.assignment
-            + self._multiply(10 / 100, self.report.twelve_two) / self.report.generic_report_data.assignment
-        )
+        r = 15 * self.report.twelve_one
         return r
 
     def _calc_thirteen(self) -> float:
-        r = self._multiply(50 / 100, self.report.thirteen_one) / self.report.generic_report_data.assignment
+        r = 100 * self.report.thirteen_one + 50 * self.report.thirteen_two
         return r
 
     def _calc_fourteen(self) -> float:
         r = (
-            self._multiply(50 / 100, self.report.fourteen_one) / self.report.generic_report_data.assignment
-            + self._multiply(10 / 100, self.report.fourteen_two) / self.report.generic_report_data.assignment
+            100 * self.report.fourteen_one + 50 * self.report.fourteen_two + 60 * self.report.fourteen_three 
+            + 30 * self.report.fourteen_four + 30 * self.report.fourteen_five + 15 * self.report.fourteen_six
         )
         return r
 
     def _calc_fifteen(self) -> float:
-        r = (
-            self._multiply(50 / 100, self.report.fifteen_one)
-            + self._multiply(10 / 100, self.report.fifteen_two)
-            + self._multiply(30 / 100, self.report.fifteen_three)
-            + self._multiply(6 / 100, self.report.fifteen_four)
-            + self._multiply(60 / 100, self.report.fifteen_five)
-            + self._multiply(12 / 100, self.report.fifteen_six)
-        )
-        return r
-
-    def _calc_sixteen(self) -> float:
-        r = self._multiply(4, self.report.sixteen_one) + self._multiply(10, self.report.sixteen_two)
-        return r
-
-    def _calc_seventeen(self) -> float:
-        r = 50 * self.report.seventeen_one + 15 * self.report.seventeen_two + 10 * self.report.seventeen_three
-        return r
-
-    def _calc_eighteen(self) -> float:
-        r = 80 if self.report.eighteen_one else 0 + (200 / self.report.eighteen_two) if self.report.eighteen_two else 0
-        return r
-
-    def _calc_nineteen(self) -> float:
-        r = 100 * self.report.nineteen_one + 60 * self.report.nineteen_two + 30 * self.report.nineteen_three
-        return r
-
-    def _calc_twenty(self) -> float:
-        r = 250 * self.report.twenty_one + 150 * self.report.twenty_two + 75 * self.report.twenty_three
-        return r
-
-    def _calc_twenty_one(self) -> float:
-        r = 500 * self.report.twenty_one_one + 300 * self.report.twenty_one_two + 150 * self.report.twenty_one_three
-        return r
-
-    def _calc_twenty_two(self) -> float:
-        r = 200 * self.report.twenty_two_one + 100 * self.report.twenty_two_two
-        return r
-
-    def _calc_twenty_three(self) -> float:
         r = (
             dict(
                 (
@@ -182,7 +126,7 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
                     (EducationalAndMethodicalWork.PROFESSOR, 120),
                     (EducationalAndMethodicalWork.DOCENT, 60),
                 )
-            ).get(self.report.twenty_three_one)
+            ).get(self.report.fifteen_one)
             or 0
         )
         return r

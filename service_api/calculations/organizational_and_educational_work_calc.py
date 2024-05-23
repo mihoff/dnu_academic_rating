@@ -29,12 +29,6 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
             + self.__calc_nineteen()
             + self.__calc_twenty()
             + self.__calc_twenty_one()
-            + self.__calc_twenty_two()
-            + self.__calc_twenty_three()
-            + self.__calc_twenty_four()
-            + self.__calc_twenty_five()
-            + self.__calc_twenty_six()
-            + self.__calc_twenty_seven()
         )
         return self.apply_rounding(result)
 
@@ -80,11 +74,11 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_five(self) -> float:
-        r = 50 * self.report.five_one + 50 * self.report.five_two + 20 * self.report.five_three
+        r = (250 if self.report.five_one else 0) + (150 if self.report.five_two else 0)
         return r
 
     def __calc_six(self) -> float:
-        r = (250 if self.report.six_one else 0) + (150 if self.report.six_two else 0)
+        r = 10 * self.report.six_one
         return r
 
     def __calc_seven(self) -> float:
@@ -92,106 +86,96 @@ class OrganizationalAndEducationalWorkCalculation(BaseCalculation):
         return r
 
     def __calc_eight(self) -> float:
-        r = 3 * self.report.eight_one
+        r = 50 * self.report.eight_one / 12
         return r
 
     def __calc_nine(self) -> float:
-        r = 3 * self.report.nine_one
+        LEVELS_RATE = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 80,
+            OrganizationalAndEducationalWork.SECRETARY: 60,
+            OrganizationalAndEducationalWork.MEMBER: 40,
+        }
+        r = LEVELS_RATE.get(self.report.nine_one) or 0
         return r
 
     def __calc_ten(self) -> float:
-        r = 10 * self.report.ten_one
+        LEVELS_RATE = {
+            OrganizationalAndEducationalWork.NONE: 0,
+            OrganizationalAndEducationalWork.HEAD: 50,
+            OrganizationalAndEducationalWork.SECRETARY: 35,
+            OrganizationalAndEducationalWork.MEMBER: 25,
+        }
+        r = LEVELS_RATE.get(self.report.ten_one) or 0
         return r
 
     def __calc_eleven(self) -> float:
-        r = 50 * self.report.eleven_one / 12 + (10 if self.report.eleven_two else 0)
+        r = 250 if self.report.eleven_one else 0 + 100 if self.report.eleven_two else 0
         return r
 
     def __calc_twelve(self) -> float:
-        r = 40 if self.report.twelve_one else 0
+        r = self.report.twelve_one
         return r
 
     def __calc_thirteen(self) -> float:
-        LEVELS_RATE = {
-            OrganizationalAndEducationalWork.NONE: 0,
-            OrganizationalAndEducationalWork.HEAD: 35,
-            OrganizationalAndEducationalWork.SECRETARY: 50,
-            OrganizationalAndEducationalWork.MEMBER: 25,
-        }
-        r = LEVELS_RATE.get(self.report.thirteen_one) or 0
-        return r
-
-    def __calc_fourteen(self) -> float:
-        r = 15 * self.report.fourteen_one
-        return r
-
-    def __calc_fifteen(self) -> float:
-        r = 250 if self.report.fifteen_one else 0 + 100 if self.report.fifteen_two else 0
-        return r
-
-    def __calc_sixteen(self) -> float:
-        r = 20 * self.report.sixteen_one
-        return r
-
-    def __calc_seventeen(self) -> float:
         r = (
-            (300 if self.report.seventeen_one else 0)
-            + (250 if self.report.seventeen_two else 0)
-            + (30 if self.report.seventeen_three else 0)
-            + (10 * self.report.seventeen_four)
-            if (10 * self.report.seventeen_four < 150)
+            (300 if self.report.thirteen_one else 0)
+            + (250 if self.report.thirteen_two else 0)
+            + (30 if self.report.thirteen_three else 0)
+            + (10 * self.report.thirteen_four)
+            if (10 * self.report.thirteen_four < 150)
             else 150
-            + 20 * self.report.seventeen_five
-            + 15 * self.report.seventeen_six
-            + 5 * self.report.seventeen_seven
-            + 15 * self.report.seventeen_eight
+            + 20 * self.report.thirteen_five
+            + 15 * self.report.thirteen_six
+            + 5 * self.report.thirteen_seven
+            + 15 * self.report.thirteen_eight
         )
         return r
 
+    def __calc_fourteen(self) -> float:
+        r = 50 * self.report.fourteen_one
+        return r
+
+    def __calc_fifteen(self) -> float:
+        r = 30 * self.report.fifteen_one
+        return r
+
+    def __calc_sixteen(self) -> float:
+        r = 50 if self.report.sixteen_one else 0
+        return r
+
+    def __calc_seventeen(self) -> float:
+        r = 50 if self.report.seventeen_one else 0
+        return r
+
     def __calc_eighteen(self) -> float:
-        r = 50 if self.report.eighteen_one else 0
+        r = self._divide(50, self.report.eighteen_one)
         return r
 
     def __calc_nineteen(self) -> float:
-        r = 50 * self.report.nineteen_one
+        r = 100 * self.report.nineteen_one
         return r
 
     def __calc_twenty(self) -> float:
-        r = 10 * self.report.twenty_zero_one
+        r = (
+            200
+            if self.report.twenty_zero_one
+            else 0 + 100
+            if self.report.twenty_zero_two
+            else 0 + 75
+            if self.report.twenty_zero_three
+            else 0
+        )
         return r
 
     def __calc_twenty_one(self) -> float:
-        r = 50 if self.report.twenty_one_one else 0
-        return r
-
-    def __calc_twenty_two(self) -> float:
-        r = 50 if self.report.twenty_two_one else 0
-        return r
-
-    def __calc_twenty_three(self) -> float:
-        r = self._divide(50, self.report.twenty_three_one)
-        return r
-
-    def __calc_twenty_four(self) -> float:
-        r = 50 * self.report.twenty_four_one
-        return r
-
-    def __calc_twenty_five(self) -> float:
-        r = 50 if self.report.twenty_five_one else 0
-        return r
-
-    def __calc_twenty_six(self) -> float:
-        r = 200 if self.report.twenty_six_one else 0 + 100 if self.report.twenty_six_two else 0
-        return r
-
-    def __calc_twenty_seven(self) -> float:
         r = (
             150
-            if self.report.twenty_seven_one
+            if self.report.twenty_one_one
             else 0 + 100
-            if self.report.twenty_seven_two
+            if self.report.twenty_one_two
             else 0 + 30
-            if self.report.twenty_seven_three
+            if self.report.twenty_one_three
             else 0
         )
         return r
