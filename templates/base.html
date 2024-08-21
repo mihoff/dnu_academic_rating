@@ -132,7 +132,9 @@
             <div class="col-md-12 text-center">
                 <div class="btn-group btn-group-sm" role="group" aria-label="Footer Buttons Group">
                     <a href="http://dnu.dp.ua/" target="_blank" type="button" class="btn btn-secondary">Сайт ДНУ</a>
+                    {% if user.is_authenticated %}
                     <a href="#" target="_self" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#feedback">Відгук</a>
+                    {% endif %}
                     <a href="{% url 'admin:index' %}" type="button" class="btn btn-secondary">Адміністрування</a>
                 </div>
             </div>

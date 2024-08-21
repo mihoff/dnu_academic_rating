@@ -54,7 +54,7 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _calc_four(self) -> float:
-        r = self.LEVELS_RATE.get(self.report.eight_one) or 0
+        r = self.LEVELS_RATE.get(self.report.four_one) or 0
         return r
 
     def _calc_five(self) -> float:
@@ -132,5 +132,5 @@ class EducationalAndMethodicalWorkCalculation(BaseCalculation):
         return r
 
     def _students_result(self) -> float:
-        r = (self.report.generic_report_data.students_rating or 0) * 2
+        r = (self.report.generic_report_data.students_rating or 0)
         return r
