@@ -1,5 +1,4 @@
 import logging
-import traceback
 
 from django.contrib.auth import logout
 from django.contrib.sites.models import Site
@@ -18,11 +17,11 @@ def logout_view(request):
     logout(request)
     return redirect(  # Also need to log out from the Microsoft Identity platform
         f"https://login.microsoftonline.com/common/oauth2/v2.0/logout"
-        f"?post_logout_redirect_uri={scheme}://{domain}/")
+        f"?post_logout_redirect_uri={scheme}://{domain}/"
+    )
 
 
 class AuthenticateCallbackViewOverwrite(AuthenticateCallbackView):
-
     def post(self, request):
         try:
             return super().post(request)
@@ -30,7 +29,7 @@ class AuthenticateCallbackViewOverwrite(AuthenticateCallbackView):
             return render(
                 request,
                 "proxy_microsoft_oauth/auth_hook_exception.html",
-                context={"user__": e.user__}
+                context={"user__": e.user__},
             )
-        except:
-            logger.error(traceback.format_exc())
+        except Exception:
+            logger.exception("Microsoft OAuth error")
